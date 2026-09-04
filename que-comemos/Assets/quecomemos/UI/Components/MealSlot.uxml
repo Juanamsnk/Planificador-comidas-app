@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Atoms.uss" />
+    <Style src="../Styles/Molecules.uss" />
+    <ui:Template name="CellButton" src="CellButton.uxml" />
+
+    <!--
+      Molécula: bloque "Comida" o "Cena" dentro de una tarjeta de día
+      (equivalente a .meal-slot). Este template es genérico: desde C#,
+      al instanciarlo, añade la clase "meal-dotcomida" o "meal-dotcena"
+      al elemento "meal-dot" y cambia el texto de "meal-tag-label".
+    -->
+    <ui:VisualElement name="meal-slot" class="meal-slot">
+        <ui:VisualElement name="meal-tag" class="meal-tag">
+            <ui:VisualElement name="meal-dot" class="meal-dot meal-dot--comida" />
+            <ui:Label name="meal-tag-label" text="Comida" />
+        </ui:VisualElement>
+
+        <ui:Instance template="CellButton" name="cell-instance" />
+    </ui:VisualElement>
+</ui:UXML>

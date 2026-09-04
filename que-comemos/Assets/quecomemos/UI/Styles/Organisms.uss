@@ -1,0 +1,173 @@
+/* ==========================================================================
+   ORGANISMS.uss — bloques completos de la pantalla
+   Equivalente a: .topbar/.header-row, .dropdown-menu, .week-nav, .nav-group,
+   .day-card(+is-today), .day-meals, .week-grid, .edit-panel, .toast
+   ========================================================================== */
+
+/* ---------- Cabecera (topbar) ---------- */
+.header-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.header-actions {
+    flex-direction: row;
+}
+
+.header-actions > .icon-btn {
+    margin-left: 8px;
+}
+
+.menu-wrap {
+    position: relative;
+}
+
+/* ---------- Menú desplegable (hamburguesa) ---------- */
+.dropdown-menu {
+    position: absolute;
+    top: 48px;
+    right: 0;
+    min-width: 210px;
+    background-color: var(--surface);
+    border-width: 1px;
+    border-color: var(--line-strong);
+    border-radius: 14px;
+    padding: 10px;
+    /* USS no soporta calc(), así que no se puede replicar
+       "max-width:calc(100vw - 32px)" del CSS. Si el menú llega a
+       desbordar el ancho de pantalla en algún dispositivo muy estrecho,
+       ajusta este min-width o fija un width concreto (p.ej. 260px). */
+    /* USS tampoco soporta box-shadow con difuminado real; si tu versión
+       de Unity 6.6 lo permite, añade aquí
+       `box-shadow: 0 20px 44px rgba(0,0,0,0.45);` */
+}
+
+/* ---------- Navegación entre semanas ---------- */
+.week-nav {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 26px 0 18px;
+}
+
+.nav-group {
+    flex-direction: row;
+    align-items: center;
+}
+
+.nav-group > * {
+    margin-right: 6px;
+}
+
+.week-nav-label {
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    font-size: 17px;
+    color: var(--paper);
+    -unity-font-style: italic;
+    overflow: hidden;
+}
+
+.week-nav-label__year {
+    font-size: 12px;
+    color: var(--muted);
+    -unity-font-style: normal;
+    margin-left: 6px;
+}
+
+/* En el HTML original este espaciador solo existe en la versión de
+   escritorio (para centrar la etiqueta entre dos bloques simétricos);
+   en móvil se ocultaba con display:none, así que aquí queda oculto
+   por defecto. */
+.nav-spacer {
+    width: 80px;
+    display: none;
+}
+
+/* ---------- Tarjeta de día ----------
+   Layout "apilado" (una tarjeta por fila, fecha a la izquierda y comidas
+   a la derecha): es el que el HTML original activaba en móvil con
+   @media (max-width:600px). Como esta app es solo móvil en portrait,
+   se deja como único layout, sin variante de escritorio. */
+.day-card {
+    background-color: var(--surface);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 16px;
+    padding: 12px;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.day-card--today {
+    border-color: var(--herb);
+    border-width: 1px;
+}
+
+.day-meals {
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 0;
+}
+
+/* ---------- Rejilla semanal (una columna, una tarjeta por día) ---------- */
+.week-grid {
+    flex-direction: column;
+}
+
+/* ---------- Panel de edición de un día ---------- */
+.edit-panel {
+    margin-top: 24px;
+    background-color: var(--surface);
+    border-width: 1px;
+    border-color: var(--line-strong);
+    border-radius: 16px;
+    padding: 22px 24px;
+}
+
+.edit-panel__title {
+    font-size: 19px;
+    -unity-font-style: italic;
+    color: var(--paper);
+    margin-bottom: 16px;
+}
+
+.edit-panel__row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.edit-panel__field {
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 100%;
+}
+
+.edit-panel__btn-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    translate: -50% 0;
+    background-color: var(--paper);
+    color: var(--ink);
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    -unity-font-style: bold;
+    opacity: 0;
+    display: none;
+}
+
+.toast--show {
+    opacity: 1;
+    display: flex;
+}

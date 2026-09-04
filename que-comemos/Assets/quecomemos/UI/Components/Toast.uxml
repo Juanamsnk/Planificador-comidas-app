@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Organisms.uss" />
+
+    <!--
+      Molécula: aviso flotante inferior (equivalente a .toast).
+      Actívalo con AddToClassList("toastshow") / RemoveFromClassList(...)
+      y un temporizador de ~2.2s, igual que showToast() en el HTML.
+    -->
+    <ui:Label name="toast" text="Guardado" class="toast" />
+</ui:UXML>

@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Atoms.uss" />
+    <Style src="../Styles/Organisms.uss" />
+    <ui:Template name="DropdownMenu" src="DropdownMenu.uxml" />
+
+    <!--
+      Organismo: cabecera de la app (equivalente a <header class="topbar">).
+      Incluye: título, botón día/noche, botón hamburguesa + menú desplegable,
+      badge de propietario/compartido, badge de demo y nota de invitado.
+      Muestra/oculta cada badge según el estado desde C# (display:none / flex).
+    -->
+    <ui:VisualElement name="header-bar" class="topbar">
+        <ui:VisualElement name="header-row" class="header-row">
+            <ui:Label text="Qué comemos" class="brand-title" />
+
+            <ui:VisualElement name="header-actions" class="header-actions">
+                <ui:Button name="theme-toggle-btn" text="&#127769;" class="icon-btn" tooltip="Modo claro/oscuro" />
+
+                <ui:VisualElement name="menu-wrap" class="menu-wrap">
+                    <ui:Button name="menu-toggle-btn" text="&#9776;" class="icon-btn" tooltip="Menú" />
+                    <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" style="display: none;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:Label name="owner-badge" text="Tu calendario" class="badge badge--owner" style="display: none;" />
+        <ui:Label name="demo-badge" text="Modo demostración: los cambios no se guardan." class="badge badge--demo" style="display: none;" />
+        <ui:Label name="guest-note" text="Estás viendo este calendario porque alguien te ha compartido su enlace." class="guest-note" style="display: none;" />
+    </ui:VisualElement>
+</ui:UXML>

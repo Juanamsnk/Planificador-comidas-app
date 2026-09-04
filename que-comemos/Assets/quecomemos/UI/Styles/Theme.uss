@@ -1,0 +1,51 @@
+/* ==========================================================================
+   THEME.uss
+   Equivalente a los custom properties ":root" / "body.theme-light" del HTML.
+   Se aplica como CLASE al elemento raíz de la jerarquía (ver MainMenu.uxml).
+
+   Cómo alternar tema en runtime (C#, para más adelante):
+       root.RemoveFromClassList(isLight ? "theme-dark" : "theme-light");
+       root.AddToClassList(isLight ? "theme-light" : "theme-dark");
+   Como USS resuelve las custom properties en cascada igual que CSS,
+   todo lo que use var(--xxx) se recolorea solo.
+   ========================================================================== */
+
+.theme-dark {
+    --ink: #14171A;
+    --surface: #1D2225;
+    --surface-2: #242A2E;
+    --surface-hover: #2D343A;
+    --paper: #F1F0EA;
+    --muted: #8D949B;
+    --line: rgba(241, 240, 234, 0.08);
+    --line-strong: rgba(241, 240, 234, 0.18);
+    --herb: #8FC46E;
+    --herb-deep: #6FA34E;
+    --herb-ink: #12210D;
+    --gold: #E8B24D;
+    --plum: #7C93C4;
+    --rust: #E2735A;
+}
+
+.theme-light {
+    --ink: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-2: #F1F3EE;
+    --surface-hover: #E7EAE1;
+    --paper: #20241F;
+    --muted: #6B7267;
+    --line: rgba(20, 23, 20, 0.08);
+    --line-strong: rgba(20, 23, 20, 0.16);
+    --herb: #5FA23B;
+    --herb-deep: #4A8A2C;
+    --herb-ink: #FFFFFF;
+    --gold: #B9791E;
+    --plum: #5D6FA0;
+    --rust: #C1502F;
+}
+
+/* NOTA IMPORTANTE sobre fuentes:
+   Newsreader (serif, títulos) y Manrope (sans-serif, cuerpo) no vienen
+   incluidas en Unity. Importa los .ttf en Assets/UI/Fonts/, crea un
+   "Font Asset" (o usa TTF directo en proyectos UI Toolkit runtime
+   modernos) y sustituye estos placeholders en Typography más abajo. */

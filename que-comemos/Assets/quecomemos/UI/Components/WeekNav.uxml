@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Atoms.uss" />
+    <Style src="../Styles/Organisms.uss" />
+
+    <!--
+      Organismo: navegación entre semanas (equivalente a .week-nav).
+      "today-btn" solo se muestra cuando weekOffset != 0 en el original;
+      contrólalo con display:none/flex desde C#.
+    -->
+    <ui:VisualElement name="week-nav" class="week-nav">
+        <ui:VisualElement name="nav-group" class="nav-group">
+            <ui:Button name="prev-week-btn" text="&#8249;" class="nav-btn" />
+            <ui:Button name="next-week-btn" text="&#8250;" class="nav-btn" />
+            <ui:Button name="today-btn" text="Esta semana" class="today-btn" style="display: none;" />
+        </ui:VisualElement>
+
+        <ui:Label name="week-range-label" text="1 – 7 de septiembre" class="week-nav-label" />
+
+        <ui:VisualElement name="nav-spacer" class="nav-spacer" />
+    </ui:VisualElement>
+</ui:UXML>

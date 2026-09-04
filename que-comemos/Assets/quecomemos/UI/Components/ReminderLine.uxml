@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Atoms.uss" />
+    <Style src="../Styles/Molecules.uss" />
+
+    <!--
+      Molécula: línea "Recordatorio [x] [fecha] a las [hora]"
+      (equivalente a .reminder-line).
+      Nota: UI Toolkit runtime no tiene un DatePicker/TimePicker nativo.
+      Aquí se usan TextField como placeholder ("AAAA-MM-DD" / "HH:MM");
+      si el proyecto corre en el Editor puedes cambiarlos por los campos
+      uie:DateTimeField / (hora manual) del namespace UnityEditor.UIElements,
+      o crear un control propio de UI Toolkit runtime más adelante.
+    -->
+    <ui:VisualElement name="reminder-line" class="reminder-line">
+        <ui:Toggle name="reminder-toggle" />
+        <ui:Label text="Recordatorio" />
+        <ui:TextField name="reminder-date-field" value="2026-09-01" class="input-field input-field--compact" />
+        <ui:Label text="a las" />
+        <ui:TextField name="reminder-time-field" value="12:00" class="input-field input-field--compact" />
+    </ui:VisualElement>
+</ui:UXML>

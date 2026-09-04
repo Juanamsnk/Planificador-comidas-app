@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Molecules.uss" />
+
+    <!--
+      Molécula: celda de un plato dentro de un meal-slot (equivalente a
+      .cell-btn). Tiene dos estados de contenido que el script debe
+      alternar (display:none / flex) según haya o no plato guardado:
+        - "cell-empty-label"  -> "+ añadir" (sin plato)
+        - "cell-filled"       -> nombre del plato + meta (con plato)
+      Añade la clase "cell-btnselected" cuando esta celda esté abierta
+      en el panel de edición.
+    -->
+    <ui:Button name="cell-button" class="cell-btn">
+        <ui:Label name="cell-empty-label" text="+ añadir" class="cell-empty" />
+        <ui:VisualElement name="cell-filled" style="display: none;">
+            <ui:Label name="cell-dish-label" text="Pollo al horno" class="cell-dish" />
+            <ui:Label name="cell-meta-label" text="aviso 12:00" class="cell-meta" />
+        </ui:VisualElement>
+    </ui:Button>
+</ui:UXML>

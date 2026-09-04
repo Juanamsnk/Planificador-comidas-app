@@ -1,0 +1,50 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="Styles/Theme.uss" />
+    <Style src="Styles/Atoms.uss" />
+    <Style src="Styles/Molecules.uss" />
+    <Style src="Styles/Organisms.uss" />
+    <Style src="Styles/Page.uss" />
+
+    <ui:Template name="HeaderBar" src="Components/HeaderBar.uxml" />
+    <ui:Template name="WeekNav" src="Components/WeekNav.uxml" />
+    <ui:Template name="DayCard" src="Components/DayCard.uxml" />
+    <ui:Template name="EditPanel" src="Components/EditPanel.uxml" />
+    <ui:Template name="Toast" src="Components/Toast.uxml" />
+
+    <!--
+      PÁGINA: Menú principal "Qué comemos" (equivalente a <div id="root" class="wrap">).
+      La clase "theme-dark" en la raíz activa las variables de color oscuras
+      por defecto (ver Theme.uss); cámbiala a "theme-light" para el modo claro.
+
+      La semana se representa con 7 instancias de DayCard (day-card-0 .. day-card-6,
+      lunes a domingo). Un script (MainMenuBinder, próximo paso) rellenará cada
+      una con fecha/nombre real, marcará la de "hoy" y conectará los eventos.
+    -->
+    <ui:VisualElement name="root" class="root theme-dark">
+        <ui:ScrollView name="page-scroll" style="flex-grow: 1;">
+            <ui:VisualElement name="wrap" class="wrap">
+
+                <ui:Instance template="HeaderBar" name="header-bar-instance" />
+
+                <ui:Instance template="WeekNav" name="week-nav-instance" />
+
+                <ui:VisualElement name="week-grid" class="week-grid">
+                    <ui:Instance template="DayCard" name="day-card-0" />
+                    <ui:Instance template="DayCard" name="day-card-1" />
+                    <ui:Instance template="DayCard" name="day-card-2" />
+                    <ui:Instance template="DayCard" name="day-card-3" />
+                    <ui:Instance template="DayCard" name="day-card-4" />
+                    <ui:Instance template="DayCard" name="day-card-5" />
+                    <ui:Instance template="DayCard" name="day-card-6" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="edit-slot">
+                    <ui:Instance template="EditPanel" name="edit-panel-instance" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+        </ui:ScrollView>
+
+        <ui:Instance template="Toast" name="toast-instance" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,16 @@
+/* ==========================================================================
+   PAGE.uss — layout general de la pantalla (equivalente a body / .wrap)
+   ========================================================================== */
+
+.root {
+    flex-grow: 1;
+    background-color: var(--ink);
+}
+
+.wrap {
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 24px 16px 56px;
+    flex-grow: 1;
+}

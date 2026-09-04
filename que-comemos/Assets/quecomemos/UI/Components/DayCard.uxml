@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Molecules.uss" />
+    <Style src="../Styles/Organisms.uss" />
+    <ui:Template name="MealSlot" src="MealSlot.uxml" />
+
+    <!--
+      Organismo: tarjeta de un día de la semana (equivalente a .day-card).
+      Añade la clase "day-cardtoday" (y "day-card-headtoday" a la
+      cabecera) cuando esta tarjeta corresponda al día actual.
+    -->
+    <ui:VisualElement name="day-card" class="day-card">
+        <ui:VisualElement name="day-card-head" class="day-card-head">
+            <ui:Label name="day-name-label" text="Lunes" class="day-name" />
+            <ui:Label name="day-num-label" text="1 sep" class="day-num" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="day-meals" class="day-meals">
+            <ui:Instance template="MealSlot" name="meal-slot-comida" />
+            <ui:Instance template="MealSlot" name="meal-slot-cena" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

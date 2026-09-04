@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Atoms.uss" />
+    <Style src="../Styles/Organisms.uss" />
+    <ui:Template name="ReminderLine" src="ReminderLine.uxml" />
+
+    <!--
+      Organismo: panel para rellenar/editar un día (equivalente a
+      .edit-panel / #editSlot). Oculto por defecto: muéstralo (display:flex)
+      cuando el usuario pulse una celda de comida/cena.
+      "delete-btn" solo aparece si la celda ya tenía un plato guardado.
+    -->
+    <ui:VisualElement name="edit-panel" class="edit-panel" style="display: none;">
+        <ui:Label name="edit-panel-title" text="Comida · Lunes 1 de septiembre" class="edit-panel__title" />
+
+        <ui:VisualElement class="edit-panel__row">
+            <ui:VisualElement class="edit-panel__field">
+                <ui:Label text="Plato" class="field-label" />
+                <ui:TextField name="dish-field" placeholder-text="Ej. Pollo al horno" class="input-field" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="edit-panel__btn-row" style="margin-bottom: 14px;">
+            <ui:Button name="random-dish-btn" text="&#127922; Plato random" class="btn btn--ghost" />
+            <ui:Button name="old-dish-btn" text="&#8987; Hace tiempo que no..." class="btn btn--ghost" />
+        </ui:VisualElement>
+
+        <ui:Instance template="ReminderLine" name="reminder-line-instance" />
+
+        <ui:VisualElement class="edit-panel__row">
+            <ui:VisualElement class="edit-panel__field">
+                <ui:Label text="Nombre del recordatorio" class="field-label" />
+                <ui:TextField name="reminder-title-field" placeholder-text="Ej. Sacar el pollo del congelador" class="input-field" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="edit-panel__btn-row">
+            <ui:Button name="save-btn" text="Guardar" class="btn btn--primary" />
+            <ui:Button name="delete-btn" text="Eliminar" class="btn btn--danger" style="display: none;" />
+            <ui:Button name="close-btn" text="Cerrar" class="btn btn--ghost" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

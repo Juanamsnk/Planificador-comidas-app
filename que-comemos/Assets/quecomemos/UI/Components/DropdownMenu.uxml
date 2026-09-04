@@ -1,0 +1,33 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Styles/Molecules.uss" />
+    <Style src="../Styles/Organisms.uss" />
+    <ui:Template name="MenuItem" src="MenuItem.uxml" />
+    <ui:Template name="CalendarMenuRow" src="CalendarMenuRow.uxml" />
+
+    <!--
+      Organismo: panel desplegable del botón hamburguesa (equivalente a
+      #dropdownMenu). El contenido de "Calendarios compartidos" es dinámico
+      en el HTML original (uno por calendario) — aquí se deja un contenedor
+      vacío ("shared-calendars-container") donde el script instanciará N
+      copias de CalendarMenuRow.uxml en tiempo de ejecución.
+    -->
+    <ui:VisualElement name="dropdown-menu" class="dropdown-menu">
+        <ui:Label text="Calendarios" class="menu-section-label" />
+
+        <ui:Instance template="MenuItem" name="own-calendar-item" />
+
+        <ui:VisualElement name="shared-calendars-container" />
+
+        <ui:VisualElement name="divider-1" class="menu-divider" />
+
+        <ui:Button name="share-real-btn" text="Compartir enlace" class="menu-item" />
+
+        <ui:VisualElement name="divider-2" class="menu-divider" />
+
+        <ui:Button name="share-demo-btn" text="Compartir enlace de demostración" class="menu-item" />
+
+        <ui:VisualElement name="divider-3" class="menu-divider" />
+
+        <ui:Button name="logout-btn" text="Cerrar sesión" class="menu-item menu-item--danger" />
+    </ui:VisualElement>
+</ui:UXML>
