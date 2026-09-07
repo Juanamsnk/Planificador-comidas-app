@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "556029382725",
+    "firebase_url": "https://que-comemos-146b7-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "que-comemos-146b7",
+    "storage_bucket": "que-comemos-146b7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556029382725:android:c847f4c1a308a146c3132c",
+        "android_client_info": {
+          "package_name": "com.senekagames.quecomemos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556029382725-v24o2vfp5otbcuvtnctfbt9rqdav5ib2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1q_whxhgEJT3non6fys12b0bO0e09Jl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556029382725-v24o2vfp5otbcuvtnctfbt9rqdav5ib2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "556029382725-raghm88bq08g68mtkb9s2tm1tpahu1lm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.senekagames.quecomemos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
