@@ -148,6 +148,31 @@
     font-size: 13px;
 }
 
+/* Unity dibuja el recuadro de texto de un TextField con un elemento
+   INTERNO propio (nombre "unity-text-input"), que trae su propio fondo
+   blanco del tema base y no hereda las reglas de arriba (esas solo
+   afectan al contenedor exterior). Sin esto se ve un recuadro blanco sin
+   estilo aunque .input-field esté bien puesto. Cubrimos los dos nombres
+   de clase por si cambian entre versiones de Unity. */
+.input-field > .unity-text-field__input,
+.input-field > .unity-base-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    padding: 0;
+    color: var(--paper);
+    /* font-size no hace falta repetirlo aquí: en USS es una propiedad
+       "heredada", así que ya toma el valor de .input-field (15px o 13px
+       si es --compact) automáticamente. La palabra "inherit" no es una
+       sintaxis válida en USS (a diferencia de CSS). */
+}
+
+/* El propio TextField (BaseField) suele traer márgenes por defecto del
+   tema base; los quitamos para que el spacing lo controle solo nuestro
+   layout (edit-panel__row, edit-panel__field, reminder-line...). */
+.input-field {
+    margin: 0;
+}
+
 /* ---------- Etiqueta de campo ---------- */
 .field-label {
     font-size: 12px;

@@ -35,6 +35,15 @@
     border-color: var(--line-strong);
     border-radius: 14px;
     padding: 10px;
+    /* Igual que en .day-card: sin esto, un flex-shrink por defecto puede
+       colapsar este panel a 0 de alto (fondo/borde desaparecen) aunque
+       su contenido siga asomando por encima, sin nada detrás. */
+    flex-shrink: 0;
+    flex-grow: 0;
+    /* Oculto por defecto aquí (en la clase, no en la instancia del UXML)
+       para que MainMenuController.cs, que consulta y alterna el display
+       de ESTE elemento con nombre "dropdown-menu", pueda mostrarlo. */
+    display: none;
     /* USS no soporta calc(), así que no se puede replicar
        "max-width:calc(100vw - 32px)" del CSS. Si el menú llega a
        desbordar el ancho de pantalla en algún dispositivo muy estrecho,
@@ -63,11 +72,14 @@
 
 .week-nav-label {
     flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
     -unity-text-align: middle-center;
     font-size: 17px;
     color: var(--paper);
     -unity-font-style: italic;
     overflow: hidden;
+    white-space: normal;
 }
 
 .week-nav-label__year {
@@ -99,6 +111,15 @@
     padding: 12px;
     flex-direction: row;
     margin-bottom: 10px;
+    width: 100%;
+    /* Sin esto, el motor de layout puede encoger o estirar cada tarjeta
+       de forma distinta según cuánto contenido total haya en la semana
+       (el mismo tipo de fallo que hacía desaparecer el menú hamburguesa:
+       un elemento flexible sin flex-shrink/flex-grow fijados a 0 puede
+       recalcularse "elástico"). Con esto, la altura la decide solo el
+       contenido de dentro (padding + celdas), siempre igual. */
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
 .day-card--today {
@@ -109,12 +130,14 @@
 .day-meals {
     flex-direction: column;
     flex-grow: 1;
+    min-width: 0;
     margin-top: 0;
 }
 
 /* ---------- Rejilla semanal (una columna, una tarjeta por día) ---------- */
 .week-grid {
     flex-direction: column;
+    width: 100%;
 }
 
 /* ---------- Panel de edición de un día ---------- */

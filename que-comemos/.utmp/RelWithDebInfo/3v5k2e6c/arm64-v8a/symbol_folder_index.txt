@@ -1,0 +1,1 @@
+C:\Users\juanm\OneDrive\Documentos\GitHub\Planificador-comidas-app\que-comemos\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\3v5k2e6c\obj\arm64-v8a

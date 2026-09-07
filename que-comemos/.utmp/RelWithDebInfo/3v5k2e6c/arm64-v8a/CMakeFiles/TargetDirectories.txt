@@ -1,0 +1,8 @@
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+C:/Users/juanm/OneDrive/Documentos/GitHub/Planificador-comidas-app/que-comemos/.utmp/RelWithDebInfo/3v5k2e6c/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir

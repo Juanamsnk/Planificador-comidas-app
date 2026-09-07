@@ -1,12 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="../Styles/Atoms.uss" />
     <Style src="../Styles/Organisms.uss" />
-    <ui:Template name="DropdownMenu" src="DropdownMenu.uxml" />
 
     <!--
       Organismo: cabecera de la app (equivalente a <header class="topbar">).
-      Incluye: título, botón día/noche, botón hamburguesa + menú desplegable,
-      badge de propietario/compartido, badge de demo y nota de invitado.
+      Incluye: título, botón día/noche, botón hamburguesa, badge de
+      propietario/compartido, badge de demo y nota de invitado.
+      El menú desplegable YA NO vive aquí dentro: está como último hijo
+      de #root en MainMenu.uxml (ver comentario ahí) para que se pinte
+      por encima de todo y no lo recorte el ScrollView. Aquí solo queda
+      el botón que lo abre/cierra.
       Muestra/oculta cada badge según el estado desde C# (display:none / flex).
     -->
     <ui:VisualElement name="header-bar" class="topbar">
@@ -18,7 +21,6 @@
 
                 <ui:VisualElement name="menu-wrap" class="menu-wrap">
                     <ui:Button name="menu-toggle-btn" text="&#9776;" class="icon-btn" tooltip="Menú" />
-                    <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" style="display: none;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

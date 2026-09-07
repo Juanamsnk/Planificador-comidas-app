@@ -10,6 +10,7 @@
     <ui:Template name="DayCard" src="Components/DayCard.uxml" />
     <ui:Template name="EditPanel" src="Components/EditPanel.uxml" />
     <ui:Template name="Toast" src="Components/Toast.uxml" />
+    <ui:Template name="DropdownMenu" src="Components/DropdownMenu.uxml" />
 
     <!--
       PÁGINA: Menú principal "Qué comemos" (equivalente a <div id="root" class="wrap">).
@@ -21,7 +22,7 @@
       una con fecha/nombre real, marcará la de "hoy" y conectará los eventos.
     -->
     <ui:VisualElement name="root" class="root theme-dark">
-        <ui:ScrollView name="page-scroll" style="flex-grow: 1;">
+        <ui:ScrollView name="page-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1;">
             <ui:VisualElement name="wrap" class="wrap">
 
                 <ui:Instance template="HeaderBar" name="header-bar-instance" />
@@ -45,6 +46,23 @@
             </ui:VisualElement>
         </ui:ScrollView>
 
-        <ui:Instance template="Toast" name="toast-instance" />
+        <ui:Instance template="Toast" name="toast-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;" />
+
+        <!--
+          El menú desplegable vuelve a ser HIJO de "#root" (no hermano),
+          porque los colores (var(surface), var(herb)...) están
+          definidos en la clase "theme-dark", puesta en #root — fuera de
+          su árbol esas variables no existen y el fondo/bordes no se
+          pintaban. Para que el ScrollView no lo aplaste ni lo recorte, en
+          vez de sacarlo de #root le ponemos "position: absolute" con los
+          4 bordes a 0 directamente en la propia instancia (no solo en el
+          USS del elemento de dentro): así queda fuera del flujo normal
+          (no compite por espacio con el ScrollView) pero sigue dentro del
+          árbol de #root (hereda los colores) y se pinta el último = por
+          encima de todo. MainMenuController.cs calcula su posición
+          (top/right) en tiempo de ejecución para que quede justo debajo
+          del botón hamburguesa.
+        -->
+        <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;" />
     </ui:VisualElement>
 </ui:UXML>

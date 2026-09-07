@@ -12,11 +12,12 @@
     -unity-text-align: middle-left;
     justify-content: center;
     flex-direction: column;
-    width: 58px;
+    width: 72px;
     flex-shrink: 0;
+    flex-grow: 0;
     border-right-width: 1px;
     border-right-color: var(--line);
-    padding-right: 12px;
+    padding-right: 10px;
     margin-right: 12px;
 }
 
@@ -42,6 +43,8 @@
 .meal-slot {
     flex-direction: column;
     margin-bottom: 10px;
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
 .meal-tag {
@@ -68,6 +71,9 @@
     flex-direction: column;
     justify-content: center;
     white-space: normal;
+    /* Misma razón que en .day-card: fija el alto solo a su contenido. */
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
 .cell-btn:hover {
@@ -78,7 +84,11 @@
 .cell-btn--selected {
     border-width: 1px;
     border-color: var(--herb);
-    background-color: rgba(143, 196, 110, 0.14);
+    /* Antes usaba un verde con alpha (rgba con transparencia); en algunas
+       versiones de UI Toolkit ese canal alfa no se mezcla como se espera
+       y el fondo sale sólido/muy saturado. Usamos un color de superficie
+       sólido en su lugar; el borde verde ya marca la selección. */
+    background-color: var(--surface-hover);
 }
 
 .cell-dish {
@@ -102,6 +112,7 @@
     letter-spacing: 0.4px;
     color: var(--muted);
     padding: 6px 10px 4px;
+    flex-shrink: 0;
 }
 
 .menu-item {
@@ -112,6 +123,7 @@
     border-radius: 9px;
     font-size: 14px;
     color: var(--paper);
+    flex-shrink: 0;
 }
 
 .menu-item:hover {
@@ -132,9 +144,14 @@
     background-color: rgba(226, 115, 90, 0.15);
 }
 
+#shared-calendars-container {
+    flex-shrink: 0;
+}
+
 .calendar-menu-row {
     flex-direction: row;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .calendar-menu-row .menu-item {
@@ -160,6 +177,7 @@
     height: 1px;
     background-color: var(--line-strong);
     margin: 7px 4px;
+    flex-shrink: 0;
 }
 
 /* ---------- Línea de recordatorio (checkbox + fecha + hora) ---------- */
