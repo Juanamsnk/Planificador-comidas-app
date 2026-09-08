@@ -2,42 +2,31 @@ using System.Collections;
 using QueComemos.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine.UIElements;
 
 namespace QueComemos.UI
 {
-    /// <summary>
-    /// Escena de Login (UI Canvas normal, no UI Toolkit). Conecta el botón
-    /// de Google con GoogleAuthManager y pasa a la escena del menú
-    /// principal en cuanto el login termina bien.
-    /// </summary>
     public class LoginSceneController : MonoBehaviour
     {
-        [SerializeField] private Button googleSignInButton;
-        [SerializeField] private TMP_Text statusText;
+        [Tooltip("Arrastra aquí el GameObject '---UIDOCUMENT---' (el que tiene el componente UIDocument real, con Authentication como Source Asset). NO uses GetComponent/RequireComponent porque este script no vive en ese mismo GameObject.")]
+        [SerializeField] private UIDocument uiDocument;
 
         [Tooltip("Nombre exacto de la escena del menú principal (debe estar añadida en Build Settings).")]
         [SerializeField] private string mainMenuSceneName = "Menu";
 
+        private Button googleSignInButton;
         private Coroutine waitForAuthManagerRoutine;
 
-        private void OnEnable()
+        private void Start()
         {
-            googleSignInButton.onClick.AddListener(HandleSignInButtonClicked);
-            googleSignInButton.interactable = false;
-            SetStatus("Cargando...");
+            var root = uiDocument.rootVisualElement;
+            googleSignInButton = root.Q<Button>("google-login-btn");
 
+            googleSignInButton.clicked += HandleSignInButtonClicked;
+            googleSignInButton.SetEnabled(false);
             waitForAuthManagerRoutine = StartCoroutine(WaitForAuthManagerAndConnect());
         }
 
-        /// <summary>
-        /// GoogleAuthManager puede vivir en otro GameObject cuyo Awake()
-        /// todavía no haya corrido cuando esta escena arranca (Unity no
-        /// garantiza el orden entre objetos distintos), así que esperamos
-        /// a que exista antes de suscribirnos — igual que hicimos con
-        /// FirebaseManager en MainMenuController.
-        /// </summary>
         private IEnumerator WaitForAuthManagerAndConnect()
         {
             float timeout = 5f;
@@ -51,28 +40,30 @@ namespace QueComemos.UI
             if (GoogleAuthManager.Instance == null || !GoogleAuthManager.Instance.IsReady)
             {
                 Debug.LogError("[LoginSceneController] No se encontró GoogleAuthManager tras esperar " +
-                    $"{timeout}s.");
-                SetStatus("Error de configuración: falta GoogleAuthManager.");
+                    $"{timeout}s. El botón se queda deshabilitado.");
                 yield break;
             }
+
+            Debug.Log("[LoginSceneController] GoogleAuthManager listo. Suscribiendo OnSignedIn/OnSignInFailed.");
 
             GoogleAuthManager.Instance.OnSignedIn += HandleSignedIn;
             GoogleAuthManager.Instance.OnSignInFailed += HandleSignInFailed;
 
             if (GoogleAuthManager.Instance.IsSignedIn)
             {
+                Debug.Log("[LoginSceneController] Ya había sesión iniciada. Saltando directo a HandleSignedIn.");
                 HandleSignedIn(GoogleAuthManager.Instance.CurrentUser);
                 yield break;
             }
 
-            googleSignInButton.interactable = true;
-            SetStatus("");
+            googleSignInButton.SetEnabled(true);
+            Debug.Log("[LoginSceneController] Botón habilitado. Listo para pulsar.");
         }
 
         private void OnDisable()
         {
             if (waitForAuthManagerRoutine != null) StopCoroutine(waitForAuthManagerRoutine);
-            googleSignInButton.onClick.RemoveListener(HandleSignInButtonClicked);
+            if (googleSignInButton != null) googleSignInButton.clicked -= HandleSignInButtonClicked;
 
             if (GoogleAuthManager.Instance != null)
             {
@@ -83,8 +74,15 @@ namespace QueComemos.UI
 
         private void HandleSignInButtonClicked()
         {
-            googleSignInButton.interactable = false;
-            SetStatus("Conectando con Google...");
+            Debug.Log("[LoginSceneController] Click recibido en 'google-login-btn'. Llamando a GoogleAuthManager.SignIn().");
+
+            if (GoogleAuthManager.Instance == null)
+            {
+                Debug.LogError("[LoginSceneController] GoogleAuthManager.Instance es null al hacer click.");
+                return;
+            }
+
+            googleSignInButton.SetEnabled(false);
             GoogleAuthManager.Instance.SignIn();
         }
 
@@ -96,13 +94,8 @@ namespace QueComemos.UI
 
         private void HandleSignInFailed(string message)
         {
-            googleSignInButton.interactable = true;
-            SetStatus(message);
-        }
-
-        private void SetStatus(string message)
-        {
-            if (statusText != null) statusText.text = message;
+            Debug.LogWarning($"[LoginSceneController] Login fallido: {message}");
+            googleSignInButton.SetEnabled(true);
         }
     }
 }

@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="ButtonSession" src="project://database/Assets/_quecomemos/UI/Components/ButtonSession.uxml?fileID=9197481963319205126&amp;guid=4e2e5d29739888e4aa67f60216b85c17&amp;type=3#ButtonSession"/>
+    <ui:Template name="HeaderBar" src="project://database/Assets/_quecomemos/UI/Components/HeaderBar.uxml?fileID=9197481963319205126&amp;guid=50fc74e25b068fe46b64066be4d9d67a&amp;type=3#HeaderBar"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Theme.uss?fileID=7433441132597879392&amp;guid=1d375dd4f88127d42a5cb6b8efe334e5&amp;type=3#Theme"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Atoms.uss?fileID=7433441132597879392&amp;guid=87ec63ee3523e6b4eb52966548b59a7c&amp;type=3#Atoms"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Organisms.uss?fileID=7433441132597879392&amp;guid=4606e07a7bdf1eb48825e5e55ef1577d&amp;type=3#Organisms"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Page.uss?fileID=7433441132597879392&amp;guid=114a2d5be27901f44be697119cbc01b1&amp;type=3#Page"/>
+    <ui:VisualElement name="root" class="root theme-dark">
+        <ui:ScrollView name="page-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1;">
+            <ui:VisualElement name="wrap" class="wrap">
+                <ui:Instance template="HeaderBar" name="header-bar-instance"/>
+                <ui:Instance template="ButtonSession"/>
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>
