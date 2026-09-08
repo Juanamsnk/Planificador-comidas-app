@@ -12,11 +12,11 @@ namespace QueComemos.Data
     /// (calendars/{calendarId}/mealplan), con la misma estructura de clave
     /// plana "YYYY-MM-DD|comida" / "YYYY-MM-DD|cena".
     ///
-    /// De momento usa un UID de PRUEBA fijo (campo "testUserId" en el
-    /// Inspector) en vez de login real de Google — eso es el siguiente
-    /// paso, pendiente de montar el plugin nativo de Google Sign-In.
-    /// Cuando lo tengamos, "CurrentCalendarId" pasará a ser el UID real
-    /// de Firebase Auth y todo lo demás de esta clase no debería cambiar.
+    /// Arranca apuntando a un UID de PRUEBA fijo (campo "testUserId") para
+    /// poder seguir probando sin login. En cuanto GoogleAuthManager
+    /// complete el login, llama a SetCalendarId(uid real) y este
+    /// componente cambia de calendario sobre la marcha (se desuscribe del
+    /// anterior y se suscribe al nuevo).
     ///
     /// IMPORTANTE: esto asume que ya tienes el Firebase Unity SDK
     /// (FirebaseApp + FirebaseDatabase) importado y el google-services.json
@@ -26,7 +26,7 @@ namespace QueComemos.Data
     {
         public static FirebaseManager Instance { get; private set; }
 
-        [Tooltip("UID de prueba mientras no tenemos login real de Google. " +
+        [Tooltip("UID de prueba mientras no hay sesión real de Google. " +
             "Usa cualquier texto fijo para probar; todos los que usen el " +
             "mismo valor comparten el mismo calendario de pruebas.")]
         [SerializeField] private string testUserId = "test-user-uid-001";
@@ -34,8 +34,8 @@ namespace QueComemos.Data
         /// <summary>True en cuanto Firebase está listo y ya se puede leer/escribir.</summary>
         public bool IsReady { get; private set; }
 
-        /// <summary>ID del calendario actual (de momento, el UID de prueba).</summary>
-        public string CurrentCalendarId => testUserId;
+        /// <summary>ID del calendario actualmente activo (UID de prueba o UID real tras login).</summary>
+        public string CurrentCalendarId { get; private set; }
 
         /// <summary>Se dispara cada vez que llegan datos nuevos de Firebase (carga inicial y cambios en vivo).</summary>
         public event Action<Dictionary<string, MealEntryData>> OnMealPlanChanged;
@@ -43,6 +43,7 @@ namespace QueComemos.Data
         /// <summary>Se dispara si algo falla (conexión, permisos, etc.), con un mensaje ya listo para mostrar al usuario.</summary>
         public event Action<string> OnError;
 
+        private FirebaseDatabase database;
         private DatabaseReference mealsRef;
 
         private void Awake()
@@ -53,6 +54,13 @@ namespace QueComemos.Data
                 return;
             }
             Instance = this;
+
+            // DontDestroyOnLoad solo funciona con GameObjects en la raíz de
+            // la jerarquía; si este objeto está metido dentro de otro (por
+            // ejemplo un "---SCRIPTS---" organizador), lo sacamos primero
+            // para que no falle con el warning "only works for root
+            // GameObjects".
+            transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
         }
 
@@ -77,13 +85,35 @@ namespace QueComemos.Data
                 return;
             }
 
-            var database = FirebaseDatabase.DefaultInstance;
-            mealsRef = database.RootReference.Child("calendars").Child(testUserId).Child("mealplan");
-
+            database = FirebaseDatabase.DefaultInstance;
             IsReady = true;
-            Debug.Log($"[FirebaseManager] Listo. Calendario de prueba: \"{testUserId}\".");
 
+            // Arranca con el calendario de prueba; si GoogleAuthManager ya
+            // tenía sesión guardada de antes, sobreescribirá esto enseguida
+            // llamando a SetCalendarId con el UID real.
+            SetCalendarId(testUserId);
+        }
+
+        /// <summary>
+        /// Cambia el calendario activo: se desuscribe del anterior (si
+        /// había) y se suscribe al nuevo. Llamar con el UID real de
+        /// Firebase Auth en cuanto el login de Google termine.
+        /// </summary>
+        public void SetCalendarId(string calendarId)
+        {
+            if (string.IsNullOrEmpty(calendarId) || !IsReady) return;
+            if (calendarId == CurrentCalendarId && mealsRef != null) return;
+
+            if (mealsRef != null)
+            {
+                mealsRef.ValueChanged -= HandleValueChanged;
+            }
+
+            CurrentCalendarId = calendarId;
+            mealsRef = database.RootReference.Child("calendars").Child(calendarId).Child("mealplan");
             mealsRef.ValueChanged += HandleValueChanged;
+
+            Debug.Log($"[FirebaseManager] Calendario activo: \"{calendarId}\".");
         }
 
         private void HandleValueChanged(object sender, ValueChangedEventArgs args)

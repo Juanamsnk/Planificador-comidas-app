@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "556029382725-343ovdodl1slia94r5165i3fqa5h3sg5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.senekagames.quecomemos",
+            "certificate_hash": "5b62207bf1c33c409ffd54f124a9ba229e0fb772"
+          }
+        },
+        {
           "client_id": "556029382725-v24o2vfp5otbcuvtnctfbt9rqdav5ib2.apps.googleusercontent.com",
           "client_type": 3
         }
