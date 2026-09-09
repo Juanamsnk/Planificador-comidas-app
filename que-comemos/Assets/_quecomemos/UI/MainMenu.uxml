@@ -1,68 +1,36 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="Styles/Theme.uss" />
-    <Style src="Styles/Atoms.uss" />
-    <Style src="Styles/Molecules.uss" />
-    <Style src="Styles/Organisms.uss" />
-    <Style src="Styles/Page.uss" />
-
-    <ui:Template name="HeaderBar" src="Components/HeaderBar.uxml" />
-    <ui:Template name="WeekNav" src="Components/WeekNav.uxml" />
-    <ui:Template name="DayCard" src="Components/DayCard.uxml" />
-    <ui:Template name="EditPanel" src="Components/EditPanel.uxml" />
-    <ui:Template name="Toast" src="Components/Toast.uxml" />
-    <ui:Template name="DropdownMenu" src="Components/DropdownMenu.uxml" />
-
-    <!--
-      PÁGINA: Menú principal "Qué comemos" (equivalente a <div id="root" class="wrap">).
-      La clase "theme-dark" en la raíz activa las variables de color oscuras
-      por defecto (ver Theme.uss); cámbiala a "theme-light" para el modo claro.
-
-      La semana se representa con 7 instancias de DayCard (day-card-0 .. day-card-6,
-      lunes a domingo). Un script (MainMenuBinder, próximo paso) rellenará cada
-      una con fecha/nombre real, marcará la de "hoy" y conectará los eventos.
-    -->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="DayCard" src="project://database/Assets/_quecomemos/UI/Components/DayCard.uxml?fileID=9197481963319205126&amp;guid=73b051372ddf9e04c93ba0627a05c919&amp;type=3#DayCard"/>
+    <ui:Template name="DropdownMenu" src="project://database/Assets/_quecomemos/UI/Components/DropdownMenu.uxml?fileID=9197481963319205126&amp;guid=dfbbe9ae28612774586e8dbabb4e3f19&amp;type=3#DropdownMenu"/>
+    <ui:Template name="EditPanel" src="project://database/Assets/_quecomemos/UI/Components/EditPanel.uxml?fileID=9197481963319205126&amp;guid=298a7ee75b76c3e4dbd1e33820217614&amp;type=3#EditPanel"/>
+    <ui:Template name="HeaderBar" src="project://database/Assets/_quecomemos/UI/Components/HeaderBar.uxml?fileID=9197481963319205126&amp;guid=50fc74e25b068fe46b64066be4d9d67a&amp;type=3#HeaderBar"/>
+    <ui:Template name="Toast" src="project://database/Assets/_quecomemos/UI/Components/Toast.uxml?fileID=9197481963319205126&amp;guid=5f2dff4f8166dff42b95d2687aa4ff9a&amp;type=3#Toast"/>
+    <ui:Template name="WeekNav" src="project://database/Assets/_quecomemos/UI/Components/WeekNav.uxml?fileID=9197481963319205126&amp;guid=cbf6ff3bc2eab5c4d9dc801db328b460&amp;type=3#WeekNav"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Theme.uss?fileID=7433441132597879392&amp;guid=1d375dd4f88127d42a5cb6b8efe334e5&amp;type=3#Theme"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Atoms.uss?fileID=7433441132597879392&amp;guid=87ec63ee3523e6b4eb52966548b59a7c&amp;type=3#Atoms"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Organisms.uss?fileID=7433441132597879392&amp;guid=4606e07a7bdf1eb48825e5e55ef1577d&amp;type=3#Organisms"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Page.uss?fileID=7433441132597879392&amp;guid=114a2d5be27901f44be697119cbc01b1&amp;type=3#Page"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Mobile-Optimizations.uss?fileID=7433441132597879392&amp;guid=f33e4459a2a6c7645a612c6500cb1b84&amp;type=3#Mobile-Optimizations"/>
     <ui:VisualElement name="root" class="root theme-dark">
         <ui:ScrollView name="page-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1;">
             <ui:VisualElement name="wrap" class="wrap">
-
-                <ui:Instance template="HeaderBar" name="header-bar-instance" />
-
-                <ui:Instance template="WeekNav" name="week-nav-instance" />
-
+                <ui:Instance template="HeaderBar" name="header-bar-instance"/>
+                <ui:Instance template="WeekNav" name="week-nav-instance"/>
                 <ui:VisualElement name="week-grid" class="week-grid">
-                    <ui:Instance template="DayCard" name="day-card-0" />
-                    <ui:Instance template="DayCard" name="day-card-1" />
-                    <ui:Instance template="DayCard" name="day-card-2" />
-                    <ui:Instance template="DayCard" name="day-card-3" />
-                    <ui:Instance template="DayCard" name="day-card-4" />
-                    <ui:Instance template="DayCard" name="day-card-5" />
-                    <ui:Instance template="DayCard" name="day-card-6" />
+                    <ui:Instance template="DayCard" name="day-card-0"/>
+                    <ui:Instance template="DayCard" name="day-card-1"/>
+                    <ui:Instance template="DayCard" name="day-card-2"/>
+                    <ui:Instance template="DayCard" name="day-card-3"/>
+                    <ui:Instance template="DayCard" name="day-card-4"/>
+                    <ui:Instance template="DayCard" name="day-card-5"/>
+                    <ui:Instance template="DayCard" name="day-card-6"/>
                 </ui:VisualElement>
-
                 <ui:VisualElement name="edit-slot">
-                    <ui:Instance template="EditPanel" name="edit-panel-instance" />
+                    <ui:Instance template="EditPanel" name="edit-panel-instance"/>
                 </ui:VisualElement>
-
             </ui:VisualElement>
         </ui:ScrollView>
-
-        <ui:Instance template="Toast" name="toast-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;" />
-
-        <!--
-          El menú desplegable vuelve a ser HIJO de "#root" (no hermano),
-          porque los colores (var(surface), var(herb)...) están
-          definidos en la clase "theme-dark", puesta en #root — fuera de
-          su árbol esas variables no existen y el fondo/bordes no se
-          pintaban. Para que el ScrollView no lo aplaste ni lo recorte, en
-          vez de sacarlo de #root le ponemos "position: absolute" con los
-          4 bordes a 0 directamente en la propia instancia (no solo en el
-          USS del elemento de dentro): así queda fuera del flujo normal
-          (no compite por espacio con el ScrollView) pero sigue dentro del
-          árbol de #root (hereda los colores) y se pinta el último = por
-          encima de todo. MainMenuController.cs calcula su posición
-          (top/right) en tiempo de ejecución para que quede justo debajo
-          del botón hamburguesa.
-        -->
-        <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;" />
+        <ui:Instance template="Toast" name="toast-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
+        <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
     </ui:VisualElement>
 </ui:UXML>

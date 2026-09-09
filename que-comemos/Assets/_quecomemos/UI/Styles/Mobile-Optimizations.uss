@@ -1,0 +1,129 @@
+/* Aumentar padding-bottom ligeramente para dar espacio visual */
+.edit-panel {
+    margin-top: 24px;
+    background-color: var(--surface);
+    border-width: 1px;
+    border-color: var(--line-strong);
+    border-radius: 16px;
+    padding: 22px 24px 42px 24px; /* Antes: 22px 24px; Ahora: +20px al fondo */
+}
+
+/* Espaciador invisible para el teclado virtual */
+#keyboard-spacer {
+    flex-shrink: 0;
+    flex-grow: 0;
+    /* La altura se establece en código (320px), aquí solo fijamos que no se encoja */
+}
+
+/* Aumentar altura de inputs en mobile para mejor usabilidad táctil */
+.input-field {
+    font-size: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-width: 1px;
+    border-color: var(--line-strong);
+    border-radius: 10px;
+    background-color: var(--ink);
+    color: var(--paper);
+    min-height: 44px; /* iOS standard: altura mínima táctil de 44x44 */
+    margin: 0;
+}
+
+.input-field--compact {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 13px;
+    min-height: 40px;
+}
+
+/* Aumentar space entre filas de inputs */
+.edit-panel__row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 18px; /* Antes: 14px; Ahora: +4px para respiro visual */
+}
+
+/* Línea de recordatorio: más spacing */
+.reminder-line {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px; /* Antes: 16px; Ahora: +4px */
+}
+
+.reminder-line > * {
+    margin-right: 8px;
+    margin-bottom: 6px; /* Antes: 4px; Ahora: +2px para mejor flujo */
+}
+
+/* Aumentar tamaño de botones en mobile para mejor usabilidad */
+.btn {
+    font-size: 13px;
+    -unity-font-style: bold;
+    padding-top: 11px; /* Antes: 9px; Ahora: +2px */
+    padding-bottom: 11px;
+    padding-left: 16px; /* Antes: 13px; Ahora: +3px */
+    padding-right: 16px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--line-strong);
+    background-color: var(--surface-2);
+    color: var(--paper);
+    -unity-text-align: middle-center;
+    margin-right: 8px;
+    margin-bottom: 10px; /* Antes: 8px; Ahora: +2px */
+    min-height: 44px; /* iOS standard: altura mínima táctil */
+}
+
+.btn--primary {
+    background-color: var(--herb);
+    color: var(--herb-ink);
+    border-color: var(--herb);
+    min-height: 44px;
+}
+
+.btn--danger {
+    color: var(--rust);
+    border-color: var(--rust);
+    min-height: 44px;
+}
+
+.btn--ghost {
+    background-color: rgba(0, 0, 0, 0);
+    min-height: 44px;
+}
+
+/* Cuando un TextField está focused (teclado visible) */
+.input-field:focus {
+    border-color: var(--herb);
+    border-width: 1.5px;
+    /* Añade un pequeño efecto visual que indica que está activo */
+}
+
+.input-field:focus > .unity-text-field__input,
+.input-field:focus > .unity-base-text-field__input {
+    /* Sin cambios, pero la estructura permite agregar estilos si se necesita */
+}
+
+/* Si deseas que el scroll sea más "viscoso" o lento en mobile */
+.unity-scroll-view {
+    /* La velocidad de scroll está controlada en código C# */
+    /* Aquí solo podemos afectar la apariencia visual */
+}
+
+/* Si tu app está en fullscreen y necesita respetar el safe area de iOS */
+.wrap {
+    max-width: 980px;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 24px 16px 56px;
+    flex-grow: 1;
+    width: 100%;
+    overflow: hidden;
+}

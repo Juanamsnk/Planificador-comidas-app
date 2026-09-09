@@ -33,6 +33,9 @@ namespace QueComemos.UI
             public Label dayNum;
             public MealSlotRefs comida;
             public MealSlotRefs cena;
+
+            // NUEVO: se guarda la fecha asociada a esta tarjeta para poder hacer scroll a ella.
+            public string dateStr;
         }
 
         private class MealSlotRefs
@@ -60,6 +63,9 @@ namespace QueComemos.UI
         private Button ownCalendarBtn;
         private VisualElement sharedCalendarsContainer;
 
+        // NUEVO: ScrollView que contiene la semana y el panel de edición.
+        private ScrollView weekScroll;
+
         [Tooltip("Arrastra aquí el asset Components/CalendarMenuRow.uxml — hace falta para poder crear filas nuevas en tiempo de ejecución.")]
         [SerializeField] private VisualTreeAsset calendarMenuRowTemplate;
 
@@ -85,6 +91,7 @@ namespace QueComemos.UI
         private Button saveBtn;
         private Button deleteBtn;
         private Button closeBtn;
+        private VisualElement keyboardSpacer; // Espacio vacío para dejar lugar al teclado
 
         // Toast
         private Label toast;
@@ -96,6 +103,7 @@ namespace QueComemos.UI
         private (string date, string type)? selected;
         private bool menuOpen;
         private bool isLightTheme;
+        private string lastVisibleDate; // Guardar qué día estaba visible antes de abrir edición
 
         private void OnEnable()
         {
@@ -128,6 +136,7 @@ namespace QueComemos.UI
             }
 
             RegisterEvents();
+            CreateKeyboardSpacer();
             Render();
 
             ConnectToFirebase();
@@ -169,6 +178,9 @@ namespace QueComemos.UI
             data.Clear();
             foreach (var kv in firebaseData) data[kv.Key] = kv.Value;
             Render();
+
+            // NUEVO: después de cargar/cambiar los datos, vuelve a mostrar el día de hoy.
+            ScrollToToday();
         }
 
         private void HandleFirebaseError(string message)
@@ -280,6 +292,8 @@ namespace QueComemos.UI
             ownCalendarBtn = panelRoot.Q<VisualElement>("own-calendar-item").Q<Button>("menu-item");
             sharedCalendarsContainer = panelRoot.Q<VisualElement>("shared-calendars-container");
 
+            weekScroll = panelRoot.Q<ScrollView>("page-scroll");
+
             prevWeekBtn = panelRoot.Q<Button>("prev-week-btn");
             nextWeekBtn = panelRoot.Q<Button>("next-week-btn");
             todayBtn = panelRoot.Q<Button>("today-btn");
@@ -370,6 +384,11 @@ namespace QueComemos.UI
             saveBtn.clicked += OnSaveClicked;
             deleteBtn.clicked += OnDeleteClicked;
             closeBtn.clicked += OnCloseClicked;
+
+            RegisterKeyboardScrolling(dishField);
+            RegisterKeyboardScrolling(reminderDateField);
+            RegisterKeyboardScrolling(reminderTimeField);
+            RegisterKeyboardScrolling(reminderTitleField);
         }
 
         private void RegisterCellClick(MealSlotRefs slot)
@@ -378,6 +397,9 @@ namespace QueComemos.UI
             {
                 var (dateStr, type) = ((string, string))slot.cell.userData;
                 selected = (dateStr, type);
+
+                lastVisibleDate = dateStr;
+
                 RenderWeekGrid();
                 RenderEditPanel();
             };
@@ -577,6 +599,8 @@ namespace QueComemos.UI
                 bool isToday = dateStr == todayStr;
                 var refs = dayCards[i];
 
+                refs.dateStr = dateStr;
+
                 refs.dayName.text = DayNames[IsoWeekdayIndex(d)];
                 refs.dayNum.text = $"{d.Day} {Months[d.Month - 1].Substring(0, 3)}";
 
@@ -622,10 +646,13 @@ namespace QueComemos.UI
             if (!selected.HasValue)
             {
                 editPanel.style.display = DisplayStyle.None;
+                keyboardSpacer.style.display = DisplayStyle.None;
                 return;
             }
 
             editPanel.style.display = DisplayStyle.Flex;
+            keyboardSpacer.style.display = DisplayStyle.Flex;
+
             var (dateStr, type) = selected.Value;
             data.TryGetValue(Key(dateStr, type), out var entry);
             entry ??= new MealEntryData();
@@ -644,6 +671,8 @@ namespace QueComemos.UI
             reminderTitleField.SetValueWithoutNotify(entry.reminderTitle ?? "");
 
             deleteBtn.style.display = string.IsNullOrEmpty(entry.dish) ? DisplayStyle.None : DisplayStyle.Flex;
+
+            ScrollToEditPanel();
         }
 
         #endregion
@@ -674,7 +703,18 @@ namespace QueComemos.UI
             PersistData();
 
             ShowToast("Guardado");
+
+            selected = null;
             Render();
+
+            if (!string.IsNullOrEmpty(lastVisibleDate))
+            {
+                ScrollToDayCard(lastVisibleDate);
+            }
+            else
+            {
+                ScrollToToday();
+            }
         }
 
         private void OnDeleteClicked()
@@ -682,8 +722,18 @@ namespace QueComemos.UI
             if (!selected.HasValue) return;
             data.Remove(Key(selected.Value.date, selected.Value.type));
             PersistData();
+
             selected = null;
             Render();
+
+            if (!string.IsNullOrEmpty(lastVisibleDate))
+            {
+                ScrollToDayCard(lastVisibleDate);
+            }
+            else
+            {
+                ScrollToToday();
+            }
         }
 
         /// <summary>
@@ -699,6 +749,15 @@ namespace QueComemos.UI
         {
             selected = null;
             Render();
+
+            if (!string.IsNullOrEmpty(lastVisibleDate))
+            {
+                ScrollToDayCard(lastVisibleDate);
+            }
+            else
+            {
+                ScrollToToday();
+            }
         }
 
         private void OnRandomDishClicked()
@@ -791,6 +850,99 @@ namespace QueComemos.UI
         {
             var d = DateTime.Parse(dateStr).AddDays(-1);
             return (FormatDate(d), "12:00");
+        }
+
+        #endregion
+
+        #region Keyboard & Scroll Management
+
+        /// <summary>
+        /// Crea un espaciador invisible al final del panel de edición
+        /// para dejar lugar cuando aparece el teclado virtual en mobile
+        /// </summary>
+        private void CreateKeyboardSpacer()
+        {
+            keyboardSpacer = new VisualElement
+            {
+                name = "keyboard-spacer"
+            };
+
+            // Altura aproximada del teclado virtual en mobile (iOS/Android)
+            keyboardSpacer.style.height = 320;
+            keyboardSpacer.style.width = Length.Percent(100);
+            keyboardSpacer.style.display = DisplayStyle.None;
+
+            // Agregar al final del edit-panel
+            editPanel.Add(keyboardSpacer);
+
+            Debug.Log("[MainMenuController] Spacer para teclado creado");
+        }
+
+        /// <summary>
+        /// Registra listeners para cada TextField que hacen scroll
+        /// cuando aparece el teclado (mediante FocusIn)
+        /// </summary>
+        private void RegisterKeyboardScrolling(TextField field)
+        {
+            field.RegisterCallback<FocusInEvent>(evt =>
+            {
+                // Scrollear al campo cuando obtiene el foco
+                // El delay permite que el teclado se haya renderizado ya
+                field.schedule.Execute(() => ScrollToEditPanel()).ExecuteLater(150);
+            });
+        }
+
+        /// <summary>
+        /// Scrollea al panel de edición y vuelve a hacerlo después para evitar
+        /// que el teclado tape el campo de entrada.
+        /// </summary>
+        private void ScrollToEditPanel()
+        {
+            if (weekScroll == null || editPanel == null) return;
+
+            // Scroll más agresivo para mobile: intenta centrar el panel
+            weekScroll.ScrollTo(editPanel);
+
+            // Re-scroll tras layout para asegurar que el teclado no tapa nada
+            editPanel.schedule.Execute(ScrollToEditPanelAdjusted).ExecuteLater(250);
+        }
+
+        private void ScrollToEditPanelAdjusted()
+        {
+            if (weekScroll == null || editPanel == null) return;
+
+            // Scroll de nuevo, pero esta vez después de que el teclado haya aparecido completamente
+            weekScroll.ScrollTo(editPanel);
+
+            // Log para debugging
+            Debug.Log($"[MainMenuController] EditPanel scrolleado. ScrollOffset={weekScroll.scrollOffset}");
+        }
+
+        /// <summary>
+        /// Scrollea al día especificado (por fecha en formato "YYYY-MM-DD"),
+        /// buscando la tarjeta con ese nombre.
+        /// </summary>
+        private void ScrollToDayCard(string dateStr)
+        {
+            if (weekScroll == null || dayCards == null) return;
+
+            var dayCard = dayCards.FirstOrDefault(dc => dc.dateStr == dateStr);
+            if (dayCard == null) return;
+
+            weekScroll.ScrollTo(dayCard.card);
+        }
+
+        /// <summary>
+        /// Scrollea al día de hoy, pero solo si hoy pertenece a la semana visible.
+        /// </summary>
+        private void ScrollToToday()
+        {
+            string todayStr = FormatDate(DateTime.Today);
+            var weekDates = WeekDates(weekOffset);
+
+            if (!weekDates.Any(d => FormatDate(d) == todayStr)) return;
+
+            ScrollToDayCard(todayStr);
         }
 
         #endregion
