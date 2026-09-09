@@ -219,6 +219,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c86865b73e658e4581f8387274a6bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QueComemos.UI.MainMenuController
+  webBaseUrl: https://keen-haupia-6b85c0.netlify.app
+  loginSceneName: Authentication
+  calendarMenuRowTemplate: {fileID: 9197481963319205126, guid: b82d86d8f618fa243aac4b886914fbd0, type: 3}
 --- !u!1 &794510598
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07d782072052ec46ae60ca9a8503b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QueComemos.Data.FirebaseManager
-  testUserId: test-user-uid-001
+  testUserId: HsEPmB9OKDOB0ZnE3ebsaKpKp6B3
 --- !u!1 &973015399
 GameObject:
   m_ObjectHideFlags: 0

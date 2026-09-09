@@ -206,6 +206,11 @@
     padding-left: 13px;
     padding-right: 13px;
     -unity-text-align: middle-left;
+    /* Sin esto, al ser hijo de un contenedor en columna (.topbar), se
+       estira para ocupar todo el ancho disponible en vez de ajustarse a
+       su propio texto — el mismo tipo de fallo que ya hemos visto con
+       .day-card, el menú, etc. */
+    align-self: flex-start;
 }
 
 .badge--owner {
@@ -213,6 +218,10 @@
     background-color: rgba(143, 196, 110, 0.12);
     border-width: 1px;
     border-color: rgba(143, 196, 110, 0.35);
+    border-bottom-left-radius : 6px;
+    border-top-left-radius : 6px;
+    border-bottom-right-radius : 6px;
+    border-top-right-radius : 6px;
 }
 
 .badge--shared {
@@ -220,6 +229,10 @@
     background-color: rgba(124, 147, 196, 0.14);
     border-width: 1px;
     border-color: rgba(124, 147, 196, 0.4);
+    border-bottom-left-radius : 6px;
+    border-top-left-radius : 6px;
+    border-bottom-right-radius : 6px;
+    border-top-right-radius : 6px;
 }
 
 .badge--demo {

@@ -121,6 +121,10 @@
     background-color: rgba(0, 0, 0, 0);
     padding: 10px 11px;
     border-radius: 9px;
+    /* El Button de Unity trae su propio borde del tema base; sin ponerlo
+       a 0 se ve un contorno permanente que no está en la web (ahí un
+       ítem de menú normal no tiene borde hasta que está activo/hover). */
+    border-width: 0;
     font-size: 14px;
     color: var(--paper);
     flex-shrink: 0;
@@ -162,11 +166,13 @@
     width: 28px;
     height: 28px;
     border-radius: 14px;
+    border-width: 0;
     background-color: rgba(0, 0, 0, 0);
     color: var(--rust);
     font-size: 16px;
     -unity-text-align: middle-center;
     margin-left: 4px;
+    flex-shrink: 0;
 }
 
 .leave-menu-btn:hover {

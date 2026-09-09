@@ -8,29 +8,7 @@ namespace QueComemos.Data
 {
     /// <summary>
     /// Login con Google usando el flujo OAuth "federado" que trae el propio
-    /// Firebase Auth Unity SDK (SignInWithProviderAsync) — SIN el plugin
-    /// separado "Google Sign-In for Unity" (el que te daba miles de errores
-    /// de dependencias duplicadas con el Android Resolver). Firebase abre
-    /// una pestaña del navegador del sistema (Chrome Custom Tabs en Android
-    /// / ASWebAuthenticationSession en iOS) para el login de Google y
-    /// vuelve sola a la app cuando termina.
-    ///
-    /// Requisitos en consola (sin esto, falla igual aunque el código esté bien):
-    ///   1) Firebase Console → Authentication → Sign-in method → Google
-    ///      activado (la web ya lo tiene, así que probablemente ya está).
-    ///   2) (Android) SHA-1 y SHA-256 del keystore de firma registradas en
-    ///      Firebase Console → Configuración del proyecto → tu app Android
-    ///      → "Añadir huella digital".
-    ///   3) Que el Package Name (Android) / Bundle ID (iOS) en Player
-    ///      Settings coincida EXACTAMENTE con el registrado en Firebase
-    ///      para esa app.
-    ///
-    /// NOTA DE VERSIÓN: SignInWithProviderAsync/FederatedOAuthProviderData
-    /// se añadieron en versiones relativamente recientes del Firebase Auth
-    /// Unity SDK. Si al compilar te sale "no existe en el contexto actual"
-    /// para alguno de estos dos nombres, es que tu SDK importado es más
-    /// antiguo — dime el error exacto y buscamos el nombre equivalente en
-    /// tu versión.
+    /// Firebase Auth Unity SDK (SignInWithProviderAsync)
     /// </summary>
     public class GoogleAuthManager : MonoBehaviour
     {
@@ -63,6 +41,7 @@ namespace QueComemos.Data
                 Destroy(gameObject);
                 return;
             }
+            
             Instance = this;
             transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
@@ -76,12 +55,7 @@ namespace QueComemos.Data
         /// <summary>
         /// FirebaseAuth.DefaultInstance necesita que FirebaseApp ya haya
         /// terminado de comprobar/arreglar sus dependencias (lo que hace
-        /// FirebaseManager de forma asíncrona) — si se accede antes de
-        /// tiempo, puede lanzar una excepción dentro de Start() que Unity
-        /// solo ejecuta UNA vez, dejando "auth" en null para siempre y el
-        /// botón de login mostrando "todavía no está listo" sin parar.
-        /// Por eso esperamos activamente a que FirebaseManager esté listo
-        /// en vez de asumir que ya lo está.
+        /// FirebaseManager de forma asíncrona)
         /// </summary>
         private IEnumerator InitializeWhenFirebaseReady()
         {
@@ -167,7 +141,7 @@ namespace QueComemos.Data
         {
             // El UID de Firebase (idéntico al que ya usa la web con este
             // mismo proyecto) pasa a ser el calendario activo.
-            FirebaseManager.Instance?.SetCalendarId(user.UserId);
+            FirebaseManager.Instance?.SetCalendarId(user.UserId, isOwnCalendar: true);
             OnSignedIn?.Invoke(user);
         }
     }

@@ -8,10 +8,9 @@ namespace QueComemos.UI
 {
     public class LoginSceneController : MonoBehaviour
     {
-        [Tooltip("Arrastra aquí el GameObject '---UIDOCUMENT---' (el que tiene el componente UIDocument real, con Authentication como Source Asset). NO uses GetComponent/RequireComponent porque este script no vive en ese mismo GameObject.")]
         [SerializeField] private UIDocument uiDocument;
 
-        [Tooltip("Nombre exacto de la escena del menú principal (debe estar añadida en Build Settings).")]
+        [Tooltip("Nombre exacto de la escena del menú principal")]
         [SerializeField] private string mainMenuSceneName = "Menu";
 
         private Button googleSignInButton;
@@ -21,6 +20,12 @@ namespace QueComemos.UI
         {
             var root = uiDocument.rootVisualElement;
             googleSignInButton = root.Q<Button>("google-login-btn");
+
+            if (googleSignInButton == null)
+            {
+                Debug.LogError("[LoginSceneController] No se encontró el botón \"google-login-btn\"");
+                return;
+            }
 
             googleSignInButton.clicked += HandleSignInButtonClicked;
             googleSignInButton.SetEnabled(false);
@@ -55,6 +60,14 @@ namespace QueComemos.UI
                 HandleSignedIn(GoogleAuthManager.Instance.CurrentUser);
                 yield break;
             }
+
+#if UNITY_EDITOR
+            // En el Editor el login real de Google no funciona.
+            Debug.Log("[LoginSceneController] Editor: saltando el login real, " +
+                "usando el \"Test User Id\" de FirebaseManager.");
+            SceneManager.LoadScene(mainMenuSceneName);
+            yield break;
+#endif
 
             googleSignInButton.SetEnabled(true);
             Debug.Log("[LoginSceneController] Botón habilitado. Listo para pulsar.");
@@ -95,7 +108,7 @@ namespace QueComemos.UI
         private void HandleSignInFailed(string message)
         {
             Debug.LogWarning($"[LoginSceneController] Login fallido: {message}");
-            googleSignInButton.SetEnabled(true);
+            if (googleSignInButton != null) googleSignInButton.SetEnabled(true);
         }
     }
 }
