@@ -104,6 +104,7 @@ namespace QueComemos.UI
         private bool menuOpen;
         private bool isLightTheme;
         private string lastVisibleDate; // Guardar qué día estaba visible antes de abrir edición
+        private IVisualElementScheduledItem keyboardCheckTask;
 
         private void OnEnable()
         {
@@ -148,6 +149,7 @@ namespace QueComemos.UI
         private void OnDisable()
         {
             panelRoot?.UnregisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
+            keyboardCheckTask?.Pause();
 
             if (FirebaseManager.Instance != null)
             {
@@ -651,7 +653,7 @@ namespace QueComemos.UI
             }
 
             editPanel.style.display = DisplayStyle.Flex;
-            keyboardSpacer.style.display = DisplayStyle.Flex;
+            UpdateKeyboardSpacer();
 
             var (dateStr, type) = selected.Value;
             data.TryGetValue(Key(dateStr, type), out var entry);
@@ -870,12 +872,29 @@ namespace QueComemos.UI
             // Altura aproximada del teclado virtual en mobile (iOS/Android)
             keyboardSpacer.style.height = 320;
             keyboardSpacer.style.width = Length.Percent(100);
+            keyboardSpacer.style.flexShrink = 0;
+            keyboardSpacer.style.flexGrow = 0;
             keyboardSpacer.style.display = DisplayStyle.None;
 
             // Agregar al final del edit-panel
             editPanel.Add(keyboardSpacer);
 
+            // Comprobar periódicamente si el teclado está realmente visible.
+            keyboardCheckTask = editPanel.schedule
+                .Execute(UpdateKeyboardSpacer)
+                .Every(100);
+
             Debug.Log("[MainMenuController] Spacer para teclado creado");
+        }
+
+        private void UpdateKeyboardSpacer()
+        {
+            if (keyboardSpacer == null) return;
+
+            bool keyboardVisible = TouchScreenKeyboard.visible;
+            keyboardSpacer.style.display = keyboardVisible
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
         }
 
         /// <summary>
@@ -886,9 +905,12 @@ namespace QueComemos.UI
         {
             field.RegisterCallback<FocusInEvent>(evt =>
             {
-                // Scrollear al campo cuando obtiene el foco
-                // El delay permite que el teclado se haya renderizado ya
-                field.schedule.Execute(() => ScrollToEditPanel()).ExecuteLater(150);
+                // Esperar a que el teclado se haya mostrado realmente.
+                field.schedule.Execute(() =>
+                {
+                    UpdateKeyboardSpacer();
+                    ScrollToEditPanel();
+                }).ExecuteLater(250);
             });
         }
 
