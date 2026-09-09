@@ -10,9 +10,6 @@ namespace QueComemos.UI
     {
         [SerializeField] private UIDocument uiDocument;
 
-        [Tooltip("Nombre exacto de la escena del menú principal")]
-        [SerializeField] private string mainMenuSceneName = "Menu";
-
         private Button googleSignInButton;
         private Coroutine waitForAuthManagerRoutine;
 
@@ -65,7 +62,7 @@ namespace QueComemos.UI
             // En el Editor el login real de Google no funciona.
             Debug.Log("[LoginSceneController] Editor: saltando el login real, " +
                 "usando el \"Test User Id\" de FirebaseManager.");
-            SceneManager.LoadScene(mainMenuSceneName);
+            SceneHelper.LoadScene(SceneNames.Menu);
             yield break;
 #endif
 
@@ -101,8 +98,8 @@ namespace QueComemos.UI
 
         private void HandleSignedIn(Firebase.Auth.FirebaseUser user)
         {
-            Debug.Log($"[LoginSceneController] Login OK: {user.UserId}. Cargando \"{mainMenuSceneName}\"...");
-            SceneManager.LoadScene(mainMenuSceneName);
+            Debug.Log($"[LoginSceneController] Login OK: {user.UserId}. Cargando \"{SceneNames.Menu}\"...");
+            SceneHelper.LoadScene(SceneNames.Menu);
         }
 
         private void HandleSignInFailed(string message)

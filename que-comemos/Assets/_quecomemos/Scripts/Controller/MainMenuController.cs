@@ -16,9 +16,6 @@ namespace QueComemos.UI
         [Tooltip("URL base de la web (sin barra final), para construir los enlaces para compartir. Cámbiala por tu dominio real.")]
         [SerializeField] private string webBaseUrl = "https://keen-haupia-6b85c0.netlify.app";
 
-        [Tooltip("Nombre exacto de la escena de Login, a la que se vuelve al cerrar sesión.")]
-        [SerializeField] private string loginSceneName = "Login";
-
         private static readonly string[] DayNames =
             { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
 
@@ -542,7 +539,7 @@ namespace QueComemos.UI
         {
             CloseMenu();
             GoogleAuthManager.Instance?.SignOut();
-            UnityEngine.SceneManagement.SceneManager.LoadScene(loginSceneName);
+            SceneHelper.LoadScene(SceneNames.Authentication);
         }
 
         #endregion

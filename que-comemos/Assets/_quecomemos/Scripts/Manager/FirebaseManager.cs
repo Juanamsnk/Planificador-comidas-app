@@ -8,15 +8,8 @@ using UnityEngine;
 namespace QueComemos.Data
 {
     /// <summary>
-    /// Habla con el MISMO Realtime Database que ya usa la web
-    /// (calendars/{calendarId}/mealplan), con la misma estructura de clave
-    /// plana "YYYY-MM-DD|comida" / "YYYY-MM-DD|cena".
-    ///
-    /// Arranca apuntando a un UID de PRUEBA fijo (campo "testUserId") para
-    /// poder seguir probando sin login. En cuanto GoogleAuthManager
-    /// complete el login, llama a SetCalendarId(uid real) y este
-    /// componente cambia de calendario sobre la marcha (se desuscribe del
-    /// anterior y se suscribe al nuevo).
+    /// Habla con Realtime Database que ya usa la web
+    /// Arranca apuntando a un UID de PRUEBA fijo (campo "testUserId")
     /// </summary>
     public class FirebaseManager : MonoBehaviour
     {
