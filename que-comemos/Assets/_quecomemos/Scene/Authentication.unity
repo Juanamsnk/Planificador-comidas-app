@@ -197,7 +197,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QueComemos.UI.LoginSceneController
   uiDocument: {fileID: 377732988}
-  mainMenuSceneName: Menu
 --- !u!114 &377732988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07d782072052ec46ae60ca9a8503b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QueComemos.Data.FirebaseManager
-  testUserId: HsEPmB9OKDOB0ZnE3ebsaKpKp6B3
+  testUserId: Kn1NRuQvfTQWuJdkCZvbctnH34K3
 --- !u!114 &2033880051
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using System.Linq;
 using QueComemos.Data;
 using UnityEngine;
 using UnityEngine.UIElements;
+using QueComemos.Notifications;
 
 namespace QueComemos.UI
 {
@@ -682,10 +683,13 @@ namespace QueComemos.UI
         #region Acciones del Panel de Edición
         private void OnSaveClicked()
         {
-            if (!selected.HasValue) return;
+            if (!selected.HasValue)
+                return;
+
             var (dateStr, type) = selected.Value;
 
             string dish = dishField.value?.Trim();
+
             if (string.IsNullOrEmpty(dish))
             {
                 ShowToast("Escribe el nombre del plato");
@@ -693,22 +697,49 @@ namespace QueComemos.UI
             }
 
             bool remOn = reminderToggle.value;
+
             var entry = new MealEntryData
             {
                 dish = dish,
                 reminderDate = remOn ? reminderDateField.value : null,
                 reminderTime = remOn ? reminderTimeField.value : null,
-                reminderTitle = remOn ? reminderTitleField.value?.Trim() : null,
+                reminderTitle = remOn ? reminderTitleField.value?.Trim() : null
             };
+
+            string notificationId = BuildNotificationId(dateStr, type);
+
+            if (MealNotificationManager.Instance != null)
+            {
+                MealNotificationManager.Instance.CancelMealReminder(notificationId);
+            }
 
             data[Key(dateStr, type)] = entry;
             PersistData();
 
-            ShowToast("Guardado");
+            try
+            {
+                if (remOn)
+                {
+                    Debug.Log("[OnSaveClicked] Intentando programar recordatorio...");
+                    ScheduleReminder(notificationId, entry);
+                    Debug.Log("[OnSaveClicked] Recordatorio programado OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[OnSaveClicked] Error en ScheduleReminder: {ex.Message}\n{ex.StackTrace}");
+                ShowToast("Error al programar el recordatorio");
+            }
 
+            ShowToast(remOn ? "Guardado y recordatorio programado" : "Guardado");
+
+            Debug.Log("[OnSaveClicked] Haciendo selected = null");
             selected = null;
+
+            Debug.Log("[OnSaveClicked] Llamando a Render()");
             Render();
 
+            Debug.Log("[OnSaveClicked] Scrolleando");
             if (!string.IsNullOrEmpty(lastVisibleDate))
             {
                 ScrollToDayCard(lastVisibleDate);
@@ -717,15 +748,131 @@ namespace QueComemos.UI
             {
                 ScrollToToday();
             }
+
+            Debug.Log("[OnSaveClicked] Terminado");
+        }
+
+        private static string BuildNotificationId(
+    string dateStr,
+    string type)
+        {
+            return $"{dateStr}_{type}";
+        }
+
+        private void ScheduleReminder(
+    string notificationId,
+    MealEntryData entry)
+        {
+            if (MealNotificationManager.Instance == null)
+            {
+                Debug.LogWarning(
+                    "[MainMenuController] " +
+                    "No existe MealNotificationManager en la escena."
+                );
+
+                ShowToast(
+                    "Guardado, pero no se pudo programar el aviso."
+                );
+
+                return;
+            }
+
+            if (string.IsNullOrEmpty(entry.reminderDate) ||
+                string.IsNullOrEmpty(entry.reminderTime))
+            {
+                Debug.LogWarning(
+                    "[MainMenuController] " +
+                    "El recordatorio no tiene fecha u hora."
+                );
+
+                return;
+            }
+
+            DateTime reminderDateTime;
+
+            bool parsed = DateTime.TryParse(
+                $"{entry.reminderDate} {entry.reminderTime}",
+                out reminderDateTime
+            );
+
+            if (!parsed)
+            {
+                Debug.LogError(
+                    $"[MainMenuController] " +
+                    $"No se pudo interpretar la fecha del recordatorio: " +
+                    $"{entry.reminderDate} {entry.reminderTime}"
+                );
+
+                ShowToast(
+                    "La fecha/hora del recordatorio no es válida."
+                );
+
+                return;
+            }
+
+            if (reminderDateTime <= DateTime.Now)
+            {
+                Debug.LogWarning(
+                    $"[MainMenuController] " +
+                    $"El recordatorio está en el pasado: " +
+                    $"{reminderDateTime}"
+                );
+
+                ShowToast(
+                    "La fecha del recordatorio ya ha pasado."
+                );
+
+                return;
+            }
+
+            string title = string.IsNullOrEmpty(entry.reminderTitle)
+                ? "🍽️ Recordatorio de comida"
+                : entry.reminderTitle;
+
+            string message = string.IsNullOrEmpty(entry.dish)
+                ? "Tienes una comida programada."
+                : entry.dish;
+
+            MealNotificationManager.Instance.ScheduleMealReminder(
+                notificationId,
+                title,
+                message,
+                reminderDateTime
+            );
         }
 
         private void OnDeleteClicked()
         {
-            if (!selected.HasValue) return;
-            data.Remove(Key(selected.Value.date, selected.Value.type));
+            if (!selected.HasValue)
+                return;
+
+            var (dateStr, type) = selected.Value;
+
+            string notificationId = BuildNotificationId(
+                dateStr,
+                type
+            );
+
+            // Cancelar el recordatorio local.
+            if (MealNotificationManager.Instance != null)
+            {
+                MealNotificationManager.Instance.CancelMealReminder(
+                    notificationId
+                );
+            }
+
+            // Eliminar la comida.
+            data.Remove(
+                Key(dateStr, type)
+            );
+
+            // Guardar cambios en Firebase.
             PersistData();
 
+            ShowToast("Eliminado");
+
             selected = null;
+
             Render();
 
             if (!string.IsNullOrEmpty(lastVisibleDate))
