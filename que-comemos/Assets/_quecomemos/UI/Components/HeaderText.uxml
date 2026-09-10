@@ -4,12 +4,7 @@
     <ui:VisualElement name="header-bar" class="topbar">
         <ui:VisualElement name="header-row" class="header-row">
             <ui:Label text="Qué comemos" class="brand-title"/>
-            <ui:VisualElement name="header-actions" class="header-actions">
-                <ui:Button name="theme-toggle-btn" text="" tooltip="Modo claro/oscuro" icon-image="project://database/Assets/_quecomemos/Resources/Icons/moon.png?fileID=2800000&amp;guid=8db6303c53a0a6340a8dbfdc5369ac1c&amp;type=3#moon" class="icon-btn"/>
-                <ui:VisualElement name="menu-wrap" class="menu-wrap">
-                    <ui:Button name="menu-toggle-btn" text="" tooltip="Menú" icon-image="project://database/Assets/_quecomemos/Resources/Icons/IconBurger.png?fileID=2800000&amp;guid=2acbb61f15fc9fa48be12a43a384266e&amp;type=3#IconBurger" class="icon-btn"/>
-                </ui:VisualElement>
-            </ui:VisualElement>
+            <ui:VisualElement name="header-actions" class="header-actions"/>
         </ui:VisualElement>
         <ui:Label name="owner-badge" text="Tu calendario" class="badge badge--owner" style="display: none;"/>
         <ui:Label name="demo-badge" text="Modo demostración: los cambios no se guardan." class="badge badge--demo" style="display: none;"/>

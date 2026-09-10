@@ -420,9 +420,23 @@ namespace QueComemos.UI
         private void ToggleTheme()
         {
             isLightTheme = !isLightTheme;
+
             pageRoot.RemoveFromClassList(isLightTheme ? "theme-dark" : "theme-light");
             pageRoot.AddToClassList(isLightTheme ? "theme-light" : "theme-dark");
-            themeToggleBtn.text = isLightTheme ? "☀️" : "🌙";
+
+            Texture2D icon = Resources.Load<Texture2D>(
+                isLightTheme ? "Icons/sun" : "Icons/moon"
+            );
+
+            if (icon != null)
+            {
+                themeToggleBtn.style.backgroundImage = new StyleBackground(icon);
+                themeToggleBtn.text = "";
+            }
+            else
+            {
+                Debug.LogError("[Theme] No se encontró el icono del tema.");
+            }
         }
 
         private void ToggleMenu()

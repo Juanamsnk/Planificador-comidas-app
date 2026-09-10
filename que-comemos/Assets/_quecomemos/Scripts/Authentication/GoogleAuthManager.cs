@@ -1,7 +1,7 @@
-using System;
-using System.Collections;
 using Firebase.Auth;
 using Firebase.Extensions;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace QueComemos.Data
@@ -41,7 +41,7 @@ namespace QueComemos.Data
                 Destroy(gameObject);
                 return;
             }
-            
+
             Instance = this;
             transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
@@ -139,9 +139,11 @@ namespace QueComemos.Data
 
         private void NotifySignedIn(FirebaseUser user)
         {
-            // El UID de Firebase (idéntico al que ya usa la web con este
-            // mismo proyecto) pasa a ser el calendario activo.
-            FirebaseManager.Instance?.SetCalendarId(user.UserId, isOwnCalendar: true);
+            FirebaseManager.Instance?.SetCalendarId(
+                user.UserId,
+                isOwnCalendar: true
+            );
+
             OnSignedIn?.Invoke(user);
         }
     }
