@@ -173,6 +173,7 @@
     -unity-text-align: middle-center;
     margin-left: 4px;
     flex-shrink: 0;
+    margin-right: 12px;
 }
 
 .leave-menu-btn:hover {

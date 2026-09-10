@@ -182,7 +182,6 @@ namespace QueComemos.UI
             foreach (var kv in firebaseData) data[kv.Key] = kv.Value;
             Render();
 
-            // NUEVO: después de cargar/cambiar los datos, vuelve a mostrar el día de hoy.
             ScrollToToday();
         }
 
@@ -194,6 +193,8 @@ namespace QueComemos.UI
         /// <summary>Muestra el nombre del calendario que se está viendo ahora mismo</summary>
         private async void UpdateOwnerBadge()
         {
+            Debug.Log("HOLA");
+
             var firebase = FirebaseManager.Instance;
             if (firebase == null || ownerBadge == null || string.IsNullOrEmpty(firebase.CurrentCalendarId))
             {

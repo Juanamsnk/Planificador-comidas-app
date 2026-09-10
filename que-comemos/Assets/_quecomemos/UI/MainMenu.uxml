@@ -12,11 +12,11 @@
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Mobile-Optimizations.uss?fileID=7433441132597879392&amp;guid=f33e4459a2a6c7645a612c6500cb1b84&amp;type=3#Mobile-Optimizations"/>
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
     <ui:VisualElement name="root" class="root theme-dark">
-        <ui:VisualElement name="SafeArea" class="safe-area">
-            <ui:ScrollView name="page-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1;">
-                <ui:VisualElement name="wrap" class="wrap">
-                    <ui:Instance template="HeaderBar" name="header-bar-instance"/>
-                    <ui:Instance template="WeekNav" name="week-nav-instance"/>
+<ui:VisualElement name="SafeArea" class="safe-area">
+    <ui:Instance template="HeaderBar" name="header-bar-instance"/>
+    <ui:ScrollView name="page-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1;">
+        <ui:VisualElement name="wrap" class="wrap">
+            <ui:Instance template="WeekNav" name="week-nav-instance"/>
                     <ui:VisualElement name="week-grid" class="week-grid">
                         <ui:Instance template="DayCard" name="day-card-0"/>
                         <ui:Instance template="DayCard" name="day-card-1"/>

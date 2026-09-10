@@ -15,7 +15,7 @@
     max-width: 980px;
     margin-left: 0;
     margin-right: 0;
-    padding: 24px 16px 56px;
+    padding: 80px 16px 56px; 
     flex-grow: 1;
     width: 100%;
     overflow: hidden;
