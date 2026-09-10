@@ -1,33 +1,17 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="../Styles/Molecules.uss" />
-    <Style src="../Styles/Organisms.uss" />
-    <ui:Template name="MenuItem" src="MenuItem.uxml" />
-    <ui:Template name="CalendarMenuRow" src="CalendarMenuRow.uxml" />
-
-    <!--
-      Organismo: panel desplegable del botón hamburguesa (equivalente a
-      #dropdownMenu). El contenido de "Calendarios compartidos" es dinámico
-      en el HTML original (uno por calendario) — aquí se deja un contenedor
-      vacío ("shared-calendars-container") donde el script instanciará N
-      copias de CalendarMenuRow.uxml en tiempo de ejecución.
-    -->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="CalendarMenuRow" src="project://database/Assets/_quecomemos/UI/Components/CalendarMenuRow.uxml?fileID=9197481963319205126&amp;guid=b82d86d8f618fa243aac4b886914fbd0&amp;type=3#CalendarMenuRow"/>
+    <ui:Template name="MenuItem" src="project://database/Assets/_quecomemos/UI/Components/MenuItem.uxml?fileID=9197481963319205126&amp;guid=8939688d88f8e2b48b79978df6a9ea95&amp;type=3#MenuItem"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Organisms.uss?fileID=7433441132597879392&amp;guid=4606e07a7bdf1eb48825e5e55ef1577d&amp;type=3#Organisms"/>
     <ui:VisualElement name="dropdown-menu" class="dropdown-menu">
-        <ui:Label text="Calendarios" class="menu-section-label" />
-
-        <ui:Instance template="MenuItem" name="own-calendar-item" />
-
-        <ui:VisualElement name="shared-calendars-container" />
-
-        <ui:VisualElement name="divider-1" class="menu-divider" />
-
-        <ui:Button name="share-real-btn" text="Compartir enlace" class="menu-item" />
-
-        <ui:VisualElement name="divider-2" class="menu-divider" />
-
-        <ui:Button name="share-demo-btn" text="Compartir enlace de demostración" class="menu-item" />
-
-        <ui:VisualElement name="divider-3" class="menu-divider" />
-
-        <ui:Button name="logout-btn" text="Cerrar sesión" class="menu-item menu-item--danger" />
+        <ui:Label text="Calendarios" class="menu-section-label"/>
+        <ui:Instance template="MenuItem" name="own-calendar-item"/>
+        <ui:VisualElement name="shared-calendars-container"/>
+        <ui:VisualElement name="divider-1" class="menu-divider"/>
+        <ui:Button name="share-real-btn" text="Compartir enlace" class="menu-item"/>
+        <ui:VisualElement name="divider-2" class="menu-divider"/>
+        <ui:Button name="share-demo-btn" text="Apoyar a &quot;QueComemos&quot;" class="menu-item"/>
+        <ui:VisualElement name="divider-3" class="menu-divider"/>
+        <ui:Button name="logout-btn" text="Cerrar sesión" class="menu-item menu-item--danger"/>
     </ui:VisualElement>
 </ui:UXML>

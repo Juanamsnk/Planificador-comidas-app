@@ -7,6 +7,10 @@
     background-color: var(--ink);
 }
 
+.safe-area {
+    flex-grow: 1;
+}
+
 .wrap {
     max-width: 980px;
     margin-left: 0;

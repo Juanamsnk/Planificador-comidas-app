@@ -7,30 +7,32 @@
     <ui:Template name="WeekNav" src="project://database/Assets/_quecomemos/UI/Components/WeekNav.uxml?fileID=9197481963319205126&amp;guid=cbf6ff3bc2eab5c4d9dc801db328b460&amp;type=3#WeekNav"/>
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Theme.uss?fileID=7433441132597879392&amp;guid=1d375dd4f88127d42a5cb6b8efe334e5&amp;type=3#Theme"/>
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Atoms.uss?fileID=7433441132597879392&amp;guid=87ec63ee3523e6b4eb52966548b59a7c&amp;type=3#Atoms"/>
-    <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Organisms.uss?fileID=7433441132597879392&amp;guid=4606e07a7bdf1eb48825e5e55ef1577d&amp;type=3#Organisms"/>
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Page.uss?fileID=7433441132597879392&amp;guid=114a2d5be27901f44be697119cbc01b1&amp;type=3#Page"/>
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Mobile-Optimizations.uss?fileID=7433441132597879392&amp;guid=f33e4459a2a6c7645a612c6500cb1b84&amp;type=3#Mobile-Optimizations"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
     <ui:VisualElement name="root" class="root theme-dark">
-        <ui:ScrollView name="page-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1;">
-            <ui:VisualElement name="wrap" class="wrap">
-                <ui:Instance template="HeaderBar" name="header-bar-instance"/>
-                <ui:Instance template="WeekNav" name="week-nav-instance"/>
-                <ui:VisualElement name="week-grid" class="week-grid">
-                    <ui:Instance template="DayCard" name="day-card-0"/>
-                    <ui:Instance template="DayCard" name="day-card-1"/>
-                    <ui:Instance template="DayCard" name="day-card-2"/>
-                    <ui:Instance template="DayCard" name="day-card-3"/>
-                    <ui:Instance template="DayCard" name="day-card-4"/>
-                    <ui:Instance template="DayCard" name="day-card-5"/>
-                    <ui:Instance template="DayCard" name="day-card-6"/>
+        <ui:VisualElement name="SafeArea" class="safe-area">
+            <ui:ScrollView name="page-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1;">
+                <ui:VisualElement name="wrap" class="wrap">
+                    <ui:Instance template="HeaderBar" name="header-bar-instance"/>
+                    <ui:Instance template="WeekNav" name="week-nav-instance"/>
+                    <ui:VisualElement name="week-grid" class="week-grid">
+                        <ui:Instance template="DayCard" name="day-card-0"/>
+                        <ui:Instance template="DayCard" name="day-card-1"/>
+                        <ui:Instance template="DayCard" name="day-card-2"/>
+                        <ui:Instance template="DayCard" name="day-card-3"/>
+                        <ui:Instance template="DayCard" name="day-card-4"/>
+                        <ui:Instance template="DayCard" name="day-card-5"/>
+                        <ui:Instance template="DayCard" name="day-card-6"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="edit-slot">
+                        <ui:Instance template="EditPanel" name="edit-panel-instance"/>
+                    </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="edit-slot">
-                    <ui:Instance template="EditPanel" name="edit-panel-instance"/>
-                </ui:VisualElement>
-            </ui:VisualElement>
-        </ui:ScrollView>
-        <ui:Instance template="Toast" name="toast-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
-        <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
+            </ui:ScrollView>
+            <ui:Instance template="Toast" name="toast-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
+            <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

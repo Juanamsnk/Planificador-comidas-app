@@ -58,7 +58,7 @@ namespace QueComemos.UI
         private Button menuToggleBtn;
         private VisualElement dropdownMenu;
         private Button shareRealBtn;
-        private Button shareDemoBtn;
+        private Button supportBtn;
         private Button logoutBtn;
         private Label ownerBadge;
         private Button ownCalendarBtn;
@@ -231,7 +231,7 @@ namespace QueComemos.UI
             ok &= LogIfNull(menuToggleBtn, "menu-toggle-btn");
             ok &= LogIfNull(dropdownMenu, "dropdown-menu");
             ok &= LogIfNull(shareRealBtn, "share-real-btn");
-            ok &= LogIfNull(shareDemoBtn, "share-demo-btn");
+            ok &= LogIfNull(supportBtn, "share-demo-btn");
             ok &= LogIfNull(logoutBtn, "logout-btn");
             ok &= LogIfNull(ownerBadge, "owner-badge");
             ok &= LogIfNull(ownCalendarBtn, "own-calendar-item > menu-item");
@@ -289,7 +289,7 @@ namespace QueComemos.UI
             menuToggleBtn = panelRoot.Q<Button>("menu-toggle-btn");
             dropdownMenu = panelRoot.Q<VisualElement>("dropdown-menu");
             shareRealBtn = panelRoot.Q<Button>("share-real-btn");
-            shareDemoBtn = panelRoot.Q<Button>("share-demo-btn");
+            supportBtn = panelRoot.Q<Button>("share-demo-btn");
             logoutBtn = panelRoot.Q<Button>("logout-btn");
             ownerBadge = panelRoot.Q<Label>("owner-badge");
             ownCalendarBtn = panelRoot.Q<VisualElement>("own-calendar-item").Q<Button>("menu-item");
@@ -367,7 +367,7 @@ namespace QueComemos.UI
             themeToggleBtn.clicked += ToggleTheme;
             menuToggleBtn.clicked += ToggleMenu;
             shareRealBtn.clicked += OnShareRealClicked;
-            shareDemoBtn.clicked += OnShareDemoClicked;
+            supportBtn.clicked += OnOpenSupport;
             logoutBtn.clicked += OnLogoutClicked;
             ownCalendarBtn.clicked += () => SwitchToCalendar(FirebaseManager.Instance?.OwnCalendarId);
             panelRoot.RegisterCallback<PointerDownEvent>(OnRootPointerDown, TrickleDown.TrickleDown);
@@ -562,16 +562,11 @@ namespace QueComemos.UI
             }
         }
 
-        private void OnShareDemoClicked()
+        private void OnOpenSupport()
         {
             CloseMenu();
 
-            string url = $"{webBaseUrl}/?demo=1";
-            bool sharedNatively = NativeShare.ShareText(url);
-            if (!sharedNatively)
-            {
-                ShowToast("Enlace copiado al portapapeles");
-            }
+            Application.OpenURL("https://ko-fi.com/juanmasnk");
         }
 
         private void OnLogoutClicked()
