@@ -124,12 +124,22 @@
     flex-direction: row;
     margin-bottom: 10px;
     width: 100%;
-    /* Sin esto, el motor de layout puede encoger o estirar cada tarjeta
-       de forma distinta según cuánto contenido total haya en la semana
-       (el mismo tipo de fallo que hacía desaparecer el menú hamburguesa:
-       un elemento flexible sin flex-shrink/flex-grow fijados a 0 puede
-       recalcularse "elástico"). Con esto, la altura la decide solo el
-       contenido de dentro (padding + celdas), siempre igual. */
+    flex-shrink: 0;
+    flex-grow: 0;
+    
+    /* Agregar transición suave */
+    transition: background-color 0.6s ease-in-out;
+}
+
+.day-card--highlighted {
+    background-color: var(--herb-deep-light);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 16px;
+    padding: 12px;
+    flex-direction: row;
+    margin-bottom: 10px;
+    width: 100%;
     flex-shrink: 0;
     flex-grow: 0;
 }

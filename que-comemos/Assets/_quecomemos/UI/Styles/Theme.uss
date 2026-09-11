@@ -21,6 +21,7 @@
     --line-strong: rgba(241, 240, 234, 0.18);
     --herb: #8FC46E;
     --herb-deep: #6FA34E;
+    --herb-deep-light: rgba(111, 163, 78, 0.20);
     --herb-ink: #12210D;
     --gold: #E8B24D;
     --plum: #7C93C4;
@@ -38,6 +39,7 @@
     --line-strong: rgba(20, 23, 20, 0.16);
     --herb: #5FA23B;
     --herb-deep: #4A8A2C;
+    --herb-deep-light: rgba(111, 163, 78, 0.20);
     --herb-ink: #FFFFFF;
     --gold: #B9791E;
     --plum: #5D6FA0;

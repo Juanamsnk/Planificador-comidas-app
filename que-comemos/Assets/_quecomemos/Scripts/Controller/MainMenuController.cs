@@ -1132,10 +1132,6 @@ namespace QueComemos.UI
             Debug.Log($"[MainMenuController] EditPanel scrolleado. ScrollOffset={weekScroll.scrollOffset}");
         }
 
-        /// <summary>
-        /// Scrollea al día especificado (por fecha en formato "YYYY-MM-DD"),
-        /// buscando la tarjeta con ese nombre.
-        /// </summary>
         private void ScrollToDayCard(string dateStr)
         {
             if (weekScroll == null || dayCards == null) return;
@@ -1144,6 +1140,15 @@ namespace QueComemos.UI
             if (dayCard == null) return;
 
             weekScroll.ScrollTo(dayCard.card);
+
+            // Agregar highlighted (transición gradual de entrada)
+            dayCard.card.AddToClassList("day-card--highlighted");
+
+            // Después de 1 segundos, remover (transición gradual de salida)
+            dayCard.card.schedule.Execute(() =>
+            {
+                dayCard.card.RemoveFromClassList("day-card--highlighted");
+            }).ExecuteLater(1000);
         }
 
         /// <summary>
