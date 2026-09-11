@@ -236,6 +236,50 @@ namespace QueComemos.Data
             }
         }
 
+        /// <summary>Trae los mealplans de TODOS los calendarios accesibles: el tuyo + los compartidos.</summary>
+        public async Task<Dictionary<string, Dictionary<string, MealEntryData>>> GetAllAccessibleMealPlansAsync()
+        {
+            var result = new Dictionary<string, Dictionary<string, MealEntryData>>();
+
+            if (!IsReady) return result;
+
+            // Agregar el calendario actual
+            if (lastKnownData != null)
+            {
+                result[CurrentCalendarId] = new Dictionary<string, MealEntryData>(lastKnownData);
+            }
+
+            // Agregar los compartidos
+            try
+            {
+                var sharedIds = await GetSharedCalendarIdsAsync();
+                foreach (var id in sharedIds)
+                {
+                    try
+                    {
+                        var snapshot = await database.RootReference
+                            .Child("calendars").Child(id).Child("mealplan").GetValueAsync();
+
+                        if (snapshot.Value is IDictionary<string, object> dict)
+                        {
+                            var mealplan = FromFirebaseValue(dict);
+                            result[id] = mealplan;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogWarning($"[FirebaseManager] Error leyendo mealplan de {id}: {e}");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[FirebaseManager] Error en GetAllAccessibleMealPlansAsync: {e}");
+            }
+
+            return result;
+        }
+
         private void OnDestroy()
         {
             if (mealsRef != null)

@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 2acbb61f15fc9fa48be12a43a384266e
+guid: 5c79a93f9d8d78a4c943f347bf64541e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1730148987929393681
-    second: luna (1)_0
+      213: 2736339226918819357
+    second: IconBurger2_0
   - first:
-      213: -5845743957552427899
-    second: luna (1)_1
+      213: 5692738041066024835
+    second: IconBurger2_1
   - first:
-      213: -4627855283882361685
-    second: luna (1)_2
+      213: 1866080660474244667
+    second: IconBurger2_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -134,7 +134,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: luna (1)_0
+      name: IconBurger2_0
       rect:
         serializedVersion: 2
         x: 58
@@ -149,14 +149,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fe587f589a64df7e0800000000000000
-      internalID: -1730148987929393681
+      spriteID: d169675770e69f520800000000000000
+      internalID: 2736339226918819357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: luna (1)_1
+      name: IconBurger2_1
       rect:
         serializedVersion: 2
         x: 58
@@ -171,14 +171,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 58c833ab7debfdea0800000000000000
-      internalID: -5845743957552427899
+      spriteID: 38fe711461ba00f40800000000000000
+      internalID: 5692738041066024835
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: luna (1)_2
+      name: IconBurger2_2
       rect:
         serializedVersion: 2
         x: 58
@@ -193,8 +193,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bacf644832e86cfb0800000000000000
-      internalID: -4627855283882361685
+      spriteID: b3e2bc94976a5e910800000000000000
+      internalID: 1866080660474244667
       vertices: []
       indices: 
       edges: []
@@ -213,9 +213,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      luna (1)_0: -1730148987929393681
-      luna (1)_1: -5845743957552427899
-      luna (1)_2: -4627855283882361685
+      IconBurger2_0: 2736339226918819357
+      IconBurger2_1: 5692738041066024835
+      IconBurger2_2: 1866080660474244667
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

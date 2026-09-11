@@ -160,6 +160,12 @@
 
 .calendar-menu-row .menu-item {
     flex-grow: 1;
+    flex-shrink: 1;
+    width: auto;                  /* CAMBIO: de 100% a auto */
+    overflow: hidden;             /* NUEVO */
+    text-overflow: ellipsis;      /* NUEVO: pone "..." si el texto es muy largo */
+    white-space: nowrap;          /* NUEVO: una sola línea */
+    margin-right: 8px;            /* NUEVO: separación de la X */
 }
 
 .leave-menu-btn {

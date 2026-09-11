@@ -12,7 +12,7 @@
       o crear un control propio de UI Toolkit runtime más adelante.
     -->
     <ui:VisualElement name="reminder-line" class="reminder-line">
-        <ui:Toggle name="reminder-toggle" />
+        <ui:Toggle name="reminder-toggle" class="unity-toggle"/>
         <ui:Label text="Recordatorio" />
         <ui:TextField name="reminder-date-field" value="2026-09-01" class="input-field input-field--compact" />
         <ui:Label text="a las" />

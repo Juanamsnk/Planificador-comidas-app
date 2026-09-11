@@ -144,6 +144,10 @@ namespace QueComemos.UI
             ConnectToFirebase();
             UpdateOwnerBadge();
 
+            isLightTheme = true;
+
+            ToggleTheme();
+
             Debug.Log("[MainMenuController] OnEnable() terminado correctamente.");
         }
 
@@ -183,6 +187,25 @@ namespace QueComemos.UI
             Render();
 
             ScrollToToday();
+
+            SyncAllRemindersAsync();
+        }
+
+        /// <summary>Obtiene mealplans de todos los calendarios (actual + compartidos) y sincroniza sus recordatorios.</summary>
+        private async void SyncAllRemindersAsync()
+        {
+            if (FirebaseManager.Instance == null) return;
+            if (MealNotificationManager.Instance == null) return;
+
+            try
+            {
+                var allMealPlans = await FirebaseManager.Instance.GetAllAccessibleMealPlansAsync();
+                MealNotificationManager.Instance.SyncAllCalendarReminders(allMealPlans);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[MainMenuController] Error sincronizando recordatorios: {e}");
+            }
         }
 
         private void HandleFirebaseError(string message)
@@ -193,8 +216,6 @@ namespace QueComemos.UI
         /// <summary>Muestra el nombre del calendario que se está viendo ahora mismo</summary>
         private async void UpdateOwnerBadge()
         {
-            Debug.Log("HOLA");
-
             var firebase = FirebaseManager.Instance;
             if (firebase == null || ownerBadge == null || string.IsNullOrEmpty(firebase.CurrentCalendarId))
             {
@@ -437,6 +458,20 @@ namespace QueComemos.UI
             else
             {
                 Debug.LogError("[Theme] No se encontró el icono del tema.");
+            }
+
+            Texture2D iconMenu = Resources.Load<Texture2D>(
+                isLightTheme ? "Icons/menu-light" : "Icons/menu-dark"
+            );
+
+            if (iconMenu != null)
+            {
+                menuToggleBtn.style.backgroundImage = new StyleBackground(iconMenu);
+                menuToggleBtn.text = "";
+            }
+            else
+            {
+                Debug.LogError("[Menu] No se encontró el icono del menú.");
             }
         }
 

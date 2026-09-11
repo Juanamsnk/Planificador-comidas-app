@@ -171,7 +171,7 @@ namespace QueComemos.Notifications
         }
 
         // =========================================================
-        // SINCRONIZACIÓN DEL MEALPLAN
+        // SINCRONIZACIÓN DEL MEALPLAN (ACTUAL)
         // =========================================================
 
         private void OnMealPlanChanged(
@@ -187,7 +187,7 @@ namespace QueComemos.Notifications
             }
 
             Debug.Log(
-                $"[MealNotificationManager] Sincronizando {mealPlan.Count} comidas."
+                $"[MealNotificationManager] Sincronizando {mealPlan.Count} comidas del calendario actual."
             );
 
             var currentReminderIds = new HashSet<string>();
@@ -263,8 +263,115 @@ namespace QueComemos.Notifications
             }
 
             Debug.Log(
-                $"[MealNotificationManager] Sincronización terminada. " +
+                $"[MealNotificationManager] Sincronización completada. " +
                 $"Recordatorios activos: {scheduledReminderIds.Count}"
+            );
+        }
+
+        // =========================================================
+        // SINCRONIZACIÓN DE TODOS LOS CALENDARIOS (NUEVO)
+        // =========================================================
+
+        /// <summary>
+        /// Sincroniza recordatorios de TODOS los calendarios accesibles
+        /// (actual + compartidos). Programas notificaciones para cada uno.
+        /// </summary>
+        public void SyncAllCalendarReminders(
+            Dictionary<string, Dictionary<string, MealEntryData>> allMealPlans)
+        {
+            if (allMealPlans == null)
+            {
+                Debug.LogWarning("[MealNotificationManager] allMealPlans es NULL");
+                return;
+            }
+
+            Debug.Log(
+                $"[MealNotificationManager] Sincronizando {allMealPlans.Count} calendarios."
+            );
+
+            var currentReminderIds = new HashSet<string>();
+
+            foreach (var calendarPair in allMealPlans)
+            {
+                string calendarId = calendarPair.Key;
+                var mealplan = calendarPair.Value;
+
+                if (mealplan == null) continue;
+
+                Debug.Log(
+                    $"[MealNotificationManager] Procesando calendario '{calendarId}' " +
+                    $"con {mealplan.Count} comidas."
+                );
+
+                foreach (var mealPair in mealplan)
+                {
+                    string mealId = mealPair.Key;
+                    MealEntryData meal = mealPair.Value;
+
+                    if (meal == null)
+                        continue;
+
+                    if (string.IsNullOrWhiteSpace(meal.reminderDate) ||
+                        string.IsNullOrWhiteSpace(meal.reminderTime))
+                        continue;
+
+                    string notificationId = BuildNotificationId(calendarId, mealId);
+
+                    if (!TryParseReminderDateTime(
+                            meal.reminderDate,
+                            meal.reminderTime,
+                            out DateTime fireTime))
+                    {
+                        Debug.LogWarning(
+                            $"[MealNotificationManager] No puedo interpretar " +
+                            $"'{mealId}' en calendario '{calendarId}': " +
+                            $"{meal.reminderDate} {meal.reminderTime}"
+                        );
+
+                        continue;
+                    }
+
+                    if (fireTime <= DateTime.Now)
+                    {
+                        Debug.Log(
+                            $"[MealNotificationManager] Recordatorio ya pasó: " +
+                            $"{notificationId}"
+                        );
+
+                        continue;
+                    }
+
+                    string title = !string.IsNullOrWhiteSpace(meal.reminderTitle)
+                        ? meal.reminderTitle
+                        : "Recordatorio de comida";
+
+                    string message = !string.IsNullOrWhiteSpace(meal.dish)
+                        ? meal.dish
+                        : "Tienes una comida pendiente.";
+
+                    ScheduleMealReminder(
+                        notificationId,
+                        title,
+                        message,
+                        fireTime
+                    );
+
+                    currentReminderIds.Add(notificationId);
+                }
+            }
+
+            CancelRemovedReminders(currentReminderIds);
+
+            scheduledReminderIds.Clear();
+
+            foreach (string id in currentReminderIds)
+            {
+                scheduledReminderIds.Add(id);
+            }
+
+            Debug.Log(
+                $"[MealNotificationManager] Sincronización de todos los calendarios completada. " +
+                $"Total de recordatorios programados: {scheduledReminderIds.Count}"
             );
         }
 

@@ -12,7 +12,7 @@
 
 .theme-dark {
     --ink: #14171A;
-    --surface: #1D2225;
+    --surface: #14171A;
     --surface-2: #242A2E;
     --surface-hover: #2D343A;
     --paper: #F1F0EA;
