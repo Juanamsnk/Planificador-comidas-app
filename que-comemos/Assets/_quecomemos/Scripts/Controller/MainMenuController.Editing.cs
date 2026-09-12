@@ -278,24 +278,45 @@ namespace QueComemos.UI
 
         private void OnCloseClicked()
         {
+            Debug.Log(
+                $"[DAY DEBUG] CLOSE antes de Render | " +
+                $"lastVisibleDate={lastVisibleDate} | " +
+                $"selected={selected}"
+            );
+
             selected = null;
 
             Render();
+
+            Debug.Log(
+                $"[DAY DEBUG] CLOSE después de Render | " +
+                $"lastVisibleDate={lastVisibleDate}"
+            );
 
             RestoreLastVisibleDay();
         }
 
         private void RestoreLastVisibleDay()
         {
-            if (!string.IsNullOrEmpty(
-                    lastVisibleDate))
+            Debug.Log(
+                $"[DAY DEBUG] RestoreLastVisibleDay | " +
+                $"lastVisibleDate={lastVisibleDate}"
+            );
+
+            if (!string.IsNullOrEmpty(lastVisibleDate))
             {
-                ScrollToDayCard(
-                    lastVisibleDate
+                Debug.Log(
+                    $"[DAY DEBUG] Restaurando día: {lastVisibleDate}"
                 );
+
+                ScrollToDayCard(lastVisibleDate);
             }
             else
             {
+                Debug.Log(
+                    "[DAY DEBUG] lastVisibleDate vacío -> ScrollToToday"
+                );
+
                 ScrollToToday();
             }
         }

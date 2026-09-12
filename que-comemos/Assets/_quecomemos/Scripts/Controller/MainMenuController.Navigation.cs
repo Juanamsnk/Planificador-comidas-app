@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace QueComemos.UI
 {
@@ -90,37 +92,88 @@ namespace QueComemos.UI
 
         #region Scroll
 
-        private void ScrollToDayCard(
-            string dateStr)
-        {
-            if (weekScroll == null ||
-                dayCards == null)
-            {
-                return;
-            }
+        private IVisualElementScheduledItem highlightTask;
 
-            var dayCard =
-                dayCards.FirstOrDefault(
-                    dc =>
-                        dc != null &&
-                        dc.dateStr == dateStr
-                );
+        private void ScrollToDayCard(string dateStr)
+        {
+            if (weekScroll == null || dayCards == null)
+                return;
+
+            var dayCard = dayCards.FirstOrDefault(
+                dc =>
+                    dc != null &&
+                    dc.dateStr == dateStr
+            );
 
             if (dayCard?.card == null)
                 return;
 
-            weekScroll.ScrollTo(
-                dayCard.card
-            );
+            weekScroll.schedule.Execute(() =>
+            {
+                float viewportCenter =
+                    weekScroll.contentViewport
+                        .worldBound
+                        .center
+                        .y;
 
-            dayCard.card.AddToClassList("day-card--highlighted");
+                float cardCenter =
+                    dayCard.card
+                        .worldBound
+                        .center
+                        .y;
 
-            dayCard.card.schedule
-                .Execute(() =>
+                float delta =
+                    cardCenter - viewportCenter;
+
+                Debug.Log(
+    $"[DAY DEBUG] SCROLL | " +
+    $"date={dateStr} | " +
+    $"cardCenter={cardCenter} | " +
+    $"viewportCenter={viewportCenter} | " +
+    $"delta={delta}"
+);
+
+                Vector2 offset =
+                    weekScroll.scrollOffset;
+
+                Debug.Log(
+    $"[DAY DEBUG] SCROLL OFFSET | " +
+    $"date={dateStr} | " +
+    $"offsetY={offset.y}"
+);
+
+                offset.y += delta;
+
+                weekScroll.scrollOffset =
+                    offset;
+
+                // Aseguramos que solo haya un card iluminado.
+                foreach (var card in dayCards)
                 {
-                    dayCard.card.RemoveFromClassList("day-card--highlighted");
-                })
-                .ExecuteLater(1000);
+                    if (card?.card == null)
+                        continue;
+
+                    card.card.RemoveFromClassList(
+                        "day-card--highlighted"
+                    );
+                }
+
+                // Iluminamos el card actual.
+                dayCard.card.AddToClassList(
+                    "day-card--highlighted"
+                );
+
+                // Lo quitamos después de 1 segundo.
+                dayCard.card.schedule
+                    .Execute(() =>
+                    {
+                        dayCard.card.RemoveFromClassList(
+                            "day-card--highlighted"
+                        );
+                    })
+                    .ExecuteLater(1000);
+
+            }).ExecuteLater(1);
         }
 
         private void ScrollToToday()

@@ -163,6 +163,7 @@ namespace QueComemos.UI
         private bool isLightTheme;
 
         private string lastVisibleDate;
+        private bool initialDayScrollDone;
 
         private IVisualElementScheduledItem keyboardCheckTask;
 

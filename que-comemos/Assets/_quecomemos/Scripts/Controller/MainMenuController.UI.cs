@@ -506,9 +506,11 @@ namespace QueComemos.UI
         {
             isLightTheme = !isLightTheme;
 
-
             if (pageRoot == null)
                 return;
+
+            // Desactivamos temporalmente las transiciones.
+            pageRoot.AddToClassList("theme-switching");
 
             pageRoot.RemoveFromClassList(
                 isLightTheme
@@ -536,12 +538,6 @@ namespace QueComemos.UI
 
                 themeToggleBtn.text = "";
             }
-            else
-            {
-                Debug.LogError(
-                    "[Theme] No se encontró el icono del tema."
-                );
-            }
 
             Texture2D menuIcon =
                 Resources.Load<Texture2D>(
@@ -557,12 +553,13 @@ namespace QueComemos.UI
 
                 menuToggleBtn.text = "";
             }
-            else
-            {
-                Debug.LogError(
-                    "[Menu] No se encontró el icono del menú."
-                );
-            }
+
+            pageRoot.schedule
+                .Execute(() =>
+                {
+                    pageRoot.RemoveFromClassList("theme-switching");
+                })
+                .ExecuteLater(1);
         }
 
         #endregion

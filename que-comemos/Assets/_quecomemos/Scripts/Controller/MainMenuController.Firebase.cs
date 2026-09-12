@@ -32,7 +32,7 @@ namespace QueComemos.UI
         }
 
         private void HandleMealPlanChanged(
-            Dictionary<string, MealEntryData> firebaseData)
+       Dictionary<string, MealEntryData> firebaseData)
         {
             data.Clear();
 
@@ -46,7 +46,18 @@ namespace QueComemos.UI
 
             Render();
 
-            ScrollToToday();
+            if (!string.IsNullOrEmpty(lastVisibleDate))
+            {
+                dayCards[0].card.schedule
+                    .Execute(() => ScrollToDayCard(lastVisibleDate))
+                    .ExecuteLater(1);
+            }
+            else
+            {
+                dayCards[0].card.schedule
+                    .Execute(() => ScrollToToday())
+                    .ExecuteLater(1);
+            }
 
             SyncAllRemindersAsync();
         }

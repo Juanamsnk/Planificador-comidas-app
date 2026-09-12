@@ -1,14 +1,3 @@
-/* ==========================================================================
-   THEME.uss
-   Equivalente a los custom properties ":root" / "body.theme-light" del HTML.
-   Se aplica como CLASE al elemento raíz de la jerarquía (ver MainMenu.uxml).
-
-   Cómo alternar tema en runtime (C#, para más adelante):
-       root.RemoveFromClassList(isLight ? "theme-dark" : "theme-light");
-       root.AddToClassList(isLight ? "theme-light" : "theme-dark");
-   Como USS resuelve las custom properties en cascada igual que CSS,
-   todo lo que use var(--xxx) se recolorea solo.
-   ========================================================================== */
 
 .theme-dark {
     --ink: #14171A;
@@ -46,8 +35,6 @@
     --rust: #C1502F;
 }
 
-/* NOTA IMPORTANTE sobre fuentes:
-   Newsreader (serif, títulos) y Manrope (sans-serif, cuerpo) no vienen
-   incluidas en Unity. Importa los .ttf en Assets/UI/Fonts/, crea un
-   "Font Asset" (o usa TTF directo en proyectos UI Toolkit runtime
-   modernos) y sustituye estos placeholders en Typography más abajo. */
+.theme-switching .day-card {
+    transition-property: none;
+}
