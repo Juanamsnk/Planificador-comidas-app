@@ -31,7 +31,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:ScrollView>
-            <ui:Instance template="Toast" name="toast-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
+<ui:Instance template="Toast" name="toast-instance" picking-mode="Ignore" style="position: absolute; bottom: 0; left: 0; right: 0; z-index: 1000;"/>
             <ui:Instance template="DropdownMenu" name="dropdown-menu-instance" picking-mode="Ignore" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
         </ui:VisualElement>
     </ui:VisualElement>

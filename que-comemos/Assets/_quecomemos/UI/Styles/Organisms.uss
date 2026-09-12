@@ -65,33 +65,32 @@
        `box-shadow: 0 20px 44px rgba(0,0,0,0.45);` */
 }
 
-/* ---------- Navegación entre semanas ---------- */
 .week-nav {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     margin: 26px 0 18px;
 }
 
 .nav-group {
     flex-direction: row;
     align-items: center;
-}
-
-.nav-group > * {
-    margin-right: 6px;
+    margin-bottom: 8px;
 }
 
 .week-nav-label {
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-width: 0;
-    -unity-text-align: middle-center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: auto;
+    -unity-text-align: middle-left;
     font-size: 17px;
     color: var(--paper);
     -unity-font-style: italic;
     overflow: hidden;
     white-space: normal;
+}
+
+.nav-group > * {
+    margin-right: 6px;
 }
 
 .week-nav-label__year {
@@ -126,8 +125,9 @@
     width: 100%;
     flex-shrink: 0;
     flex-grow: 0;
-    
-    /* Agregar transición suave */
+}
+
+.day-card--transition {
     transition: background-color 0.6s ease-in-out;
 }
 
@@ -196,7 +196,6 @@
     flex-wrap: wrap;
 }
 
-/* ---------- Toast ---------- */
 .toast {
     position: absolute;
     bottom: 22px;
@@ -210,6 +209,7 @@
     -unity-font-style: bold;
     opacity: 0;
     display: none;
+    z-index: 1000;
 }
 
 .toast--show {
