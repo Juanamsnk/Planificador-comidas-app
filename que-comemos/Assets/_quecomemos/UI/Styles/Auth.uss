@@ -1,0 +1,65 @@
+.auth-container {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 24px;
+    background-color: var(--ink);
+}
+
+.auth-header {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.logo-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--herb), var(--herb-hover));
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.app-logo {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+    background-image: url("project://database/Assets/_quecomemos/Sprites/Icon-app/que_comemos_app_icon_v2.png?fileID=2800000&guid=b77c0b6033d15c943b85eb87aad3332f&type=3#que_comemos_app_icon_v2");
+}
+
+.app-title {
+    font-size: 32px;
+    -unity-font-style: bold;
+    color: var(--paper);
+    margin-bottom: 8px;
+    -unity-text-align: middle-center;
+}
+
+.app-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 250px;
+    -unity-text-align: middle-center;
+}
+
+.auth-actions {
+    width: 100%;
+    max-width: 300px;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.auth-status {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 16px;
+    -unity-text-align: middle-center;
+}

@@ -24,19 +24,24 @@ eso lo haremos en el siguiente paso.
 
 ```
 MainMenu/
-├── MainMenu.uxml              ← PÁGINA: ensambla todo lo demás
+├── MainMenu.uxml              ← PÁGINA : Menú Principal
+├── Authentication.uxml        ← PÁGINA : Página Principal
 ├── README.md
 ├── Styles/
-│   ├── Theme.uss              ← variables de color (dark/light), = :root del CSS
-│   ├── Atoms.uss              ← botones, inputs, texto, badges, punto de color
-│   ├── Molecules.uss          ← cabecera de día, meal-tag, cell-btn, menu-item...
-│   ├── Organisms.uss          ← topbar, dropdown, week-nav, day-card, edit-panel
-│   └── Page.uss                ← contenedor .wrap
-└── Components/                 ← moléculas y organismos reutilizables (UXML)
+│   ├── Theme.uss              		← variables de color (dark/light), = :root del CSS
+│   ├── Auth.uss               		← botones, icono, texto
+│   ├── Mobile-Optimizacions.uss      ← espacio para teclado
+│   ├── Atoms.uss              		← botones, inputs, texto, badges, punto de color
+│   ├── Molecules.uss          		← cabecera de día, meal-tag, cell-btn, menu-item...
+│   ├── Organisms.uss          		← topbar, dropdown, week-nav, day-card, edit-panel
+│   └── Page.uss                		← contenedor .wrap
+└── Components/                 		← moléculas y organismos reutilizables (UXML)
     ├── MenuItem.uxml
+    ├── ButtonSession.uxml
     ├── CalendarMenuRow.uxml
     ├── DropdownMenu.uxml
     ├── HeaderBar.uxml
+    ├── HeaderText.uxml
     ├── WeekNav.uxml
     ├── CellButton.uxml
     ├── MealSlot.uxml
