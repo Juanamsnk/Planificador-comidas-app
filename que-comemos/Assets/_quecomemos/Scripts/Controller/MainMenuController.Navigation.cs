@@ -113,29 +113,14 @@ namespace QueComemos.UI
                 dayCard.card
             );
 
-            dayCard.card.AddToClassList(
-                "day-card--transition"
-            );
-
-            dayCard.card.AddToClassList(
-                "day-card--highlighted"
-            );
-
+            dayCard.card.AddToClassList("day-card--highlighted");
 
             dayCard.card.schedule
-     .Execute(
-         () =>
-         {
-             dayCard.card.RemoveFromClassList(
-                 "day-card--highlighted"
-             );
-
-             dayCard.card.RemoveFromClassList(
-                 "day-card--transition"
-             );
-         }
-     )
-     .ExecuteLater(1000);
+                .Execute(() =>
+                {
+                    dayCard.card.RemoveFromClassList("day-card--highlighted");
+                })
+                .ExecuteLater(1000);
         }
 
         private void ScrollToToday()

@@ -100,20 +100,11 @@
     margin-left: 6px;
 }
 
-/* En el HTML original este espaciador solo existe en la versión de
-   escritorio (para centrar la etiqueta entre dos bloques simétricos);
-   en móvil se ocultaba con display:none, así que aquí queda oculto
-   por defecto. */
 .nav-spacer {
     width: 80px;
     display: none;
 }
 
-/* ---------- Tarjeta de día ----------
-   Layout "apilado" (una tarjeta por fila, fecha a la izquierda y comidas
-   a la derecha): es el que el HTML original activaba en móvil con
-   @media (max-width:600px). Como esta app es solo móvil en portrait,
-   se deja como único layout, sin variante de escritorio. */
 .day-card {
     background-color: var(--surface);
     border-width: 1px;
@@ -125,23 +116,14 @@
     width: 100%;
     flex-shrink: 0;
     flex-grow: 0;
-}
 
-.day-card--transition {
-    transition: background-color 0.6s ease-in-out;
+    transition-property: background-color;
+    transition-duration: 0.6s;
+    transition-timing-function: ease-in-out;
 }
 
 .day-card--highlighted {
     background-color: var(--herb-deep-light);
-    border-width: 1px;
-    border-color: var(--line);
-    border-radius: 16px;
-    padding: 12px;
-    flex-direction: row;
-    margin-bottom: 10px;
-    width: 100%;
-    flex-shrink: 0;
-    flex-grow: 0;
 }
 
 .day-card--today {
@@ -156,7 +138,6 @@
     margin-top: 0;
 }
 
-/* ---------- Rejilla semanal (una columna, una tarjeta por día) ---------- */
 .week-grid {
     flex-direction: column;
     width: 100%;
