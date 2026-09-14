@@ -240,6 +240,10 @@ namespace QueComemos.UI
                 "[MainMenuController] OnEnable() terminado correctamente."
             );
         }
+        private void Start()
+        {
+            Invoke(nameof(InitBanner), 2f);
+        }
 
         private void OnDisable()
         {
@@ -265,5 +269,10 @@ namespace QueComemos.UI
         }
 
         #endregion
+
+        public void InitBanner()
+        {
+            AdsManager.Instance.ShowBanner();
+        }
     }
 }
