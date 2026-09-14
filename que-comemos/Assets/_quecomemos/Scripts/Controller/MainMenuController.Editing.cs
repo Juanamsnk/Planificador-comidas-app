@@ -1,9 +1,10 @@
-﻿using System;
+﻿using QueComemos.Data;
+using QueComemos.Notifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using QueComemos.Data;
-using QueComemos.Notifications;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace QueComemos.UI
 {
@@ -13,103 +14,52 @@ namespace QueComemos.UI
 
         private void OnSaveClicked()
         {
-            if (!selected.HasValue)
-                return;
+            HideKeyboard();
 
-            var selection =
-                selected.Value;
+            if (!selected.HasValue) return;
 
-            string dateStr =
-                selection.date;
-
-            string type =
-                selection.type;
-
-            string dish =
-                dishField.value?.Trim();
+            var selection = selected.Value;
+            string dateStr = selection.date;
+            string type = selection.type;
+            string dish = dishField.value?.Trim();
 
             if (string.IsNullOrEmpty(dish))
             {
-                ShowToast(
-                    "Escribe el nombre del plato"
-                );
-
+                ShowToast("Escribe el nombre del plato");
                 return;
             }
 
-            bool reminderEnabled =
-                reminderToggle.value;
+            bool reminderEnabled = reminderToggle.value;
 
-            var entry =
-                new MealEntryData
-                {
-                    dish = dish,
+            var entry = new MealEntryData
+            {
+                dish = dish,
+                reminderDate = reminderEnabled ? reminderDateField.value : null,
+                reminderTime = reminderEnabled ? reminderTimeField.value : null,
+                reminderTitle = reminderEnabled ? reminderTitleField.value?.Trim() : null
+            };
 
-                    reminderDate =
-                        reminderEnabled
-                            ? reminderDateField.value
-                            : null,
+            string notificationId = BuildNotificationId(dateStr, type);
 
-                    reminderTime =
-                        reminderEnabled
-                            ? reminderTimeField.value
-                            : null,
-
-                    reminderTitle =
-                        reminderEnabled
-                            ? reminderTitleField.value?.Trim()
-                            : null
-                };
-
-            string notificationId =
-                BuildNotificationId(
-                    dateStr,
-                    type
-                );
-
-            MealNotificationManager.Instance?
-                .CancelMealReminder(
-                    notificationId
-                );
-
-            data[
-                Key(dateStr, type)
-            ] = entry;
-
+            MealNotificationManager.Instance?.CancelMealReminder(notificationId);
+            data[Key(dateStr, type)] = entry;
             PersistData();
 
             try
             {
                 if (reminderEnabled)
-                {
-                    ScheduleReminder(
-                        notificationId,
-                        entry
-                    );
-                }
+                    ScheduleReminder(notificationId, entry);
             }
             catch (Exception ex)
             {
-                Debug.LogError(
-                    "[MainMenuController] Error en ScheduleReminder: " +
-                    $"{ex.Message}\n{ex.StackTrace}"
-                );
-
-                ShowToast(
-                    "Error al programar el recordatorio"
-                );
+                Debug.LogError($"Error: {ex.Message}");
+                ShowToast("Error al programar recordatorio");
             }
 
-            ShowToast(
-                reminderEnabled
-                    ? "Guardado y recordatorio programado"
-                    : "Guardado"
-            );
+            ShowToast(reminderEnabled ? "Guardado y recordatorio programado" : "Guardado");
 
             selected = null;
-
             Render();
-
             RestoreLastVisibleDay();
         }
 
@@ -221,41 +171,19 @@ namespace QueComemos.UI
 
         private void OnDeleteClicked()
         {
-            if (!selected.HasValue)
-                return;
+            HideKeyboard();
 
-            var selection =
-                selected.Value;
+            if (!selected.HasValue) return;
 
-            string dateStr =
-                selection.date;
-
-            string type =
-                selection.type;
-
-            string notificationId =
-                BuildNotificationId(
-                    dateStr,
-                    type
-                );
-
-            MealNotificationManager.Instance?
-                .CancelMealReminder(
-                    notificationId
-                );
-
-            data.Remove(
-                Key(dateStr, type)
-            );
-
+            var selection = selected.Value;
+            MealNotificationManager.Instance?.CancelMealReminder(BuildNotificationId(selection.date, selection.type));
+            data.Remove(Key(selection.date, selection.type));
             PersistData();
 
             ShowToast("Eliminado");
 
             selected = null;
-
             Render();
-
             RestoreLastVisibleDay();
         }
 
@@ -278,45 +206,21 @@ namespace QueComemos.UI
 
         private void OnCloseClicked()
         {
-            Debug.Log(
-                $"[DAY DEBUG] CLOSE antes de Render | " +
-                $"lastVisibleDate={lastVisibleDate} | " +
-                $"selected={selected}"
-            );
+            HideKeyboard();
 
             selected = null;
-
             Render();
-
-            Debug.Log(
-                $"[DAY DEBUG] CLOSE después de Render | " +
-                $"lastVisibleDate={lastVisibleDate}"
-            );
-
             RestoreLastVisibleDay();
         }
 
         private void RestoreLastVisibleDay()
         {
-            Debug.Log(
-                $"[DAY DEBUG] RestoreLastVisibleDay | " +
-                $"lastVisibleDate={lastVisibleDate}"
-            );
-
             if (!string.IsNullOrEmpty(lastVisibleDate))
             {
-                Debug.Log(
-                    $"[DAY DEBUG] Restaurando día: {lastVisibleDate}"
-                );
-
                 ScrollToDayCard(lastVisibleDate);
             }
             else
             {
-                Debug.Log(
-                    "[DAY DEBUG] lastVisibleDate vacío -> ScrollToToday"
-                );
-
                 ScrollToToday();
             }
         }

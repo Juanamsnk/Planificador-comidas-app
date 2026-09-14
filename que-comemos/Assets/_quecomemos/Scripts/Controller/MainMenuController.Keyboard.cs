@@ -128,6 +128,15 @@ namespace QueComemos.UI
             );
         }
 
+        private void HideKeyboard()
+        {
+            dishField.Blur();
+            reminderDateField.Blur();
+            reminderTimeField.Blur();
+            reminderTitleField.Blur();
+            GUI.FocusControl(null);
+        }
+
         #endregion
     }
 }

@@ -22,9 +22,9 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement class="edit-panel__btn-row">
-            <ui:Button name="save-btn" text="Guardar" class="btn btn--primary"/>
-            <ui:Button name="delete-btn" text="Eliminar" class="btn btn--danger" style="display: none;"/>
-            <ui:Button name="close-btn" text="Cerrar" class="btn btn--ghost"/>
+            <ui:Button name="save-btn" text="Guardar" class="btn btn--primary" focusable="false"/>
+            <ui:Button name="delete-btn" text="Eliminar" class="btn btn--danger" style="display: none;" focusable="false"/>
+            <ui:Button name="close-btn" text="Cerrar" class="btn btn--ghost" focusable="false"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

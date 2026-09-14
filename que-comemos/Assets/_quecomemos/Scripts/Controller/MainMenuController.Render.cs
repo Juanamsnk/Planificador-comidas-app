@@ -312,6 +312,18 @@ namespace QueComemos.UI
                     : DisplayStyle.Flex;
 
             ScrollToEditPanel();
+
+            if (keyboardSpacer == null)
+            {
+                CreateKeyboardSpacer();
+            }
+
+            RegisterKeyboardScrolling(dishField);
+            RegisterKeyboardScrolling(reminderDateField);
+            RegisterKeyboardScrolling(reminderTimeField);
+            RegisterKeyboardScrolling(reminderTitleField);
+
+            ScrollToEditPanel();
         }
 
         #endregion

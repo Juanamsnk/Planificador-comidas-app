@@ -118,6 +118,17 @@ namespace QueComemos.UI
 
             toast =
                 panelRoot.Q<Label>("toast");
+
+            ConfigureTextField(dishField);
+            ConfigureTextField(reminderTitleField);
+        }
+        private void ConfigureTextField(TextField field)
+        {
+            if (field == null)
+                return;
+
+            field.autoCorrection = true;
+            field.keyboardType = TouchScreenKeyboardType.NamePhonePad;
         }
 
         private void CacheDayCards()

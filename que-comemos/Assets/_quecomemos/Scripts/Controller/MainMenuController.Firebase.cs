@@ -160,7 +160,6 @@ namespace QueComemos.UI
         #endregion
 
         #region Calendarios
-
         private void SwitchToCalendar(
             string calendarId)
         {
@@ -170,6 +169,7 @@ namespace QueComemos.UI
                 return;
 
             selected = null;
+            lastVisibleDate = null;
 
             FirebaseManager.Instance?
                 .SetCalendarId(calendarId);
