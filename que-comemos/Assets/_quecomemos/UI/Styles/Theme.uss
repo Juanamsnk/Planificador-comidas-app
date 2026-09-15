@@ -1,4 +1,3 @@
-
 .theme-dark {
     --ink: #14171A;
     --surface: #14171A;
@@ -33,6 +32,15 @@
     --gold: #B9791E;
     --plum: #5D6FA0;
     --rust: #C1502F;
+}
+
+/* CARET */
+.theme-dark .unity-base-text-field__input {
+    --unity-cursor-color: #8FC46E;
+}
+
+.theme-light .unity-base-text-field__input {
+    --unity-cursor-color: #5FA23B;
 }
 
 .theme-switching .day-card {

@@ -276,12 +276,25 @@ namespace QueComemos.UI
                 $"{(type == "comida" ? "Comida" : "Cena")} · " +
                 dayLabel;
 
-            dishField.SetValueWithoutNotify(
-                entry.dish ?? ""
-            );
+            string dish = entry.dish ?? "";
+
+            if (dishField.value != dish)
+                dishField.SetValueWithoutNotify(dish);
 
             var defaults =
                 DefaultReminder(dateStr);
+
+            string reminderDate = entry.reminderDate ?? defaults.date;
+            if (reminderDateField.value != reminderDate)
+                reminderDateField.SetValueWithoutNotify(reminderDate);
+
+            string reminderTime = entry.reminderTime ?? defaults.time;
+            if (reminderTimeField.value != reminderTime)
+                reminderTimeField.SetValueWithoutNotify(reminderTime);
+
+            string reminderTitle = entry.reminderTitle ?? "";
+            if (reminderTitleField.value != reminderTitle)
+                reminderTitleField.SetValueWithoutNotify(reminderTitle);
 
             bool hasReminder =
                 !string.IsNullOrEmpty(
