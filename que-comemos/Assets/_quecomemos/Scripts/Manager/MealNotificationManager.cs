@@ -1,8 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using System.Threading.Tasks;
+
 
 #if UNITY_ANDROID
 using Unity.Notifications.Android;
@@ -20,14 +22,14 @@ namespace QueComemos.Notifications
         private const string AndroidChannelId = "meal_reminders";
         private const string AndroidChannelName = "Recordatorios de comidas";
         private const string AndroidChannelDescription = "Recordatorios de comidas de QueComemos";
-
         private const string PlayerPrefsPrefix = "MealNotification_Android_";
 
-        // Recordatorios que este dispositivo tiene actualmente programados.
-        private readonly HashSet<string> scheduledReminderIds =
-            new HashSet<string>();
-
+        private readonly HashSet<string> scheduledReminderIds = new HashSet<string>();
         private bool firebaseSubscribed = false;
+
+        // âœ… NUEVO: Para evitar duplicados
+        private Coroutine syncCoroutine;
+        private const float DEBOUNCE_DELAY = 1f;
 
         private void Awake()
         {
@@ -38,9 +40,7 @@ namespace QueComemos.Notifications
             }
 
             Instance = this;
-
             DontDestroyOnLoad(gameObject);
-
             InitializeNotifications();
         }
 
@@ -64,7 +64,7 @@ namespace QueComemos.Notifications
         }
 
         // =========================================================
-        // INICIALIZACIÓN
+        // INICIALIZACIÃ“N
         // =========================================================
 
         private void InitializeNotifications()
@@ -79,15 +79,10 @@ namespace QueComemos.Notifications
         private IEnumerator RequestPermissionAndStart()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-
-            // Esperamos un poco para que Android/Unity termine de arrancar.
             yield return new WaitForSeconds(1f);
-
             RequestNotificationPermission();
-
 #endif
 
-            // Después continuamos normalmente con Firebase.
             yield return StartCoroutine(WaitForFirebaseAndSubscribe());
         }
 
@@ -104,7 +99,6 @@ namespace QueComemos.Notifications
             };
 
             AndroidNotificationCenter.RegisterNotificationChannel(channel);
-
             Debug.Log("[MealNotificationManager] Canal Android registrado.");
         }
 
@@ -112,25 +106,14 @@ namespace QueComemos.Notifications
         {
             int sdkInt = GetAndroidSdkInt();
 
-            // Android 13+
             if (sdkInt >= 33)
             {
-                const string permission =
-                    "android.permission.POST_NOTIFICATIONS";
+                const string permission = "android.permission.POST_NOTIFICATIONS";
 
                 if (!Permission.HasUserAuthorizedPermission(permission))
                 {
-                    Debug.Log(
-                        "[MealNotificationManager] Solicitando permiso POST_NOTIFICATIONS."
-                    );
-
+                    Debug.Log("[MealNotificationManager] Solicitando permiso POST_NOTIFICATIONS.");
                     Permission.RequestUserPermission(permission);
-                }
-                else
-                {
-                    Debug.Log(
-                        "[MealNotificationManager] Permiso de notificaciones ya concedido."
-                    );
                 }
             }
         }
@@ -153,129 +136,97 @@ namespace QueComemos.Notifications
         {
             Debug.Log("[MealNotificationManager] Esperando a Firebase...");
 
-            while (FirebaseManager.Instance == null ||
-                   !FirebaseManager.Instance.IsReady)
+            while (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
             {
                 yield return null;
             }
 
             Debug.Log("[MealNotificationManager] Firebase listo.");
-
             FirebaseManager.Instance.SubscribeToMealPlan(OnMealPlanChanged);
-
             firebaseSubscribed = true;
 
-            Debug.Log(
-                "[MealNotificationManager] Suscrito a los cambios del MealPlan."
-            );
+            Debug.Log("[MealNotificationManager] Suscrito a los cambios del MealPlan.");
         }
 
         // =========================================================
-        // SINCRONIZACIÓN DEL MEALPLAN (ACTUAL)
+        // SINCRONIZACIÃ“N CON DEBOUNCE
         // =========================================================
 
-        private void OnMealPlanChanged(
-            Dictionary<string, MealEntryData> mealPlan)
+        // âœ… NUEVO: Callback que evita duplicados con debounce
+        private void OnMealPlanChanged(Dictionary<string, MealEntryData> mealPlan)
         {
             if (mealPlan == null)
             {
-                Debug.LogWarning(
-                    "[MealNotificationManager] MealPlan recibido es NULL."
-                );
-
+                Debug.LogWarning("[MealNotificationManager] MealPlan recibido es NULL.");
                 return;
             }
 
             Debug.Log(
-                $"[MealNotificationManager] Sincronizando {mealPlan.Count} comidas del calendario actual."
+                $"[MealNotificationManager] Cambio detectado en MealPlan. " +
+                $"Esperando {DEBOUNCE_DELAY}s antes de sincronizar para evitar duplicados..."
             );
 
-            var currentReminderIds = new HashSet<string>();
-
-            foreach (var pair in mealPlan)
+            if (syncCoroutine != null)
             {
-                string mealId = pair.Key;
-                MealEntryData meal = pair.Value;
-
-                if (meal == null)
-                    continue;
-
-                if (string.IsNullOrWhiteSpace(meal.reminderDate))
-                    continue;
-
-                if (string.IsNullOrWhiteSpace(meal.reminderTime))
-                    continue;
-
-                string notificationId = BuildNotificationId(
-                    FirebaseManager.Instance.CurrentCalendarId,
-                    mealId
-                );
-
-                if (!TryParseReminderDateTime(
-                        meal.reminderDate,
-                        meal.reminderTime,
-                        out DateTime fireTime))
-                {
-                    Debug.LogWarning(
-                        $"[MealNotificationManager] No puedo interpretar " +
-                        $"el recordatorio de '{mealId}': " +
-                        $"{meal.reminderDate} {meal.reminderTime}"
-                    );
-
-                    continue;
-                }
-
-                if (fireTime <= DateTime.Now)
-                {
-                    Debug.Log(
-                        $"[MealNotificationManager] Recordatorio pasado: " +
-                        $"{notificationId}"
-                    );
-
-                    continue;
-                }
-
-                string title = !string.IsNullOrWhiteSpace(meal.reminderTitle)
-                    ? meal.reminderTitle
-                    : "Recordatorio de comida";
-
-                string message = !string.IsNullOrWhiteSpace(meal.dish)
-                    ? meal.dish
-                    : "Tienes una comida pendiente.";
-
-                ScheduleMealReminder(
-                    notificationId,
-                    title,
-                    message,
-                    fireTime
-                );
-
-                currentReminderIds.Add(notificationId);
+                StopCoroutine(syncCoroutine);
+                Debug.Log("[MealNotificationManager] SincronizaciÃ³n anterior cancelada.");
             }
 
-            CancelRemovedReminders(currentReminderIds);
-
-            scheduledReminderIds.Clear();
-
-            foreach (string id in currentReminderIds)
-            {
-                scheduledReminderIds.Add(id);
-            }
-
-            Debug.Log(
-                $"[MealNotificationManager] Sincronización completada. " +
-                $"Recordatorios activos: {scheduledReminderIds.Count}"
-            );
+            syncCoroutine = StartCoroutine(DebouncedSyncAllCalendars());
         }
 
+        private IEnumerator DebouncedSyncAllCalendars()
+        {
+            yield return new WaitForSeconds(DEBOUNCE_DELAY);
+
+            if (FirebaseManager.Instance == null)
+            {
+                Debug.LogWarning("[MealNotificationManager] FirebaseManager no disponible.");
+                yield break;
+            }
+
+            Task<Dictionary<string, Dictionary<string, MealEntryData>>> task =
+                FirebaseManager.Instance.GetAllAccessibleMealPlansAsync();
+
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            if (task.IsFaulted)
+            {
+                Debug.LogError(
+                    $"[MealNotificationManager] Error obteniendo calendarios: {task.Exception}"
+                );
+                syncCoroutine = null;
+                yield break;
+            }
+
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning(
+                    "[MealNotificationManager] ObtenciÃ³n de calendarios cancelada."
+                );
+                syncCoroutine = null;
+                yield break;
+            }
+
+            var allMealPlans = task.Result;
+
+            if (allMealPlans != null)
+            {
+                SyncAllCalendarReminders(allMealPlans);
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "[MealNotificationManager] No se pudieron obtener los calendarios."
+                );
+            }
+
+            syncCoroutine = null;
+        }
         // =========================================================
-        // SINCRONIZACIÓN DE TODOS LOS CALENDARIOS (NUEVO)
+        // SINCRONIZACIÃ“N DE TODOS LOS CALENDARIOS
         // =========================================================
 
-        /// <summary>
-        /// Sincroniza recordatorios de TODOS los calendarios accesibles
-        /// (actual + compartidos). Programas notificaciones para cada uno.
-        /// </summary>
         public void SyncAllCalendarReminders(
             Dictionary<string, Dictionary<string, MealEntryData>> allMealPlans)
         {
@@ -308,10 +259,8 @@ namespace QueComemos.Notifications
                     string mealId = mealPair.Key;
                     MealEntryData meal = mealPair.Value;
 
-                    if (meal == null)
-                        continue;
-
-                    if (string.IsNullOrWhiteSpace(meal.reminderDate) ||
+                    if (meal == null ||
+                        string.IsNullOrWhiteSpace(meal.reminderDate) ||
                         string.IsNullOrWhiteSpace(meal.reminderTime))
                         continue;
 
@@ -327,17 +276,14 @@ namespace QueComemos.Notifications
                             $"'{mealId}' en calendario '{calendarId}': " +
                             $"{meal.reminderDate} {meal.reminderTime}"
                         );
-
                         continue;
                     }
 
                     if (fireTime <= DateTime.Now)
                     {
                         Debug.Log(
-                            $"[MealNotificationManager] Recordatorio ya pasó: " +
-                            $"{notificationId}"
+                            $"[MealNotificationManager] Recordatorio ya pasÃ³: {notificationId}"
                         );
-
                         continue;
                     }
 
@@ -349,13 +295,7 @@ namespace QueComemos.Notifications
                         ? meal.dish
                         : "Tienes una comida pendiente.";
 
-                    ScheduleMealReminder(
-                        notificationId,
-                        title,
-                        message,
-                        fireTime
-                    );
-
+                    ScheduleMealReminder(notificationId, title, message, fireTime);
                     currentReminderIds.Add(notificationId);
                 }
             }
@@ -363,20 +303,18 @@ namespace QueComemos.Notifications
             CancelRemovedReminders(currentReminderIds);
 
             scheduledReminderIds.Clear();
-
             foreach (string id in currentReminderIds)
             {
                 scheduledReminderIds.Add(id);
             }
 
             Debug.Log(
-                $"[MealNotificationManager] Sincronización de todos los calendarios completada. " +
-                $"Total de recordatorios programados: {scheduledReminderIds.Count}"
+                $"[MealNotificationManager] SincronizaciÃ³n completada. " +
+                $"Total de recordatorios: {scheduledReminderIds.Count}"
             );
         }
 
-        private void CancelRemovedReminders(
-            HashSet<string> currentReminderIds)
+        private void CancelRemovedReminders(HashSet<string> currentReminderIds)
         {
             var oldIds = new List<string>(scheduledReminderIds);
 
@@ -384,11 +322,7 @@ namespace QueComemos.Notifications
             {
                 if (!currentReminderIds.Contains(oldId))
                 {
-                    Debug.Log(
-                        $"[MealNotificationManager] Cancelando " +
-                        $"recordatorio eliminado: {oldId}"
-                    );
-
+                    Debug.Log($"[MealNotificationManager] Cancelando recordatorio: {oldId}");
                     CancelMealReminder(oldId);
                 }
             }
@@ -398,9 +332,7 @@ namespace QueComemos.Notifications
         // CREAR ID ESTABLE
         // =========================================================
 
-        private string BuildNotificationId(
-            string calendarId,
-            string mealId)
+        private string BuildNotificationId(string calendarId, string mealId)
         {
             if (string.IsNullOrWhiteSpace(calendarId))
                 calendarId = "unknown_calendar";
@@ -423,43 +355,40 @@ namespace QueComemos.Notifications
         {
             if (string.IsNullOrWhiteSpace(notificationId))
             {
-                Debug.LogWarning(
-                    "[MealNotificationManager] notificationId vacío."
-                );
-
+                Debug.LogWarning("[MealNotificationManager] notificationId vacÃ­o.");
                 return;
             }
 
             if (dateTime <= DateTime.Now)
             {
                 Debug.LogWarning(
-                    $"[MealNotificationManager] No se puede programar " +
-                    $"'{notificationId}' porque la fecha ya ha pasado."
+                    $"[MealNotificationManager] No se puede programar '{notificationId}' " +
+                    $"porque la fecha ya ha pasado."
                 );
+                return;
+            }
 
+
+            if (scheduledReminderIds.Contains(notificationId))
+            {
+                Debug.Log(
+                    $"[MealNotificationManager] '{notificationId}' ya estÃ¡ programada. Ignorando."
+                );
                 return;
             }
 
             CancelMealReminder(notificationId);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-
-            ScheduleAndroid(
-                notificationId,
-                title,
-                message,
-                dateTime
-            );
-
+            ScheduleAndroid(notificationId, title, message, dateTime);
 #else
-
             Debug.Log(
-                $"[MealNotificationManager] " +
-                $"SIMULACIÓN: '{title}' - '{message}' " +
+                $"[MealNotificationManager] SIMULACIÃ“N: '{title}' - '{message}' " +
                 $"a las {dateTime}"
             );
-
 #endif
+
+            scheduledReminderIds.Add(notificationId);
         }
 
         // =========================================================
@@ -488,21 +417,15 @@ namespace QueComemos.Notifications
                     AndroidChannelId
                 );
 
-            string prefsKey =
-                PlayerPrefsPrefix + notificationId;
-
-            PlayerPrefs.SetInt(
-                prefsKey,
-                androidNotificationId
-            );
-
+            string prefsKey = PlayerPrefsPrefix + notificationId;
+            PlayerPrefs.SetInt(prefsKey, androidNotificationId);
             PlayerPrefs.Save();
 
             Debug.Log(
-                $"[MealNotificationManager] NOTIFICACIÓN PROGRAMADA\n" +
+                $"[MealNotificationManager] NOTIFICACIÃ“N PROGRAMADA\n" +
                 $"ID: {notificationId}\n" +
                 $"Android ID: {androidNotificationId}\n" +
-                $"Título: {title}\n" +
+                $"TÃ­tulo: {title}\n" +
                 $"Mensaje: {message}\n" +
                 $"Hora: {dateTime:yyyy-MM-dd HH:mm:ss}"
             );
@@ -511,7 +434,7 @@ namespace QueComemos.Notifications
 #endif
 
         // =========================================================
-        // CANCELAR UN RECORDATORIO
+        // CANCELAR RECORDATORIO
         // =========================================================
 
         public void CancelMealReminder(string notificationId)
@@ -521,24 +444,17 @@ namespace QueComemos.Notifications
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
-            string prefsKey =
-                PlayerPrefsPrefix + notificationId;
+            string prefsKey = PlayerPrefsPrefix + notificationId;
 
             if (PlayerPrefs.HasKey(prefsKey))
             {
-                int androidNotificationId =
-                    PlayerPrefs.GetInt(prefsKey);
-
-                AndroidNotificationCenter.CancelNotification(
-                    androidNotificationId
-                );
-
+                int androidNotificationId = PlayerPrefs.GetInt(prefsKey);
+                AndroidNotificationCenter.CancelNotification(androidNotificationId);
                 PlayerPrefs.DeleteKey(prefsKey);
                 PlayerPrefs.Save();
 
                 Debug.Log(
-                    $"[MealNotificationManager] " +
-                    $"Notificación cancelada: {notificationId}"
+                    $"[MealNotificationManager] NotificaciÃ³n cancelada: {notificationId}"
                 );
             }
 
@@ -561,10 +477,7 @@ namespace QueComemos.Notifications
 #endif
 
             scheduledReminderIds.Clear();
-
-            Debug.Log(
-                "[MealNotificationManager] Todas las notificaciones canceladas."
-            );
+            Debug.Log("[MealNotificationManager] Todas las notificaciones canceladas.");
         }
 
         // =========================================================
@@ -578,79 +491,41 @@ namespace QueComemos.Notifications
         {
             result = default;
 
-            if (string.IsNullOrWhiteSpace(date) ||
-                string.IsNullOrWhiteSpace(time))
-            {
+            if (string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(time))
                 return false;
-            }
 
-            string combined =
-                $"{date.Trim()} {time.Trim()}";
+            string combined = $"{date.Trim()} {time.Trim()}";
 
             string[] formats =
             {
-                "yyyy-MM-dd HH:mm",
-                "yyyy-MM-dd H:mm",
-                "yyyy-MM-dd HH:mm:ss",
-                "yyyy-MM-dd H:mm:ss",
-
-                "dd/MM/yyyy HH:mm",
-                "dd/MM/yyyy H:mm",
-                "dd/MM/yyyy HH:mm:ss",
-                "dd/MM/yyyy H:mm:ss",
-
-                "dd-MM-yyyy HH:mm",
-                "dd-MM-yyyy H:mm",
-                "dd-MM-yyyy HH:mm:ss",
-                "dd-MM-yyyy H:mm:ss",
-
-                "yyyy-MM-ddTHH:mm",
-                "yyyy-MM-ddTHH:mm:ss"
+                "yyyy-MM-dd HH:mm", "yyyy-MM-dd H:mm", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd H:mm:ss",
+                "dd/MM/yyyy HH:mm", "dd/MM/yyyy H:mm", "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy H:mm:ss",
+                "dd-MM-yyyy HH:mm", "dd-MM-yyyy H:mm", "dd-MM-yyyy HH:mm:ss", "dd-MM-yyyy H:mm:ss",
+                "yyyy-MM-ddTHH:mm", "yyyy-MM-ddTHH:mm:ss"
             };
 
             foreach (string format in formats)
             {
                 if (DateTime.TryParseExact(
-                        combined,
-                        format,
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.None,
-                        out result))
+                        combined, format, CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out result))
                 {
-                    result = DateTime.SpecifyKind(
-                        result,
-                        DateTimeKind.Local
-                    );
-
+                    result = DateTime.SpecifyKind(result, DateTimeKind.Local);
                     return true;
                 }
             }
 
-            if (DateTime.TryParse(
-                    combined,
-                    CultureInfo.CurrentCulture,
-                    DateTimeStyles.AllowWhiteSpaces,
-                    out result))
+            if (DateTime.TryParse(combined, CultureInfo.CurrentCulture,
+                    DateTimeStyles.AllowWhiteSpaces, out result))
             {
-                result = DateTime.SpecifyKind(
-                    result,
-                    DateTimeKind.Local
-                );
-
+                result = DateTime.SpecifyKind(result, DateTimeKind.Local);
                 return true;
             }
 
-            if (DateTime.TryParse(
-                    combined,
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.AllowWhiteSpaces,
-                    out result))
+            if (DateTime.TryParse(combined, CultureInfo.InvariantCulture,
+                    DateTimeStyles.AllowWhiteSpaces, out result))
             {
-                result = DateTime.SpecifyKind(
-                    result,
-                    DateTimeKind.Local
-                );
-
+                result = DateTime.SpecifyKind(result, DateTimeKind.Local);
                 return true;
             }
 
