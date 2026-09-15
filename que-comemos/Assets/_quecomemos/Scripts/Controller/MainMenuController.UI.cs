@@ -120,6 +120,8 @@ namespace QueComemos.UI
                 panelRoot.Q<Label>("toast");
 
             ConfigureTextField(dishField);
+            ConfigureTextField(reminderDateField);
+            ConfigureTextField(reminderTimeField);
             ConfigureTextField(reminderTitleField);
         }
         private void ConfigureTextField(TextField field)
@@ -127,8 +129,27 @@ namespace QueComemos.UI
             if (field == null)
                 return;
 
-            field.autoCorrection = true;
+            field.autoCorrection = false;
+            field.selectAllOnFocus = false;
+            field.selectAllOnMouseUp = false;
             field.keyboardType = TouchScreenKeyboardType.NamePhonePad;
+
+            field.RegisterCallback<PointerUpEvent>(evt =>
+            {
+                field.schedule.Execute(() =>
+                {
+                    if (field.panel == null)
+                        return;
+
+                    // Unity ya ha calculado la posición tocada.
+                    // Quitamos cualquier selección y dejamos el caret
+                    // exactamente en cursorIndex.
+                    field.SelectNone();
+
+                    // Aseguramos que cursorIndex == selectIndex.
+                    field.selectIndex = field.cursorIndex;
+                });
+            });
         }
 
         private void CacheDayCards()
