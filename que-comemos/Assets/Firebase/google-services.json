@@ -23,11 +23,35 @@
           }
         },
         {
+          "client_id": "556029382725-37oqb6hd555bd4jn9onnsi13887fl2cm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.senekagames.quecomemos",
+            "certificate_hash": "f37c2d9ebb0c927469711ea671d22a113f3a5371"
+          }
+        },
+        {
+          "client_id": "556029382725-6k50jt4t3hpodgp34rn2gbqocu017l6g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.senekagames.quecomemos",
+            "certificate_hash": "0a860359e03e7af486c6be0fd85b702fe3e17f78"
+          }
+        },
+        {
           "client_id": "556029382725-atgv9phiifr1jfp5rn8iqotrqbia2i3t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.senekagames.quecomemos",
             "certificate_hash": "295c62bd2c642054714b47e107a925815ee7233e"
+          }
+        },
+        {
+          "client_id": "556029382725-ca327175a39jkkip7vt5shvba8sqlkq5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.senekagames.quecomemos",
+            "certificate_hash": "831f3a1780c5b843632a6b9ec2ad11881a58d8a8"
           }
         },
         {
