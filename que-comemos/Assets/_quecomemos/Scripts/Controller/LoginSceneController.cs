@@ -14,9 +14,12 @@ namespace QueComemos.UI
         private Button guestLoginButton;
         private Coroutine waitForAuthManagerRoutine;
 
+        private Label appVersionLabel;
+
         private void Start()
         {
             var root = uiDocument.rootVisualElement;
+            appVersionLabel = root.Q<Label>("app-version");
             googleSignInButton = root.Q<Button>("google-login-btn");
             guestLoginButton = root.Q<Button>("guest-login-btn");
 
@@ -34,10 +37,15 @@ namespace QueComemos.UI
 
             googleSignInButton.clicked += HandleSignInButtonClicked;
             guestLoginButton.clicked += HandleGuestLoginClicked;
-            googleSignInButton.SetEnabled(false);
-            guestLoginButton.SetEnabled(true); // El guest login siempre disponible
+            googleSignInButton.SetEnabled(true);
+            guestLoginButton.SetEnabled(true);
             
             waitForAuthManagerRoutine = StartCoroutine(WaitForAuthManagerAndConnect());
+
+            if (appVersionLabel != null)
+            {
+                appVersionLabel.text = $"v{Application.version}";
+            }
         }
 
         private IEnumerator WaitForAuthManagerAndConnect()

@@ -63,3 +63,5 @@
     min-height: 16px;
     -unity-text-align: middle-center;
 }
+
+.app-version { position: absolute; bottom: 20px; left: 0; right: 0; -unity-text-align: middle-center; font-size: 12px; opacity: 0.6; color : #FFFFFF;}
