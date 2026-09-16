@@ -11,12 +11,14 @@ namespace QueComemos.UI
         [SerializeField] private UIDocument uiDocument;
 
         private Button googleSignInButton;
+        private Button guestLoginButton;
         private Coroutine waitForAuthManagerRoutine;
 
         private void Start()
         {
             var root = uiDocument.rootVisualElement;
             googleSignInButton = root.Q<Button>("google-login-btn");
+            guestLoginButton = root.Q<Button>("guest-login-btn");
 
             if (googleSignInButton == null)
             {
@@ -24,8 +26,17 @@ namespace QueComemos.UI
                 return;
             }
 
+            if (guestLoginButton == null)
+            {
+                Debug.LogError("[LoginSceneController] No se encontró el botón \"guest-login-btn\"");
+                return;
+            }
+
             googleSignInButton.clicked += HandleSignInButtonClicked;
+            guestLoginButton.clicked += HandleGuestLoginClicked;
             googleSignInButton.SetEnabled(false);
+            guestLoginButton.SetEnabled(true); // El guest login siempre disponible
+            
             waitForAuthManagerRoutine = StartCoroutine(WaitForAuthManagerAndConnect());
         }
 
@@ -74,6 +85,7 @@ namespace QueComemos.UI
         {
             if (waitForAuthManagerRoutine != null) StopCoroutine(waitForAuthManagerRoutine);
             if (googleSignInButton != null) googleSignInButton.clicked -= HandleSignInButtonClicked;
+            if (guestLoginButton != null) guestLoginButton.clicked -= HandleGuestLoginClicked;
 
             if (GoogleAuthManager.Instance != null)
             {
@@ -93,7 +105,34 @@ namespace QueComemos.UI
             }
 
             googleSignInButton.SetEnabled(false);
+            guestLoginButton.SetEnabled(false);
             GoogleAuthManager.Instance.SignIn();
+        }
+
+        private void HandleGuestLoginClicked()
+        {
+            Debug.Log("[LoginSceneController] Click recibido en 'guest-login-btn'. Iniciando sesión como invitado.");
+
+            if (FirebaseManager.Instance == null)
+            {
+                Debug.LogError("[LoginSceneController] FirebaseManager.Instance es null al hacer guest login.");
+                return;
+            }
+
+            googleSignInButton.SetEnabled(false);
+            guestLoginButton.SetEnabled(false);
+
+            // Crear un UID temporal único para el guest
+            string guestId = "guest-" + System.Guid.NewGuid().ToString().Substring(0, 8);
+            
+            Debug.Log($"[LoginSceneController] Usuario invitado creado: {guestId}");
+            
+            // Establecer el calendario guest en FirebaseManager (sin persistencia)
+            FirebaseManager.Instance.SetCalendarId(guestId, isOwnCalendar: true);
+            
+            // Cargar la escena Menu
+            Debug.Log("[LoginSceneController] Cargando Menu...");
+            SceneHelper.LoadScene(SceneNames.Menu);
         }
 
         private void HandleSignedIn(Firebase.Auth.FirebaseUser user)
@@ -106,6 +145,7 @@ namespace QueComemos.UI
         {
             Debug.LogWarning($"[LoginSceneController] Login fallido: {message}");
             if (googleSignInButton != null) googleSignInButton.SetEnabled(true);
+            if (guestLoginButton != null) guestLoginButton.SetEnabled(true);
         }
     }
 }

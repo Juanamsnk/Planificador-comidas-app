@@ -19,9 +19,10 @@
                 <ui:Label name="app-subtitle" text="Planifica tus comidas en equipo" class="app-subtitle"/>
             </ui:VisualElement>
 
-            <!-- Botón de login -->
+            <!-- Botones de login -->
             <ui:VisualElement name="auth-actions" class="auth-actions">
                 <ui:Instance template="ButtonSession" name="google-login-btn"/>
+                <ui:Button name="guest-login-btn" text="Entrar como invitado" class="button-secondary"/>
             </ui:VisualElement>
 
             <!-- Estado/Loading -->

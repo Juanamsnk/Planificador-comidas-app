@@ -7,7 +7,7 @@ public class AdsManager : MonoBehaviour
     private BannerView bannerView;
     private bool bannerReady = false;
 
-    private string adUnitIdAndroid = "ca-app-pub-3940256099942544/6300978111"; // Banner de prueba
+    private string adUnitIdAndroid = "ca-app-pub-6192873534407725/6799197234";
 
     public static AdsManager Instance
     {
