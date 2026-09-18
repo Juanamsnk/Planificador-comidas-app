@@ -1,13 +1,3 @@
-/* ==========================================================================
-   MOLECULES.uss — combinación de átomos con sentido propio
-   Equivalente a: .day-card-head, .meal-tag, .cell-btn(+selected/empty),
-   .menu-item(+active/danger), .leave-menu-btn, .calendar-menu-row,
-   .reminder-line, .menu-section-label, .menu-divider
-   ========================================================================== */
-
-/* ---------- Cabecera de una tarjeta de día ----------
-   Layout lateral (fecha a la izquierda, comidas a la derecha): es el
-   único layout de esta app, pensada solo para móvil en portrait. */
 .day-card-head {
     -unity-text-align: middle-left;
     justify-content: center;
@@ -34,12 +24,10 @@
     margin-top: 1px;
 }
 
-/* modificador cuando la tarjeta es "hoy" */
 .day-card-head--today .day-name {
     color: var(--herb);
 }
 
-/* ---------- Slot de comida/cena (etiqueta + celda) ---------- */
 .meal-slot {
     flex-direction: column;
     margin-bottom: 10px;
@@ -57,7 +45,6 @@
     margin-bottom: 5px;
 }
 
-/* ---------- Celda de plato (botón) ---------- */
 .cell-btn {
     width: 100%;
     min-height: 54px;
@@ -71,7 +58,6 @@
     flex-direction: column;
     justify-content: center;
     white-space: normal;
-    /* Misma razón que en .day-card: fija el alto solo a su contenido. */
     flex-shrink: 0;
     flex-grow: 0;
 }
@@ -84,10 +70,6 @@
 .cell-btn--selected {
     border-width: 1px;
     border-color: var(--herb);
-    /* Antes usaba un verde con alpha (rgba con transparencia); en algunas
-       versiones de UI Toolkit ese canal alfa no se mezcla como se espera
-       y el fondo sale sólido/muy saturado. Usamos un color de superficie
-       sólido en su lugar; el borde verde ya marca la selección. */
     background-color: var(--surface-hover);
 }
 
@@ -106,7 +88,6 @@
     color: var(--muted);
 }
 
-/* ---------- Ítem de menú desplegable ---------- */
 .menu-section-label {
     font-size: 11px;
     letter-spacing: 0.4px;
@@ -121,9 +102,6 @@
     background-color: rgba(0, 0, 0, 0);
     padding: 10px 11px;
     border-radius: 9px;
-    /* El Button de Unity trae su propio borde del tema base; sin ponerlo
-       a 0 se ve un contorno permanente que no está en la web (ahí un
-       ítem de menú normal no tiene borde hasta que está activo/hover). */
     border-width: 0;
     font-size: 14px;
     color: var(--paper);
@@ -161,11 +139,11 @@
 .calendar-menu-row .menu-item {
     flex-grow: 1;
     flex-shrink: 1;
-    width: auto;                  /* CAMBIO: de 100% a auto */
-    overflow: hidden;             /* NUEVO */
-    text-overflow: ellipsis;      /* NUEVO: pone "..." si el texto es muy largo */
-    white-space: nowrap;          /* NUEVO: una sola línea */
-    margin-right: 8px;            /* NUEVO: separación de la X */
+    width: auto;                  
+    overflow: hidden;             
+    text-overflow: ellipsis;      
+    white-space: nowrap;          
+    margin-right: 8px;     
 }
 
 .leave-menu-btn {
@@ -192,8 +170,6 @@
     margin: 7px 4px;
     flex-shrink: 0;
 }
-
-/* ---------- Línea de recordatorio (checkbox + fecha + hora) ---------- */
 .reminder-line {
     flex-direction: row;
     align-items: center;
@@ -208,4 +184,13 @@
     margin-bottom: 4px;
 }
 
-
+.pin-menu-btn {
+    width: 28px;
+    height: 28px;
+    margin-right: 4px;
+    background-color: transparent;
+    border-width: 0;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}

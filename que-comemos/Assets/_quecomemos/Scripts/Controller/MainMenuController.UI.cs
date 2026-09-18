@@ -41,6 +41,9 @@ namespace QueComemos.UI
             ownCalendarBtn =
                 ownCalendarContainer?.Q<Button>("menu-item");
 
+            ownPinBtn =
+                panelRoot.Q<Button>("own-pin-btn");
+
             sharedCalendarsContainer =
                 panelRoot.Q<VisualElement>(
                     "shared-calendars-container"
@@ -450,21 +453,33 @@ namespace QueComemos.UI
                     FirebaseManager.Instance?.OwnCalendarId
                 );
 
+            if (ownPinBtn != null)
+            {
+                ownPinBtn.clicked +=
+                    () => PinCalendar(
+                        FirebaseManager.Instance?.OwnCalendarId
+                    );
+            }
+
             panelRoot.RegisterCallback<PointerDownEvent>(
                 OnRootPointerDown,
                 TrickleDown.TrickleDown
             );
 
             prevWeekBtn.clicked +=
-                () =>
-                {
-                    weekOffset--;
-                    Render();
-                };
+             () =>
+             {
+                 HideKeyboard();
+                 selected = null;
+                 weekOffset--;
+                 Render();
+             };
 
             nextWeekBtn.clicked +=
                 () =>
                 {
+                    HideKeyboard();
+                    selected = null;
                     weekOffset++;
                     Render();
                 };
@@ -472,6 +487,8 @@ namespace QueComemos.UI
             todayBtn.clicked +=
                 () =>
                 {
+                    HideKeyboard();
+                    selected = null;
                     weekOffset = 0;
                     Render();
                 };

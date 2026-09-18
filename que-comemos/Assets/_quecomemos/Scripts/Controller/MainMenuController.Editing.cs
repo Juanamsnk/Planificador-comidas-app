@@ -237,8 +237,7 @@ namespace QueComemos.UI
             if (suggestion == null)
             {
                 ShowToast(
-                    "Todavía no hay suficientes platos " +
-                    "guardados en otras semanas"
+                    "Todavía no hay suficientes platos "
                 );
 
                 return;

@@ -102,6 +102,7 @@ namespace QueComemos.UI
         private Label ownerBadge;
 
         private Button ownCalendarBtn;
+        private Button ownPinBtn;
         private VisualElement sharedCalendarsContainer;
 
         #endregion
@@ -226,13 +227,14 @@ namespace QueComemos.UI
 
             CreateKeyboardSpacer();
 
-            // El estado inicial es tema claro.
             isLightTheme = true;
             ToggleTheme();
 
             Render();
 
             ConnectToFirebase();
+
+            ApplyPinnedCalendarIfNeeded();
 
             UpdateOwnerBadge();
 

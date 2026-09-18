@@ -5,7 +5,10 @@
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Organisms.uss?fileID=7433441132597879392&amp;guid=4606e07a7bdf1eb48825e5e55ef1577d&amp;type=3#Organisms"/>
     <ui:VisualElement name="dropdown-menu" class="dropdown-menu">
         <ui:Label text="Calendarios" class="menu-section-label"/>
-        <ui:Instance template="MenuItem" name="own-calendar-item"/>
+        <ui:VisualElement name="own-calendar-row" class="calendar-menu-row">
+            <ui:Instance template="MenuItem" name="own-calendar-item" style="flex-grow: 1;"/>
+            <ui:Button name="own-pin-btn" text="" class="pin-menu-btn" tooltip="Fijar calendario"/>
+        </ui:VisualElement>
         <ui:VisualElement name="shared-calendars-container"/>
         <ui:VisualElement name="divider-1" class="menu-divider"/>
         <ui:Button name="share-real-btn" text="Compartir enlace" class="menu-item"/>

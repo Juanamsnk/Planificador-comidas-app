@@ -160,6 +160,66 @@ namespace QueComemos.UI
         #endregion
 
         #region Calendarios
+
+        private const string PinnedCalendarPrefKey = "quecomemos_pinned_calendar";
+
+        // "" significa "Mi calendario" (estado por defecto).
+        private string PinnedCalendarId
+        {
+            get => PlayerPrefs.GetString(PinnedCalendarPrefKey, "");
+            set
+            {
+                PlayerPrefs.SetString(
+                    PinnedCalendarPrefKey,
+                    value ?? ""
+                );
+
+                PlayerPrefs.Save();
+            }
+        }
+
+        private void SetPinIcon(
+            Button btn,
+            bool isSelected)
+        {
+            if (btn == null)
+                return;
+
+            Texture2D icon =
+                Resources.Load<Texture2D>(
+                    isSelected
+                        ? "Icons/chincheta_select"
+                        : "Icons/chincheta"
+                );
+
+            if (icon != null)
+            {
+                btn.style.backgroundImage =
+                    new StyleBackground(icon);
+            }
+
+            btn.text = "";
+        }
+
+        private void PinCalendar(
+            string calendarId)
+        {
+            if (string.IsNullOrEmpty(calendarId))
+                return;
+
+            string ownId =
+                FirebaseManager.Instance?.OwnCalendarId;
+
+            PinnedCalendarId =
+                calendarId == ownId
+                    ? ""
+                    : calendarId;
+
+            ShowToast("Calendario fijado");
+
+            RefreshCalendarsMenu();
+        }
+
         private void SwitchToCalendar(
             string calendarId)
         {
@@ -186,6 +246,13 @@ namespace QueComemos.UI
             await FirebaseManager.Instance
                 .LeaveSharedCalendarAsync(calendarId);
 
+            if (PinnedCalendarId == calendarId)
+            {
+                // Si fijaste el calendario que acabas de abandonar,
+                // volvemos a fijar "Mi calendario".
+                PinnedCalendarId = "";
+            }
+
             if (FirebaseManager.Instance
                     .CurrentCalendarId ==
                 calendarId)
@@ -200,6 +267,36 @@ namespace QueComemos.UI
             }
 
             RefreshCalendarsMenu();
+        }
+
+        private async void ApplyPinnedCalendarIfNeeded()
+        {
+            var firebase = FirebaseManager.Instance;
+
+            if (firebase == null)
+                return;
+
+            string pinnedId = PinnedCalendarId;
+
+            // Vacío = "Mi calendario", que ya es el comportamiento por defecto.
+            if (string.IsNullOrEmpty(pinnedId))
+                return;
+
+            if (pinnedId == firebase.CurrentCalendarId)
+                return;
+
+            var sharedIds =
+                await firebase.GetSharedCalendarIdsAsync();
+
+            if (sharedIds != null && sharedIds.Contains(pinnedId))
+            {
+                SwitchToCalendar(pinnedId);
+            }
+            else
+            {
+                // Ya no tenemos acceso a ese calendario: volvemos a "Mi calendario".
+                PinnedCalendarId = "";
+            }
         }
 
         private async void RefreshCalendarsMenu()
@@ -228,6 +325,9 @@ namespace QueComemos.UI
             string ownId =
                 firebase.OwnCalendarId;
 
+            string pinnedId =
+                PinnedCalendarId;
+
             ownCalendarBtn.text =
                 "Mi calendario";
 
@@ -241,6 +341,12 @@ namespace QueComemos.UI
                     "menu-item--active"
                 );
             }
+
+            SetPinIcon(
+                ownPinBtn,
+                string.IsNullOrEmpty(pinnedId) ||
+                pinnedId == ownId
+            );
 
             sharedCalendarsContainer.Clear();
 
@@ -261,6 +367,11 @@ namespace QueComemos.UI
                 Button nameBtn =
                     row.Q<Button>(
                         "calendar-name-btn"
+                    );
+
+                Button pinBtn =
+                    row.Q<Button>(
+                        "pin-btn"
                     );
 
                 Button leaveBtn =
@@ -305,6 +416,22 @@ namespace QueComemos.UI
                             capturedId
                         );
                     };
+
+                SetPinIcon(
+                    pinBtn,
+                    pinnedId == id
+                );
+
+                if (pinBtn != null)
+                {
+                    pinBtn.clicked +=
+                        () =>
+                        {
+                            PinCalendar(
+                                capturedId
+                            );
+                        };
+                }
 
                 leaveBtn.clicked +=
                     () =>
