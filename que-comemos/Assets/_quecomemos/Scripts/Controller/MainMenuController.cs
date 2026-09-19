@@ -227,8 +227,8 @@ namespace QueComemos.UI
 
             CreateKeyboardSpacer();
 
-            isLightTheme = true;
-            ToggleTheme();
+            isLightTheme = LoadThemePreference();
+            ApplyTheme();
 
             Render();
 

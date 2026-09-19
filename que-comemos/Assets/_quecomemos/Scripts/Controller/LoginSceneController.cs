@@ -15,13 +15,21 @@ namespace QueComemos.UI
         private Coroutine waitForAuthManagerRoutine;
 
         private Label appVersionLabel;
+        private VisualElement pageRoot;
+        private const string ThemePrefKey = "quecomemos_theme_light";
 
         private void Start()
         {
             var root = uiDocument.rootVisualElement;
+
+            pageRoot = root.Q<VisualElement>("root");
+            ApplyStoredTheme();
+
             appVersionLabel = root.Q<Label>("app-version");
             googleSignInButton = root.Q<Button>("google-login-btn");
             guestLoginButton = root.Q<Button>("guest-login-btn");
+
+
 
             if (googleSignInButton == null)
             {
@@ -46,6 +54,27 @@ namespace QueComemos.UI
             {
                 appVersionLabel.text = $"v{Application.version}";
             }
+        }
+        private void ApplyStoredTheme()
+        {
+            if (pageRoot == null)
+                return;
+
+            // Por defecto, tema oscuro (mismo criterio que MainMenuController).
+            bool isLightTheme =
+                PlayerPrefs.GetInt(ThemePrefKey, 0) == 1;
+
+            pageRoot.RemoveFromClassList(
+                isLightTheme
+                    ? "theme-dark"
+                    : "theme-light"
+            );
+
+            pageRoot.AddToClassList(
+                isLightTheme
+                    ? "theme-light"
+                    : "theme-dark"
+            );
         }
 
         private IEnumerator WaitForAuthManagerAndConnect()
@@ -81,6 +110,7 @@ namespace QueComemos.UI
             // En el Editor el login real de Google no funciona.
             Debug.Log("[LoginSceneController] Editor: saltando el login real, " +
                 "usando el \"Test User Id\" de FirebaseManager.");
+            yield return new WaitForSeconds(3f);
             SceneHelper.LoadScene(SceneNames.Menu);
             yield break;
 #endif

@@ -551,10 +551,17 @@ namespace QueComemos.UI
 
         #region Theme
 
+        private const string ThemePrefKey = "quecomemos_theme_light";
+
         private void ToggleTheme()
         {
             isLightTheme = !isLightTheme;
+            ApplyTheme();
+            SaveThemePreference();
+        }
 
+        private void ApplyTheme()
+        {
             if (pageRoot == null)
                 return;
 
@@ -609,6 +616,25 @@ namespace QueComemos.UI
                     pageRoot.RemoveFromClassList("theme-switching");
                 })
                 .ExecuteLater(1);
+        }
+
+        private void SaveThemePreference()
+        {
+            PlayerPrefs.SetInt(
+                ThemePrefKey,
+                isLightTheme ? 1 : 0
+            );
+
+            PlayerPrefs.Save();
+        }
+
+        private bool LoadThemePreference()
+        {
+            // Por defecto, tema oscuro.
+            return PlayerPrefs.GetInt(
+                ThemePrefKey,
+                0
+            ) == 1;
         }
 
         #endregion
