@@ -2,6 +2,7 @@ using QueComemos.Data;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 
 namespace QueComemos.UI
 {
@@ -466,32 +467,11 @@ namespace QueComemos.UI
                 TrickleDown.TrickleDown
             );
 
-            prevWeekBtn.clicked +=
-             () =>
-             {
-                 HideKeyboard();
-                 selected = null;
-                 weekOffset--;
-                 Render();
-             };
+            prevWeekBtn.clicked += GoToPrevWeek;
+            nextWeekBtn.clicked += GoToNextWeek;
+            todayBtn.clicked += GoToToday;
 
-            nextWeekBtn.clicked +=
-                () =>
-                {
-                    HideKeyboard();
-                    selected = null;
-                    weekOffset++;
-                    Render();
-                };
-
-            todayBtn.clicked +=
-                () =>
-                {
-                    HideKeyboard();
-                    selected = null;
-                    weekOffset = 0;
-                    Render();
-                };
+            RegisterSwipeGestures();
 
             foreach (var refs in dayCards)
             {
@@ -739,6 +719,237 @@ namespace QueComemos.UI
             }
 
             CloseMenu();
+        }
+
+        #endregion
+
+        #region Cambio de semana (animado)
+
+        private bool isChangingWeek;
+
+        private const int WeekChangeFadeMs = 130;
+
+        private void GoToPrevWeek()
+        {
+            ChangeWeek(weekOffset - 1);
+        }
+
+        private void GoToNextWeek()
+        {
+            ChangeWeek(weekOffset + 1);
+        }
+
+        private void GoToToday()
+        {
+            ChangeWeek(0);
+        }
+
+        /// <summary>
+        /// Cambia de semana con una pequeña animación de fundido, para que
+        /// se note visualmente que ha ocurrido el cambio. Ignora llamadas
+        /// mientras ya hay una animación en curso, para evitar que varios
+        /// swipes/clicks rápidos se pisen entre sí.
+        /// </summary>
+        private void ChangeWeek(int newOffset)
+        {
+            if (isChangingWeek)
+                return;
+
+            if (newOffset == weekOffset)
+                return;
+
+            HideKeyboard();
+            selected = null;
+
+            if (weekScroll == null)
+            {
+                weekOffset = newOffset;
+                Render();
+                return;
+            }
+
+            isChangingWeek = true;
+
+            weekScroll.experimental.animation
+                .Start(
+                    1f,
+                    0f,
+                    WeekChangeFadeMs,
+                    (el, value) =>
+                    {
+                        el.style.opacity = value;
+                    }
+                )
+                .OnCompleted(
+                    () =>
+                    {
+                        weekOffset = newOffset;
+                        Render();
+
+                        weekScroll.experimental.animation
+                            .Start(
+                                0f,
+                                1f,
+                                WeekChangeFadeMs,
+                                (el, value) =>
+                                {
+                                    el.style.opacity = value;
+                                }
+                            )
+                            .OnCompleted(
+                                () =>
+                                {
+                                    isChangingWeek = false;
+                                }
+                            );
+                    }
+                );
+        }
+
+        #endregion
+
+        #region Swipe (cambio de semana)
+
+        private Vector2? swipeStartPos;
+        private bool? swipeIsHorizontal;
+        private int swipePointerId = -1;
+
+        // Distancia mínima (px) antes de decidir si el gesto es
+        // scroll vertical o swipe horizontal.
+        private const float SwipeLockThreshold = 12f;
+
+        // Distancia mínima total (px) para que el swipe cuente
+        // como cambio de semana al soltar el dedo.
+        private const float SwipeMinDistance = 60f;
+
+        // Cuánto más horizontal que vertical tiene que ser el
+        // movimiento para considerarse swipe (y no scroll).
+        private const float SwipeDirectionRatio = 1.2f;
+
+        private void RegisterSwipeGestures()
+        {
+            if (weekScroll == null)
+                return;
+
+            weekScroll.RegisterCallback<PointerDownEvent>(
+                OnSwipePointerDown,
+                TrickleDown.TrickleDown
+            );
+
+            weekScroll.RegisterCallback<PointerMoveEvent>(
+                OnSwipePointerMove,
+                TrickleDown.TrickleDown
+            );
+
+            weekScroll.RegisterCallback<PointerUpEvent>(
+                OnSwipePointerUp,
+                TrickleDown.TrickleDown
+            );
+
+            weekScroll.RegisterCallback<PointerCaptureOutEvent>(
+                _ => ResetSwipeState()
+            );
+        }
+
+        private void ResetSwipeState()
+        {
+            swipeStartPos = null;
+            swipeIsHorizontal = null;
+            swipePointerId = -1;
+        }
+
+        private void OnSwipePointerDown(
+            PointerDownEvent evt)
+        {
+            swipeStartPos = evt.position;
+            swipeIsHorizontal = null;
+            swipePointerId = evt.pointerId;
+        }
+
+        private void OnSwipePointerMove(
+            PointerMoveEvent evt)
+        {
+            if (!swipeStartPos.HasValue ||
+                evt.pointerId != swipePointerId)
+            {
+                return;
+            }
+
+            Vector2 start = swipeStartPos.Value;
+
+            float deltaX = evt.position.x - start.x;
+            float deltaY = evt.position.y - start.y;
+
+            if (!swipeIsHorizontal.HasValue)
+            {
+                // Todavía no sabemos si es scroll vertical o swipe
+                // horizontal: esperamos a que el movimiento sea
+                // significativo antes de decidir.
+                if (Mathf.Abs(deltaX) < SwipeLockThreshold &&
+                    Mathf.Abs(deltaY) < SwipeLockThreshold)
+                {
+                    return;
+                }
+
+                swipeIsHorizontal =
+                    Mathf.Abs(deltaX) >
+                    Mathf.Abs(deltaY) * SwipeDirectionRatio;
+
+                if (swipeIsHorizontal.Value)
+                {
+                    // Nos "apropiamos" del gesto para que el
+                    // ScrollView deje de interpretarlo como
+                    // arrastre vertical a partir de ahora.
+                    weekScroll.CapturePointer(evt.pointerId);
+                }
+            }
+
+            if (swipeIsHorizontal.Value)
+            {
+                evt.StopPropagation();
+            }
+        }
+
+        private void OnSwipePointerUp(
+            PointerUpEvent evt)
+        {
+            if (!swipeStartPos.HasValue ||
+                evt.pointerId != swipePointerId)
+            {
+                ResetSwipeState();
+                return;
+            }
+
+            bool wasHorizontal =
+                swipeIsHorizontal.HasValue &&
+                swipeIsHorizontal.Value;
+
+            float deltaX =
+                evt.position.x - swipeStartPos.Value.x;
+
+            if (weekScroll.HasPointerCapture(evt.pointerId))
+            {
+                weekScroll.ReleasePointer(evt.pointerId);
+            }
+
+            ResetSwipeState();
+
+            if (!wasHorizontal)
+                return;
+
+            if (Mathf.Abs(deltaX) < SwipeMinDistance)
+                return;
+
+            if (deltaX < 0)
+            {
+                // Dedo hacia la izquierda -> semana siguiente.
+                GoToNextWeek();
+            }
+            else
+            {
+                // Dedo hacia la derecha -> semana anterior.
+                GoToPrevWeek();
+            }
         }
 
         #endregion
