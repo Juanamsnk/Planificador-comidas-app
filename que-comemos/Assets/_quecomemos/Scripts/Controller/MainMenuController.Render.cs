@@ -1,5 +1,6 @@
 using QueComemos.Data;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace QueComemos.UI
@@ -306,6 +307,8 @@ namespace QueComemos.UI
                 hasReminder
             );
 
+            UpdateReminderFieldsVisibility();
+
             reminderDateField.SetValueWithoutNotify(
                 entry.reminderDate ??
                 defaults.date
@@ -319,6 +322,8 @@ namespace QueComemos.UI
             reminderTitleField.SetValueWithoutNotify(
                 entry.reminderTitle ?? ""
             );
+
+            UpdateReminderFieldsVisibility();
 
             deleteBtn.style.display =
                 string.IsNullOrEmpty(entry.dish)
@@ -338,6 +343,52 @@ namespace QueComemos.UI
             RegisterKeyboardScrolling(reminderTitleField);
 
             ScrollToEditPanel();
+        }
+
+        private void UpdateReminderFieldsVisibility()
+        {
+            if (reminderToggle == null)
+                return;
+
+            bool reminderEnabled = reminderToggle.value;
+
+            // Ocultar/mostrar dentro de reminderLine
+            var reminderLine = reminderToggle.parent;
+            if (reminderLine != null)
+            {
+                var children = reminderLine.Children().ToList();
+
+                for (int i = 0; i < children.Count; i++)
+                {
+                    var child = children[i];
+
+                    // El toggle y el primer label ("Recordatorio") siempre visibles
+                    if (child == reminderToggle || (i == 1 && child is Label))
+                    {
+                        child.style.display = DisplayStyle.Flex;
+                        continue;
+                    }
+
+                    // El resto (campos de fecha/hora y sus labels): ocultar/mostrar según toggle
+                    child.style.display =
+                        reminderEnabled
+                            ? DisplayStyle.Flex
+                            : DisplayStyle.None;
+                }
+            }
+
+            // Ocultar/mostrar el edit-panel__row que contiene "Nombre del recordatorio"
+            if (reminderTitleField != null)
+            {
+                var reminderTitleRow = reminderTitleField.parent?.parent;
+                if (reminderTitleRow != null)
+                {
+                    reminderTitleRow.style.display =
+                        reminderEnabled
+                            ? DisplayStyle.Flex
+                            : DisplayStyle.None;
+                }
+            }
         }
 
         #endregion

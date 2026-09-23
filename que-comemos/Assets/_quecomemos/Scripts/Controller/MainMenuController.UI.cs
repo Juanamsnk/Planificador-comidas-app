@@ -498,6 +498,14 @@ namespace QueComemos.UI
             closeBtn.clicked +=
                 OnCloseClicked;
 
+            if (reminderToggle != null)
+            {
+                reminderToggle.RegisterValueChangedCallback(evt =>
+                {
+                    UpdateReminderFieldsVisibility();
+                });
+            }
+
             RegisterKeyboardScrolling(dishField);
             RegisterKeyboardScrolling(reminderDateField);
             RegisterKeyboardScrolling(reminderTimeField);
