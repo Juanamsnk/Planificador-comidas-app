@@ -156,6 +156,8 @@ namespace QueComemos.UI
             ownerBadge.AddToClassList(
                 "badge--shared"
             );
+
+            UpdateShareButtonVisibility();
         }
 
         #endregion
@@ -164,7 +166,6 @@ namespace QueComemos.UI
 
         private const string PinnedCalendarPrefKey = "quecomemos_pinned_calendar";
 
-        // "" significa "Mi calendario" (estado por defecto).
         private string PinnedCalendarId
         {
             get => PlayerPrefs.GetString(PinnedCalendarPrefKey, "");
@@ -236,6 +237,7 @@ namespace QueComemos.UI
                 .SetCalendarId(calendarId);
 
             UpdateOwnerBadge();
+            UpdateShareButtonVisibility();
         }
 
         private async void LeaveCalendar(
@@ -501,6 +503,22 @@ namespace QueComemos.UI
             SceneHelper.LoadScene(
                 SceneNames.Authentication
             );
+        }
+
+        private void UpdateShareButtonVisibility()
+        {
+            var firebase = FirebaseManager.Instance;
+
+            if (shareRealBtn == null || firebase == null)
+                return;
+
+            bool isOwnCalendar =
+                firebase.CurrentCalendarId == firebase.OwnCalendarId;
+
+            shareRealBtn.style.display =
+                isOwnCalendar
+                    ? DisplayStyle.Flex
+                    : DisplayStyle.None;
         }
 
         #endregion
