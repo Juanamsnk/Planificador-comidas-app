@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 namespace QueComemos.UI
 {
+    //MainMenuController.UI
     public partial class MainMenuController
     {
         #region Firebase
@@ -150,7 +151,7 @@ namespace QueComemos.UI
             ownerBadge.text =
                 string.IsNullOrEmpty(label)
                     ? "Calendario compartido"
-                    : label;
+                    : FirebaseManager.GetDisplayNameFromEmail(label);
 
             ownerBadge.AddToClassList(
                 "badge--shared"
@@ -361,6 +362,7 @@ namespace QueComemos.UI
                 string ownerLabel =
                     await firebase.GetOwnerLabelAsync(id);
 
+
                 TemplateContainer row =
                     calendarMenuRowTemplate.Instantiate();
 
@@ -394,7 +396,7 @@ namespace QueComemos.UI
                 nameBtn.text =
                     string.IsNullOrEmpty(ownerLabel)
                         ? "Calendario compartido"
-                        : ownerLabel;
+                        : FirebaseManager.GetDisplayNameFromEmail(ownerLabel); 
 
                 nameBtn.RemoveFromClassList(
                     "menu-item--active"

@@ -2,14 +2,6 @@ using UnityEngine;
 
 namespace QueComemos.UI
 {
-    /// <summary>
-    /// Comparte texto usando el cuadro de diálogo nativo "Compartir con..."
-    /// de Android (Intent.ACTION_SEND) — deja elegir WhatsApp, Mensajes,
-    /// Gmail, etc. En cualquier otra plataforma (Editor, iOS por ahora, o
-    /// si algo falla) copia el texto al portapapeles como alternativa.
-    /// Devuelve true si se abrió el diálogo nativo, false si solo se copió
-    /// al portapapeles (para que el llamador pueda avisar con un toast).
-    /// </summary>
     public static class NativeShare
     {
         public static bool ShareText(string text)

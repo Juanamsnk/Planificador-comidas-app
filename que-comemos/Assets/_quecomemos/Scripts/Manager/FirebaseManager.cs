@@ -330,5 +330,22 @@ namespace QueComemos.Data
             }
             return result;
         }
+
+        /// <summary>
+        /// Extrae solo la parte antes de la @ del email para mostrar en UI
+        /// Ej: "juan@gmail.com" → "juan"
+        /// </summary>
+        public static string GetDisplayNameFromEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return email;
+
+            int atIndex = email.IndexOf('@');
+            if (atIndex > 0)
+            {
+                return email.Substring(0, atIndex);
+            }
+            return email;
+        }
     }
 }

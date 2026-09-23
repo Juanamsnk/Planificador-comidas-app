@@ -7,7 +7,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QueComemos.UI
-{
+{  
+    //MainMenuController.Editing
     public partial class MainMenuController
     {
         #region Guardar
