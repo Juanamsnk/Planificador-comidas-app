@@ -43,7 +43,7 @@
     right: 0;
     min-width: 210px;
     background-color: var(--surface);
-    border-width: 1px;
+    border-width: 2px;
     border-color: var(--line-strong);
     border-radius: 14px;
     padding: 10px;
@@ -107,7 +107,7 @@
 
 .day-card {
     background-color: var(--surface);
-    border-width: 1px;
+    border-width: 2px;
     border-color: var(--line);
     border-radius: 16px;
     padding: 12px;
@@ -128,7 +128,7 @@
 
 .day-card--today {
     border-color: var(--herb);
-    border-width: 1px;
+    border-width: 2px;
 }
 
 .day-meals {

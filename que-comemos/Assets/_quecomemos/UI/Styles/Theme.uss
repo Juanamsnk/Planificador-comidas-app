@@ -17,18 +17,18 @@
 }
 
 .theme-light {
-    --ink: #FFFFFF;
-    --surface: #FFFFFF;
+    --ink: #F8F8F8;
+    --surface: #F8F8F8;
     --surface-2: #F1F3EE;
     --surface-hover: #E7EAE1;
     --paper: #20241F;
     --muted: #6B7267;
-    --line: rgba(20, 23, 20, 0.08);
-    --line-strong: rgba(20, 23, 20, 0.16);
+    --line: rgba(20, 23, 20, 0.25);
+    --line-strong: rgba(20, 23, 20, 0.45);
     --herb: #5FA23B;
     --herb-deep: #4A8A2C;
     --herb-deep-light: rgba(111, 163, 78, 0.20);
-    --herb-ink: #FFFFFF;
+    --herb-ink: #F8F8F8;
     --gold: #B9791E;
     --plum: #5D6FA0;
     --rust: #C1502F;
