@@ -518,10 +518,18 @@ namespace QueComemos.UI
             bool isGuest =
                 firebase.IsGuestSession();
 
+            bool shouldShow =
+                (isOwnCalendar && !isGuest);
+
             shareRealBtn.style.display =
-                (isOwnCalendar && !isGuest)
+                shouldShow
                     ? DisplayStyle.Flex
                     : DisplayStyle.None;
+
+            var divider2 = panelRoot.Q<VisualElement>("divider-2");
+
+            if (divider2 != null)
+                divider2.style.display = shouldShow ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         #endregion
