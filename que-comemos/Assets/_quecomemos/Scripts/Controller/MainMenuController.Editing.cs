@@ -187,7 +187,6 @@ namespace QueComemos.UI
             Render();
             RestoreLastVisibleDay();
         }
-
         #endregion
 
         #region Firebase Save
@@ -256,7 +255,7 @@ namespace QueComemos.UI
             if (suggestion == null)
             {
                 ShowToast(
-                    "Agrega platos en varias fechas para analizarl"
+                    "Agrega platos en varias fechas para analizar"
                 );
 
                 return;

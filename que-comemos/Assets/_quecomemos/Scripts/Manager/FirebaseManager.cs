@@ -347,5 +347,14 @@ namespace QueComemos.Data
             }
             return email;
         }
+
+        /// <summary>
+        /// Comprueba si el calendario actual es una sesión de invitado
+        /// </summary>
+        public bool IsGuestSession()
+        {
+            return !string.IsNullOrEmpty(OwnCalendarId) &&
+                   OwnCalendarId.StartsWith("guest-");
+        }
     }
 }

@@ -238,6 +238,8 @@ namespace QueComemos.UI
 
             UpdateOwnerBadge();
 
+            UpdateShareButtonVisibility();
+
             Debug.Log(
                 "[MainMenuController] OnEnable() terminado correctamente."
             );

@@ -515,8 +515,11 @@ namespace QueComemos.UI
             bool isOwnCalendar =
                 firebase.CurrentCalendarId == firebase.OwnCalendarId;
 
+            bool isGuest =
+                firebase.IsGuestSession();
+
             shareRealBtn.style.display =
-                isOwnCalendar
+                (isOwnCalendar && !isGuest)
                     ? DisplayStyle.Flex
                     : DisplayStyle.None;
         }
