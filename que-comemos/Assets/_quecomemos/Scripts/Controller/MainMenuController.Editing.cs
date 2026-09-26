@@ -238,7 +238,7 @@ namespace QueComemos.UI
             if (suggestion == null)
             {
                 ShowToast(
-                    "Todavía no hay suficientes platos "
+                    "Añade platos en otras fechas para sugerir"
                 );
 
                 return;
@@ -256,7 +256,7 @@ namespace QueComemos.UI
             if (suggestion == null)
             {
                 ShowToast(
-                    "Todavía no hay suficiente histórico guardado"
+                    "Agrega platos en varias fechas para analizarl"
                 );
 
                 return;
