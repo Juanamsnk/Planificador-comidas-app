@@ -17,7 +17,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="auth-actions" class="auth-actions">
                 <ui:Instance template="ButtonSession" name="google-login-btn"/>
-                <ui:Button name="guest-login-btn" text="Entrar como invitado" class="button-secondary"/>
+            <ui:Button name="guest-login-btn" text="Entrar como invitado" class="guest-link-btn"/>
             </ui:VisualElement>
             <ui:Label name="auth-status" text="" class="auth-status"/>
         </ui:VisualElement>

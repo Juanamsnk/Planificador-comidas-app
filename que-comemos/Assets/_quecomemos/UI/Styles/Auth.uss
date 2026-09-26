@@ -63,5 +63,38 @@
     min-height: 16px;
     -unity-text-align: middle-center;
 }
+.guest-link-btn {
+    width: auto;
+    height: auto;
+    padding: 4px 8px 6px 8px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--muted);
+    color: var(--muted);
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    cursor: link;
+    margin-top: 12px;
+    white-space: nowrap;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.guest-link-btn:hover {
+    border-bottom-color: var(--paper);
+    color: var(--paper);
+}
+
+.theme-light .guest-link-btn {
+    color: #666666;
+    border-bottom-color: #666666;
+}
+
+.theme-light .guest-link-btn:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+}
 
 .app-version { position: absolute; bottom: 20px; left: 0; right: 0; -unity-text-align: middle-center; font-size: 12px; opacity: 0.6; color : #FFFFFF;}
