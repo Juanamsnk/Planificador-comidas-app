@@ -14,8 +14,8 @@
     <ui:VisualElement name="reminder-line" class="reminder-line">
         <ui:Toggle name="reminder-toggle" class="unity-toggle"/>
         <ui:Label text="Recordatorio" />
-        <ui:TextField name="reminder-date-field" value="2026-09-01" class="input-field input-field--compact" />
+<ui:TextField name="reminder-date-field" value="2026-09-01" class="input-field input-field--compact" max-length="10" />
         <ui:Label text="a las" />
-        <ui:TextField name="reminder-time-field" value="12:00" class="input-field input-field--compact" />
+        <ui:TextField name="reminder-time-field" value="12:00" class="input-field input-field--compact" max-length="5" />
     </ui:VisualElement>
 </ui:UXML>
