@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="CalendarMenuRow" src="project://database/Assets/_quecomemos/UI/Components/CalendarMenuRow.uxml?fileID=9197481963319205126&amp;guid=b82d86d8f618fa243aac4b886914fbd0&amp;type=3#CalendarMenuRow"/>
+    <ui:Template name="MenuItem" src="project://database/Assets/_quecomemos/UI/Components/MenuItem.uxml?fileID=9197481963319205126&amp;guid=8939688d88f8e2b48b79978df6a9ea95&amp;type=3#MenuItem"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
+    <Style src="project://database/Assets/_quecomemos/UI/Styles/Organisms.uss?fileID=7433441132597879392&amp;guid=4606e07a7bdf1eb48825e5e55ef1577d&amp;type=3#Organisms"/>
+    
+    <ui:VisualElement name="nav-panel" class="nav-panel" picking-mode="Ignore" style="display: none;">
+        <!-- PANEL DE AJUSTES (FULL SCREEN) -->
+        <ui:ScrollView name="nav-settings-scroll" class="nav-settings-scroll">
+            <ui:VisualElement name="settings-container" class="settings-container">
+                <!-- Tema -->
+                <ui:VisualElement name="settings-section">
+                    <ui:Label text="Apariencia" class="settings-section-title"/>
+                    <ui:Button name="settings-theme-btn" text="🌙 Tema oscuro" class="settings-btn"/>
+                </ui:VisualElement>
+                
+                <!-- Calendarios -->
+                <ui:VisualElement name="settings-section">
+                    <ui:Label text="Calendarios" class="settings-section-title"/>
+                    <ui:VisualElement name="settings-own-calendar-row" class="calendar-menu-row">
+                        <ui:Instance template="MenuItem" name="settings-own-calendar-item" style="flex-grow: 1;"/>
+                        <ui:Button name="settings-own-pin-btn" text="" class="pin-menu-btn" tooltip="Fijar calendario"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="settings-shared-calendars-container"/>
+                </ui:VisualElement>
+                
+                <!-- Acciones -->
+                <ui:VisualElement name="settings-section">
+                    <ui:Label text="Acciones" class="settings-section-title"/>
+                    <ui:Button name="settings-share-btn" text="Compartir enlace" class="settings-btn"/>
+                    <ui:Button name="settings-support-btn" text="Apoyar a QueComemos" class="settings-btn"/>
+                </ui:VisualElement>
+                
+                <!-- Cuenta -->
+                <ui:VisualElement name="settings-section">
+                    <ui:Label text="Cuenta" class="settings-section-title"/>
+                    <ui:Button name="settings-logout-btn" text="Cerrar sesión" class="settings-btn settings-btn--danger"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

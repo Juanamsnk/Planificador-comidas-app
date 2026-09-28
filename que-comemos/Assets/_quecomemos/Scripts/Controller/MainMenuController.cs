@@ -213,6 +213,8 @@ namespace QueComemos.UI
 
             CacheReferences();
 
+            CacheNavPanelReferences();
+
             if (!ValidateReferences())
             {
                 Debug.LogError(
@@ -239,6 +241,8 @@ namespace QueComemos.UI
             UpdateOwnerBadge();
 
             UpdateShareButtonVisibility();
+
+            UpdateThemeButtonText();
 
             Debug.Log(
                 "[MainMenuController] OnEnable() terminado correctamente."

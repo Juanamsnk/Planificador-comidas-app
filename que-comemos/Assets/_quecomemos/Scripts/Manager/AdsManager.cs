@@ -63,7 +63,7 @@ public class AdsManager : MonoBehaviour
             string adUnitId = "unused";
 #endif
 
-        bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
+        bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Top);
 
         bannerView.OnBannerAdLoaded += () =>
         {

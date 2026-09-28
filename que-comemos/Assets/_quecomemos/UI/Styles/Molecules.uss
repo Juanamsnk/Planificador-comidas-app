@@ -194,3 +194,165 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background-color: var(--surface);
+    border-top-width: 1px;
+    border-top-color: var(--line);
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    z-index: 100;
+}
+
+.footer-btn {
+    flex-grow: 1;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 8px 0;
+    border-top-width: 2px;
+    border-top-color: transparent;
+    -unity-text-align: middle-center;
+    flex-direction: column;
+}
+
+.footer-btn:hover {
+    color: var(--paper);
+}
+
+.footer-btn--active {
+    color: var(--herb);
+    border-top-color: var(--herb);
+}
+
+
+
+.theme-light .footer {
+    background-color: var(--surface);
+}
+
+.theme-light .footer-btn {
+    color: #999999;
+}
+
+.theme-light .footer-btn--active {
+    color: var(--herb);
+    border-top-color: var(--herb);
+}
+
+/* ==========================================================================
+   NAV PANEL — panel de ajustes fullscreen
+   ========================================================================== */
+
+.nav-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 56px;
+    background-color: var(--surface);
+    flex-direction: column;
+    z-index: 500;
+}
+
+.nav-settings-scroll {
+    flex-grow: 1;
+    padding: 0;
+    margin: 0;
+}
+
+/* SETTINGS */
+.settings-container {
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px;
+}
+
+.settings-section {
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settings-section-title {
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    color: var(--muted);
+    -unity-font-style: bold;
+    padding-bottom: 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--line);
+}
+
+.settings-btn {
+    width: 100%;
+    min-height: 44px;
+    background-color: var(--surface-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 8px;
+    color: var(--paper);
+    font-size: 13px;
+    -unity-text-align: middle-center;
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.settings-btn:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--herb);
+    color: var(--herb);
+}
+
+.settings-btn--danger {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+.settings-btn--danger:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+    color: #ff8888;
+    border-color: #ff8888;
+}
+
+/* TEMA CLARO */
+.theme-light .nav-panel {
+    background-color: var(--surface);
+}
+
+.theme-light .settings-section-title {
+    color: var(--paper);
+    border-bottom-color: var(--line);
+}
+
+.theme-light .settings-btn {
+    background-color: var(--surface-2);
+    color: var(--paper);
+    border-color: var(--line-strong);
+}
+
+.theme-light .settings-btn:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--herb);
+    color: var(--herb);
+}
+
+.theme-light .settings-btn--danger {
+    color: #C1502F;
+    border-color: #C1502F;
+}
+
+.theme-light .settings-btn--danger:hover {
+    background-color: rgba(193, 80, 47, 0.1);
+    color: #D96B4A;
+    border-color: #D96B4A;
+}

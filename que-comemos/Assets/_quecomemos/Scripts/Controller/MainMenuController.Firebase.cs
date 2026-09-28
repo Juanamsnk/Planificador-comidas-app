@@ -158,6 +158,7 @@ namespace QueComemos.UI
             );
 
             UpdateShareButtonVisibility();
+            UpdateShareButtonInSettings();
         }
 
         #endregion
@@ -225,7 +226,9 @@ namespace QueComemos.UI
         private void SwitchToCalendar(
             string calendarId)
         {
-            CloseMenu();
+            CloseNavPanel();
+
+            Debug.Log($"[MainMenuController] Cambiando a calendario: {calendarId}");
 
             if (string.IsNullOrEmpty(calendarId))
                 return;
@@ -455,7 +458,7 @@ namespace QueComemos.UI
 
         private void OnShareRealClicked()
         {
-            CloseMenu();
+            CloseNavPanel();
 
             var calendarId =
                 FirebaseManager.Instance?
@@ -487,7 +490,7 @@ namespace QueComemos.UI
 
         private void OnOpenSupport()
         {
-            CloseMenu();
+            CloseNavPanel();
 
             Application.OpenURL(
                 "https://ko-fi.com/juanmasnk"

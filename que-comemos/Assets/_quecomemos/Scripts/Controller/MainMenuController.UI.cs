@@ -13,14 +13,14 @@ namespace QueComemos.UI
 
         private void CacheReferences()
         {
-            themeToggleBtn =
-                panelRoot.Q<Button>("theme-toggle-btn");
+            //themeToggleBtn =
+            //    panelRoot.Q<Button>("theme-toggle-btn");
 
-            menuWrap =
-                panelRoot.Q<VisualElement>("menu-wrap");
+            //menuWrap =
+            //    panelRoot.Q<VisualElement>("menu-wrap");
 
-            menuToggleBtn =
-                panelRoot.Q<Button>("menu-toggle-btn");
+            //menuToggleBtn =
+            //    panelRoot.Q<Button>("menu-toggle-btn");
 
             dropdownMenu =
                 panelRoot.Q<VisualElement>("dropdown-menu");
@@ -305,20 +305,20 @@ namespace QueComemos.UI
         {
             bool ok = true;
 
-            ok &= LogIfNull(
-                themeToggleBtn,
-                "theme-toggle-btn"
-            );
+            //ok &= LogIfNull(
+            //    themeToggleBtn,
+            //    "theme-toggle-btn"
+            //);
 
-            ok &= LogIfNull(
-                menuWrap,
-                "menu-wrap"
-            );
+            //ok &= LogIfNull(
+            //    menuWrap,
+            //    "menu-wrap"
+            //);
 
-            ok &= LogIfNull(
-                menuToggleBtn,
-                "menu-toggle-btn"
-            );
+            //ok &= LogIfNull(
+            //    menuToggleBtn,
+            //    "menu-toggle-btn"
+            //);
 
             ok &= LogIfNull(
                 dropdownMenu,
@@ -440,15 +440,17 @@ namespace QueComemos.UI
 
         private void RegisterEvents()
         {
-            themeToggleBtn.clicked += ToggleTheme;
+            //themeToggleBtn.clicked += ToggleTheme;
 
-            menuToggleBtn.clicked += ToggleMenu;
+            //menuToggleBtn.clicked += ToggleMenu;
 
             shareRealBtn.clicked += OnShareRealClicked;
 
             supportBtn.clicked += OnOpenSupport;
 
             logoutBtn.clicked += OnLogoutClicked;
+
+            RegisterNavPanelEvents();
 
             ownCalendarBtn.clicked +=
                 () => SwitchToCalendar(
@@ -569,35 +571,35 @@ namespace QueComemos.UI
                     : "theme-dark"
             );
 
-            Texture2D themeIcon =
-                Resources.Load<Texture2D>(
-                    isLightTheme
-                        ? "Icons/sun"
-                        : "Icons/moon"
-                );
+            //Texture2D themeIcon =
+            //    Resources.Load<Texture2D>(
+            //        isLightTheme
+            //            ? "Icons/sun"
+            //            : "Icons/moon"
+            //    );
 
-            if (themeIcon != null)
-            {
-                themeToggleBtn.style.backgroundImage =
-                    new StyleBackground(themeIcon);
+            //if (themeIcon != null)
+            //{
+            //    themeToggleBtn.style.backgroundImage =
+            //        new StyleBackground(themeIcon);
 
-                themeToggleBtn.text = "";
-            }
+            //    themeToggleBtn.text = "";
+            //}
 
-            Texture2D menuIcon =
-                Resources.Load<Texture2D>(
-                    isLightTheme
-                        ? "Icons/menu-light"
-                        : "Icons/menu-dark"
-                );
+            //Texture2D menuIcon =
+            //    Resources.Load<Texture2D>(
+            //        isLightTheme
+            //            ? "Icons/menu-light"
+            //            : "Icons/menu-dark"
+            //    );
 
-            if (menuIcon != null)
-            {
-                menuToggleBtn.style.backgroundImage =
-                    new StyleBackground(menuIcon);
+            //if (menuIcon != null)
+            //{
+            //    menuToggleBtn.style.backgroundImage =
+            //        new StyleBackground(menuIcon);
 
-                menuToggleBtn.text = "";
-            }
+            //    menuToggleBtn.text = "";
+            //}
 
             pageRoot.schedule
                 .Execute(() =>
