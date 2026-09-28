@@ -2,9 +2,18 @@
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Atoms.uss?fileID=7433441132597879392&amp;guid=87ec63ee3523e6b4eb52966548b59a7c&amp;type=3#Atoms"/>
     <Style src="project://database/Assets/_quecomemos/UI/Styles/Molecules.uss?fileID=7433441132597879392&amp;guid=5f085e133ae88034fb9f8068c1bca8a5&amp;type=3#Molecules"/>
     
-    <ui:VisualElement name="footer" class="footer">
-        <ui:Button name="footer-calendar-btn" text="Calendario" class="footer-btn footer-btn--active"/>
-        <ui:Button name="footer-shopping-btn" text="Lista" class="footer-btn"/>
-        <ui:Button name="footer-settings-btn" text="Ajustes" class="footer-btn"/>
-    </ui:VisualElement>
+<ui:VisualElement name="footer" class="footer">
+    <ui:Button name="footer-calendar-btn" class="footer-btn footer-btn--active">
+        <ui:Image name="footer-btn-icon-calendar" class="footer-btn-icon"/>
+        <ui:Label text="Calendario" class="footer-btn-label"/>
+    </ui:Button>
+    <ui:Button name="footer-shopping-btn" class="footer-btn">
+        <ui:Image name="footer-btn-icon-shopping" class="footer-btn-icon"/>
+        <ui:Label text="Lista" class="footer-btn-label"/>
+    </ui:Button>
+    <ui:Button name="footer-settings-btn" class="footer-btn">
+        <ui:Image name="footer-btn-icon-settings" class="footer-btn-icon"/>
+        <ui:Label text="Ajustes" class="footer-btn-label"/>
+    </ui:Button>
+</ui:VisualElement>
 </ui:UXML>

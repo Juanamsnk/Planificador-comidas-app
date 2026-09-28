@@ -200,7 +200,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 56px;
+    height: 64px;  /* Aumentar de 56px a 80px (o más si quieres) */
     background-color: var(--surface);
     border-top-width: 1px;
     border-top-color: var(--line);
@@ -216,37 +216,61 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0);
     border-width: 0;
-    color: var(--muted);
-    font-size: 12px;
     padding: 8px 0;
     border-top-width: 2px;
     border-top-color: transparent;
-    -unity-text-align: middle-center;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;  /* Aumentar de 4px a 6px */
 }
 
 .footer-btn:hover {
-    color: var(--paper);
 }
 
 .footer-btn--active {
-    color: var(--herb);
     border-top-color: var(--herb);
 }
 
+.footer-btn-icon {
+    width: 32px;  /* Aumentar de 24px a 32px */
+    height: 32px;  /* Aumentar de 24px a 32px */
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--muted);
+}
 
+.footer-btn--active .footer-btn-icon {
+    -unity-background-image-tint-color: var(--herb);
+}
+
+.footer-btn-label {
+    font-size: 12px;  /* Aumentar de 10px a 12px */
+    -unity-text-align: middle-center;
+    color: var(--muted);
+}
+
+.footer-btn--active .footer-btn-label {
+    color: var(--herb);
+}
 
 .theme-light .footer {
     background-color: var(--surface);
 }
 
-.theme-light .footer-btn {
+.theme-light .footer-btn-icon {
+    -unity-background-image-tint-color: #6B7267;
+}
+
+.theme-light .footer-btn--active .footer-btn-icon {
+    -unity-background-image-tint-color: #5FA23B;
+}
+
+.theme-light .footer-btn-label {
     color: #999999;
 }
 
-.theme-light .footer-btn--active {
+.theme-light .footer-btn--active .footer-btn-label {
     color: var(--herb);
-    border-top-color: var(--herb);
 }
 
 /* ==========================================================================
@@ -258,7 +282,7 @@
     top: 0;
     left: 0;
     right: 0;
-    bottom: 56px;
+    bottom: 64px; /* el script lo ajusta con el inset inferior */
     background-color: var(--surface);
     flex-direction: column;
     z-index: 500;
@@ -279,7 +303,7 @@
 
 .settings-section {
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
 }
 
 .settings-section-title {
@@ -287,9 +311,10 @@
     letter-spacing: 0.4px;
     color: var(--muted);
     -unity-font-style: bold;
-    padding-bottom: 4px;
+    padding-bottom: 12px;  /* Aumentar de 4px a 12px */
     border-bottom-width: 1px;
     border-bottom-color: var(--line);
+    margin-bottom: 8px;  /* Agregar margen abajo */
 }
 
 .settings-btn {

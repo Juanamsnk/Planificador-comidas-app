@@ -44,6 +44,8 @@ namespace QueComemos.UI
             footerShoppingBtn = panelRoot.Q<Button>("footer-shopping-btn");
             footerSettingsBtn = panelRoot.Q<Button>("footer-settings-btn");
 
+            LoadFooterIcons();
+
             // Settings buttons (dentro del navPanel)
             if (navPanel != null)
             {
@@ -61,6 +63,34 @@ namespace QueComemos.UI
 
                 settingsOwnPinBtn = navPanel.Q<Button>("settings-own-pin-btn");
                 settingsSharedCalendarsContainer = navPanel.Q<VisualElement>("settings-shared-calendars-container");
+            }
+        }
+
+        private void LoadFooterIcons()
+        {
+            Texture2D calendarIcon = Resources.Load<Texture2D>("Icons/calendar");
+            Texture2D shoppingIcon = Resources.Load<Texture2D>("Icons/shopping-list");
+            Texture2D settingsIcon = Resources.Load<Texture2D>("Icons/settings");
+
+            if (footerCalendarBtn != null && calendarIcon != null)
+            {
+                var iconElement = footerCalendarBtn.Q<VisualElement>("footer-btn-icon-calendar");
+                if (iconElement != null)
+                    iconElement.style.backgroundImage = new StyleBackground(calendarIcon);
+            }
+
+            if (footerShoppingBtn != null && shoppingIcon != null)
+            {
+                var iconElement = footerShoppingBtn.Q<VisualElement>("footer-btn-icon-shopping");
+                if (iconElement != null)
+                    iconElement.style.backgroundImage = new StyleBackground(shoppingIcon);
+            }
+
+            if (footerSettingsBtn != null && settingsIcon != null)
+            {
+                var iconElement = footerSettingsBtn.Q<VisualElement>("footer-btn-icon-settings");
+                if (iconElement != null)
+                    iconElement.style.backgroundImage = new StyleBackground(settingsIcon);
             }
         }
 
@@ -166,19 +196,19 @@ namespace QueComemos.UI
             if (settingsThemeBtn == null)
                 return;
 
-            settingsThemeBtn.text = isLightTheme ? "☀️ Tema claro" : "🌙 Tema oscuro";
+            settingsThemeBtn.text = isLightTheme ? "Tema claro" : "Tema oscuro";
         }
 
         private void OnSettingsShareClicked()
         {
             OnShareRealClicked();
-            CloseNavPanel();
+            //CloseNavPanel();
         }
 
         private void OnSettingsSupportClicked()
         {
             OnOpenSupport();
-            CloseNavPanel();
+            //CloseNavPanel();
         }
 
         private void OnSettingsLogoutClicked()

@@ -4,10 +4,15 @@ using UnityEngine.UIElements;
 public class SafeArea : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
+    [SerializeField] private float footerBaseHeight = 64f;   // Debe coincidir con .footer en USS
+    [SerializeField] private float bannerExtraMargin = 4f;   // "Un poquito más" que el banner (unidades del panel)
 
     private VisualElement safeArea;
+    private VisualElement navPanel;
+    private VisualElement footer;
     private Vector2 lastScreenSize;
     private Rect lastSafeArea;
+    private float bannerHeightPx;
 
     private void Awake()
     {
@@ -17,10 +22,16 @@ public class SafeArea : MonoBehaviour
 
     private void OnEnable()
     {
+        bannerHeightPx = AdsManager.BannerHeightPx;
+        AdsManager.OnBannerHeightChanged += HandleBannerHeightChanged;
+
         if (uiDocument == null)
             return;
 
-        safeArea = uiDocument.rootVisualElement.Q<VisualElement>("SafeArea");
+        var root = uiDocument.rootVisualElement;
+        safeArea = root.Q<VisualElement>("SafeArea");
+        navPanel = root.Q<VisualElement>("nav-panel");
+        footer = root.Q<VisualElement>(className: "footer");
 
         if (safeArea == null)
         {
@@ -28,7 +39,19 @@ public class SafeArea : MonoBehaviour
             return;
         }
 
-        ApplySafeArea();
+        lastScreenSize = Vector2.zero;
+        lastSafeArea = Rect.zero;
+    }
+
+    private void OnDisable()
+    {
+        AdsManager.OnBannerHeightChanged -= HandleBannerHeightChanged;
+    }
+
+    private void HandleBannerHeightChanged(float px)
+    {
+        bannerHeightPx = px;
+        lastSafeArea = Rect.zero; // fuerza reaplicar en el siguiente Update
     }
 
     private void Update()
@@ -46,6 +69,9 @@ public class SafeArea : MonoBehaviour
 
     private void ApplySafeArea()
     {
+        if (safeArea.panel == null)
+            return;
+
         Rect safe = Screen.safeArea;
 
         float panelWidth = safeArea.panel.visualTree.resolvedStyle.width;
@@ -62,10 +88,28 @@ public class SafeArea : MonoBehaviour
         float bottom = safe.y * scaleY;
         float top = (Screen.height - safe.yMax) * scaleY;
 
+        // Banner: píxeles de pantalla -> unidades del panel (+ un pequeño margen)
+        float banner = bannerHeightPx > 0f ? bannerHeightPx * scaleY + bannerExtraMargin : 0f;
+        float topTotal = top + banner;
+
         safeArea.style.paddingLeft = left;
         safeArea.style.paddingRight = right;
-        safeArea.style.paddingTop = top;
+        safeArea.style.paddingTop = topTotal;
         safeArea.style.paddingBottom = bottom;
+
+        if (footer != null)
+        {
+            footer.style.height = footerBaseHeight + bottom;
+            footer.style.paddingBottom = bottom;
+        }
+
+        if (navPanel != null)
+        {
+            navPanel.style.paddingLeft = left;
+            navPanel.style.paddingRight = right;
+            navPanel.style.paddingTop = topTotal;
+            navPanel.style.bottom = footerBaseHeight + bottom;
+        }
 
         lastScreenSize = new Vector2(Screen.width, Screen.height);
         lastSafeArea = safe;

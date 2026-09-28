@@ -221,6 +221,7 @@ namespace QueComemos.UI
             ShowToast("Calendario fijado");
 
             RefreshCalendarsMenu();
+            RefreshCalendarsMenuInSettings();
         }
 
         private void SwitchToCalendar(
@@ -458,7 +459,7 @@ namespace QueComemos.UI
 
         private void OnShareRealClicked()
         {
-            CloseNavPanel();
+            //CloseNavPanel();
 
             var calendarId =
                 FirebaseManager.Instance?
@@ -490,7 +491,7 @@ namespace QueComemos.UI
 
         private void OnOpenSupport()
         {
-            CloseNavPanel();
+            //CloseNavPanel();
 
             Application.OpenURL(
                 "https://ko-fi.com/juanmasnk"

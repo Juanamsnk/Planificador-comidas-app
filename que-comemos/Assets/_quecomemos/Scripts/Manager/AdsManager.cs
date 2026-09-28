@@ -1,8 +1,14 @@
+using System;
 using GoogleMobileAds.Api;
+using GoogleMobileAds.Common;
 using UnityEngine;
 
 public class AdsManager : MonoBehaviour
 {
+    // Altura actual del banner en píxeles de pantalla (0 si no hay banner visible)
+    public static float BannerHeightPx { get; private set; }
+    public static event Action<float> OnBannerHeightChanged;
+
     private static AdsManager instance;
     private BannerView bannerView;
     private bool bannerReady = false;
@@ -58,17 +64,21 @@ public class AdsManager : MonoBehaviour
 #if UNITY_ANDROID
         string adUnitId = adUnitIdAndroid;
 #elif UNITY_IOS
-            string adUnitId = adUnitIdIOS;
+        string adUnitId = adUnitIdIOS;
 #else
-            string adUnitId = "unused";
+        string adUnitId = "unused";
 #endif
 
         bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Top);
 
         bannerView.OnBannerAdLoaded += () =>
         {
-            Debug.Log("Banner cargado correctamente!");
-            bannerReady = true;
+            MobileAdsEventExecutor.ExecuteInUpdate(() =>
+            {
+                Debug.Log("Banner cargado correctamente!");
+                bannerReady = true;
+                SetBannerHeight(bannerView.GetHeightInPixels());
+            });
         };
 
         bannerView.OnBannerAdLoadFailed += (LoadAdError error) =>
@@ -91,6 +101,7 @@ public class AdsManager : MonoBehaviour
         if (bannerView != null)
         {
             bannerView.Show();
+            SetBannerHeight(bannerView.GetHeightInPixels());
             Debug.Log("Banner mostrado");
         }
     }
@@ -98,7 +109,16 @@ public class AdsManager : MonoBehaviour
     public void HideBanner()
     {
         if (bannerView != null)
+        {
             bannerView.Hide();
+            SetBannerHeight(0f);
+        }
+    }
+
+    private static void SetBannerHeight(float px)
+    {
+        BannerHeightPx = px;
+        OnBannerHeightChanged?.Invoke(px);
     }
 
     private void OnDestroy()

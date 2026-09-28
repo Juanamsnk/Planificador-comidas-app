@@ -1,10 +1,3 @@
-/* ==========================================================================
-   ORGANISMS.uss — bloques completos de la pantalla
-   Equivalente a: .topbar/.header-row, .dropdown-menu, .week-nav, .nav-group,
-   .day-card(+is-today), .day-meals, .week-grid, .edit-panel, .toast
-   ========================================================================== */
-
-/* ---------- Cabecera (topbar) ---------- */
 .topbar {
     flex-shrink: 0;
     flex-grow: 0;
@@ -13,12 +6,6 @@
     border-bottom-width: 1px;
     border-bottom-color: var(--line-strong);
     padding: 12px 16px;
-    /* Fijo arriba siempre */
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
 }
 
 .header-row {
@@ -36,7 +23,6 @@
     position: relative;
 }
 
-/* ---------- Menú desplegable (hamburguesa) ---------- */
 .dropdown-menu {
     position: absolute;
     top: 48px;
@@ -47,22 +33,9 @@
     border-color: var(--line-strong);
     border-radius: 14px;
     padding: 10px;
-    /* Igual que en .day-card: sin esto, un flex-shrink por defecto puede
-       colapsar este panel a 0 de alto (fondo/borde desaparecen) aunque
-       su contenido siga asomando por encima, sin nada detrás. */
     flex-shrink: 0;
     flex-grow: 0;
-    /* Oculto por defecto aquí (en la clase, no en la instancia del UXML)
-       para que MainMenuController.cs, que consulta y alterna el display
-       de ESTE elemento con nombre "dropdown-menu", pueda mostrarlo. */
     display: none;
-    /* USS no soporta calc(), así que no se puede replicar
-       "max-width:calc(100vw - 32px)" del CSS. Si el menú llega a
-       desbordar el ancho de pantalla en algún dispositivo muy estrecho,
-       ajusta este min-width o fija un width concreto (p.ej. 260px). */
-    /* USS tampoco soporta box-shadow con difuminado real; si tu versión
-       de Unity 6.6 lo permite, añade aquí
-       `box-shadow: 0 20px 44px rgba(0,0,0,0.45);` */
 }
 
 .week-nav {
@@ -116,7 +89,6 @@
     width: 100%;
     flex-shrink: 0;
     flex-grow: 0;
-
     transition-property: background-color;
     transition-duration: 0.6s;
     transition-timing-function: ease-in-out;
@@ -143,7 +115,6 @@
     width: 100%;
 }
 
-/* ---------- Panel de edición de un día ---------- */
 .edit-panel {
     margin-top: 24px;
     background-color: var(--surface);
