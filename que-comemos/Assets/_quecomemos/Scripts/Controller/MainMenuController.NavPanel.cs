@@ -64,6 +64,8 @@ namespace QueComemos.UI
                 settingsOwnPinBtn = navPanel.Q<Button>("settings-own-pin-btn");
                 settingsSharedCalendarsContainer = navPanel.Q<VisualElement>("settings-shared-calendars-container");
             }
+
+            CacheShoppingReferences();
         }
 
         private void LoadFooterIcons()
@@ -98,9 +100,10 @@ namespace QueComemos.UI
         {
             // Footer buttons
             if (footerCalendarBtn != null)
-                footerCalendarBtn.clicked += CloseNavPanel;
+                footerCalendarBtn.clicked += ShowCalendarTab;   // antes: CloseNavPanel
 
-            // footerShoppingBtn no hace nada (comentado)
+            if (footerShoppingBtn != null)
+                footerShoppingBtn.clicked += OpenShoppingPanel;
 
             if (footerSettingsBtn != null)
                 footerSettingsBtn.clicked += OpenNavPanel;
@@ -124,6 +127,8 @@ namespace QueComemos.UI
 
             if (settingsOwnPinBtn != null)
                 settingsOwnPinBtn.clicked += () => PinCalendar(FirebaseManager.Instance?.OwnCalendarId);
+
+            RegisterShoppingEvents();
         }
 
         #endregion
@@ -132,6 +137,8 @@ namespace QueComemos.UI
 
         private void OpenNavPanel()
         {
+            HideShoppingPanel();
+
             if (navPanel == null)
                 return;
 
@@ -177,6 +184,10 @@ namespace QueComemos.UI
                 case "ajustes":
                     if (footerSettingsBtn != null)
                         footerSettingsBtn.AddToClassList("footer-btn--active");
+                    break;
+                case "lista":
+                    if (footerShoppingBtn != null)
+                        footerShoppingBtn.AddToClassList("footer-btn--active");
                     break;
             }
         }

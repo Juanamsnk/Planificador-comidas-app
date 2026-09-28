@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="shopping-panel" class="shopping-panel" style="display: none;">
+        <ui:VisualElement name="shopping-content" class="shopping-content">
+            <ui:Label text="Lista de la compra" class="shopping-title"/>
+            <ui:VisualElement name="shopping-add-row" class="shopping-add-row">
+                <ui:TextField name="shopping-input" class="shopping-input" max-length="80"/>
+                <ui:Button name="shopping-add-btn" text="+" class="shopping-add-btn"/>
+            </ui:VisualElement>
+            <ui:ScrollView name="shopping-scroll" class="shopping-scroll" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden">
+                <ui:VisualElement name="shopping-items" class="shopping-items"/>
+                <ui:Label name="shopping-empty" text="Tu lista está vacía. Escribe arriba lo que necesitas y pulsa +" class="shopping-empty"/>
+            </ui:ScrollView>
+            <ui:Button name="shopping-clear-done-btn" text="Borrar comprados" class="settings-btn settings-btn--danger" style="display: none;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

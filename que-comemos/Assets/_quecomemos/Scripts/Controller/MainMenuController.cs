@@ -274,6 +274,8 @@ namespace QueComemos.UI
 
                 FirebaseManager.Instance.OnError -= HandleFirebaseError;
             }
+
+            UnsubscribeShoppingList();
         }
 
         #endregion

@@ -9,10 +9,12 @@ public class SafeArea : MonoBehaviour
 
     private VisualElement safeArea;
     private VisualElement navPanel;
+    private VisualElement shoppingPanel;
     private VisualElement footer;
     private Vector2 lastScreenSize;
     private Rect lastSafeArea;
     private float bannerHeightPx;
+
 
     private void Awake()
     {
@@ -31,6 +33,7 @@ public class SafeArea : MonoBehaviour
         var root = uiDocument.rootVisualElement;
         safeArea = root.Q<VisualElement>("SafeArea");
         navPanel = root.Q<VisualElement>("nav-panel");
+        shoppingPanel = root.Q<VisualElement>("shopping-panel");
         footer = root.Q<VisualElement>(className: "footer");
 
         if (safeArea == null)
@@ -105,13 +108,22 @@ public class SafeArea : MonoBehaviour
 
         if (navPanel != null)
         {
-            navPanel.style.paddingLeft = left;
-            navPanel.style.paddingRight = right;
-            navPanel.style.paddingTop = topTotal;
-            navPanel.style.bottom = footerBaseHeight + bottom;
+            ApplyOverlayInsets(navPanel, left, right, topTotal, bottom);
+            ApplyOverlayInsets(shoppingPanel, left, right, topTotal, bottom);
         }
 
         lastScreenSize = new Vector2(Screen.width, Screen.height);
         lastSafeArea = safe;
+    }
+
+    private void ApplyOverlayInsets(VisualElement panel, float left, float right, float top, float bottom)
+    {
+        if (panel == null)
+            return;
+
+        panel.style.paddingLeft = left;
+        panel.style.paddingRight = right;
+        panel.style.paddingTop = top;
+        panel.style.bottom = footerBaseHeight + bottom;
     }
 }

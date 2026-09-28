@@ -11,7 +11,7 @@ namespace QueComemos.Data
     /// Habla con Realtime Database que ya usa la web
     /// Arranca apuntando a un UID de PRUEBA fijo (campo "testUserId")
     /// </summary>
-    public class FirebaseManager : MonoBehaviour
+    public partial class FirebaseManager : MonoBehaviour
     {
         public static FirebaseManager Instance { get; private set; }
 
@@ -115,6 +115,8 @@ namespace QueComemos.Data
             CurrentCalendarId = calendarId;
             mealsRef = database.RootReference.Child("calendars").Child(calendarId).Child("mealplan");
             mealsRef.ValueChanged += HandleValueChanged;
+
+            AttachShoppingRef(calendarId);
 
             Debug.Log($"[FirebaseManager] Calendario activo: \"{calendarId}\".");
         }
@@ -282,6 +284,8 @@ namespace QueComemos.Data
 
         private void OnDestroy()
         {
+            DetachShoppingRef();
+
             if (mealsRef != null)
             {
                 mealsRef.ValueChanged -= HandleValueChanged;

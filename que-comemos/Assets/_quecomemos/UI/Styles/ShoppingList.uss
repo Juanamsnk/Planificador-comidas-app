@@ -1,0 +1,149 @@
+/* ==========================================================================
+   SHOPPING LIST PANEL — pegar al final de Organisms.uss
+   ========================================================================== */
+
+.shopping-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 64px; /* el script lo ajusta con el inset inferior */
+    background-color: var(--surface);
+    flex-direction: column;
+}
+
+.shopping-content {
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.shopping-title {
+    font-size: 19px;
+    -unity-font-style: italic;
+    color: var(--paper);
+    margin-bottom: 16px;
+}
+
+.shopping-add-row {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.shopping-input {
+    flex-grow: 1;
+    margin: 0 8px 0 0;
+}
+
+.shopping-input .unity-base-text-field__input {
+    background-color: var(--surface-2);
+    border-width: 1px;
+    border-color: var(--line-strong);
+    border-radius: 10px;
+    color: var(--paper);
+    font-size: 14px;
+    min-height: 44px;
+    padding: 10px 12px;
+}
+
+.shopping-input .unity-base-text-field__input:focus {
+    border-color: var(--herb);
+}
+
+.shopping-add-btn {
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-radius: 10px;
+    background-color: var(--herb);
+    color: var(--ink);
+    font-size: 22px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    flex-shrink: 0;
+}
+
+.shopping-scroll {
+    flex-grow: 1;
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.shopping-items {
+    flex-direction: column;
+}
+
+.shopping-row {
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--surface-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.shopping-row--done {
+    opacity: 0.6;
+}
+
+.shopping-check {
+    width: 26px;
+    height: 26px;
+    margin: 0 12px 0 0;
+    padding: 0;
+    border-width: 2px;
+    border-color: var(--line-strong);
+    border-radius: 13px;
+    background-color: rgba(0, 0, 0, 0);
+    flex-shrink: 0;
+}
+
+.shopping-check--done {
+    background-color: var(--herb);
+    border-color: var(--herb);
+}
+
+.shopping-item-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 15px;
+    color: var(--paper);
+    white-space: normal;
+    -unity-text-align: middle-left;
+}
+
+.shopping-row--done .shopping-item-text {
+    color: var(--muted);
+}
+
+.shopping-delete-btn {
+    width: 32px;
+    height: 32px;
+    margin: 0 0 0 8px;
+    padding: 0;
+    border-width: 0;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--rust);
+    font-size: 20px;
+    -unity-text-align: middle-center;
+    flex-shrink: 0;
+}
+
+.shopping-delete-btn:hover {
+    background-color: rgba(226, 115, 90, 0.15);
+}
+
+.shopping-empty {
+    font-size: 13px;
+    color: var(--muted);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    padding: 24px 16px;
+}
