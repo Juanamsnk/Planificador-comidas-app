@@ -47,7 +47,13 @@ namespace QueComemos.UI
 
         private void RegisterShoppingEvents()
         {
-if (shoppingInput != null)
+            if (shoppingAddBtn != null)
+                shoppingAddBtn.clicked += OnShoppingAddClicked;
+
+            if (shoppingClearDoneBtn != null)
+                shoppingClearDoneBtn.clicked += OnShoppingClearDoneClicked;
+
+            if (shoppingInput != null)
             {
                 // Primera letra en mayúscula mientras escribes
                 shoppingInput.RegisterValueChangedCallback(evt =>
