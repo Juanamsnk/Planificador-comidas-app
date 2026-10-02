@@ -364,6 +364,94 @@ namespace QueComemos.UI
                 .Key;
         }
 
+        private void OnFillWeekClicked()
+        {
+            HideKeyboard();
+            FillWeekWithDishes();
+        }
+
+        private void FillWeekWithDishes()
+        {
+            var weekDates = WeekDates(weekOffset);
+            int filledCount = 0;
+
+            // Mantener track de platos ya usados en esta semana
+            var usedComidas = new HashSet<string>();
+            var usedCenas = new HashSet<string>();
+
+            foreach (var date in weekDates)
+            {
+                string dateStr = FormatDate(date);
+
+                // Rellenar Comida
+                data.TryGetValue(Key(dateStr, "comida"), out var comidaEntry);
+                if (string.IsNullOrEmpty(comidaEntry?.dish))
+                {
+                    string dish = GetRandomDishForType("comida", dateStr, usedComidas);
+                    if (!string.IsNullOrEmpty(dish))
+                    {
+                        data[Key(dateStr, "comida")] = new MealEntryData { dish = dish };
+                        usedComidas.Add(dish);  // Agrega a excluidos
+                        filledCount++;
+                    }
+                }
+                else
+                {
+                    usedComidas.Add(comidaEntry.dish);  // Si ya hay, agrégalo a excluidos
+                }
+
+                // Rellenar Cena
+                data.TryGetValue(Key(dateStr, "cena"), out var cenaEntry);
+                if (string.IsNullOrEmpty(cenaEntry?.dish))
+                {
+                    string dish = GetRandomDishForType("cena", dateStr, usedCenas);
+                    if (!string.IsNullOrEmpty(dish))
+                    {
+                        data[Key(dateStr, "cena")] = new MealEntryData { dish = dish };
+                        usedCenas.Add(dish);  // Agrega a excluidos
+                        filledCount++;
+                    }
+                }
+                else
+                {
+                    usedCenas.Add(cenaEntry.dish);  // Si ya hay, agrégalo a excluidos
+                }
+            }
+
+            if (filledCount == 0)
+            {
+                ShowToast("Agrega platos en otras fechas para rellenar la semana");
+                return;
+            }
+
+            PersistData();
+            ShowToast($"Semana rellenada: {filledCount} platos");
+            Render();
+        }
+
+        private string GetRandomDishForType(string type, string excludeDate, HashSet<string> excludeDishes)
+        {
+            var excluded = new HashSet<string> { excludeDate };
+
+            var candidates =
+                data
+                    .Where(
+                        kv =>
+                            !string.IsNullOrEmpty(kv.Value?.dish) &&
+                            !excluded.Contains(kv.Key.Split('|')[0]) &&
+                            kv.Key.Split('|')[1] == type &&
+                            !excludeDishes.Contains(kv.Value.dish)  // ← NO repetir en la semana
+                    )
+                    .Select(kv => kv.Value.dish)
+                    .Distinct()  // Evitar duplicados en la lista de candidatos
+                    .ToList();
+
+            if (candidates.Count == 0)
+                return null;
+
+            return candidates[UnityEngine.Random.Range(0, candidates.Count)];
+        }
+
         #endregion
 
         #region Toast

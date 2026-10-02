@@ -130,6 +130,7 @@ namespace QueComemos.UI
 
         private Button randomDishBtn;
         private Button oldDishBtn;
+        private Button fillWeekBtn;
 
         private Toggle reminderToggle;
         private TextField reminderDateField;

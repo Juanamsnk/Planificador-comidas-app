@@ -381,3 +381,44 @@
     color: #D96B4A;
     border-color: #D96B4A;
 }
+
+.week-actions {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: row;
+    gap: 8px;
+}
+
+.fill-week-btn {
+    min-width: 120px;
+    min-height: 32px;
+    background-color: var(--surface-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 6px;
+    color: var(--paper);
+    font-size: 12px;
+    -unity-text-align: middle-center;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.fill-week-btn:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--herb);
+    color: var(--herb);
+}
+
+.theme-light .fill-week-btn {
+    background-color: var(--surface-2);
+    color: var(--paper);
+    border-color: var(--line-strong);
+}
+
+.theme-light .fill-week-btn:hover {
+    background-color: #f0f0f0;
+    border-color: var(--herb);
+    color: var(--herb);
+}

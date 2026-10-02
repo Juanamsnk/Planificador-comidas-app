@@ -66,6 +66,9 @@ namespace QueComemos.UI
             weekRangeLabel =
                 panelRoot.Q<Label>("week-range-label");
 
+            fillWeekBtn =
+                panelRoot.Q<Button>("fill-week-btn");
+
             CacheDayCards();
 
             editPanel =
@@ -490,6 +493,9 @@ namespace QueComemos.UI
 
             oldDishBtn.clicked +=
                 OnOldDishClicked;
+
+            fillWeekBtn.clicked += 
+                OnFillWeekClicked;
 
             saveBtn.clicked +=
                 OnSaveClicked;
