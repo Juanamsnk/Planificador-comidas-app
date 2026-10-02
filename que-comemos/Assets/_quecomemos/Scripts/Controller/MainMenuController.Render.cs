@@ -343,6 +343,15 @@ namespace QueComemos.UI
             RegisterKeyboardScrolling(reminderTitleField);
 
             ScrollToEditPanel();
+
+            // NUEVO: Focus en el input del plato
+            if (dishField != null)
+            {
+                dishField.schedule.Execute(() =>
+                {
+                    dishField.Focus();
+                }).ExecuteLater(1);
+            }
         }
 
         private void UpdateReminderFieldsVisibility()
