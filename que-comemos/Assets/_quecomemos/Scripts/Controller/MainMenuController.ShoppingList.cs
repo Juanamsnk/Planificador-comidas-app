@@ -55,25 +55,7 @@ namespace QueComemos.UI
 
             if (shoppingInput != null)
             {
-                // Primera letra en mayúscula mientras escribes
-                shoppingInput.RegisterValueChangedCallback(evt =>
-                {
-                    string value = evt.newValue;
-
-                    if (string.IsNullOrEmpty(value))
-                        return;
-
-                    string capitalized =
-                        char.ToUpper(value[0]) + value.Substring(1);
-
-                    if (value != capitalized)
-                    {
-                        shoppingInput.SetValueWithoutNotify(capitalized);
-
-                        // Coloca el cursor al final
-                        shoppingInput.SelectRange(capitalized.Length, capitalized.Length);
-                    }
-                });
+                ConfigureAndRegisterTextField(shoppingInput, true);
 
                 shoppingInput.RegisterCallback<KeyDownEvent>(evt =>
                 {

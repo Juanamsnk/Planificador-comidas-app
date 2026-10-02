@@ -337,11 +337,6 @@ namespace QueComemos.UI
                 CreateKeyboardSpacer();
             }
 
-            RegisterKeyboardScrolling(dishField);
-            RegisterKeyboardScrolling(reminderDateField);
-            RegisterKeyboardScrolling(reminderTimeField);
-            RegisterKeyboardScrolling(reminderTitleField);
-
             ScrollToEditPanel();
 
             // NUEVO: Focus en el input del plato

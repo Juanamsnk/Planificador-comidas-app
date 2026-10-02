@@ -127,10 +127,10 @@ namespace QueComemos.UI
             toast =
                 panelRoot.Q<Label>("toast");
 
-            ConfigureTextField(dishField);
-            ConfigureTextField(reminderDateField);
-            ConfigureTextField(reminderTimeField);
-            ConfigureTextField(reminderTitleField);
+            ConfigureAndRegisterTextField(dishField, true);
+            ConfigureAndRegisterTextField(reminderDateField, true);
+            ConfigureAndRegisterTextField(reminderTimeField, true);
+            ConfigureAndRegisterTextField(reminderTitleField, true);
         }
         private void ConfigureTextField(TextField field)
         {
@@ -514,10 +514,10 @@ namespace QueComemos.UI
                 });
             }
 
-            RegisterKeyboardScrolling(dishField);
-            RegisterKeyboardScrolling(reminderDateField);
-            RegisterKeyboardScrolling(reminderTimeField);
-            RegisterKeyboardScrolling(reminderTitleField);
+            ConfigureAndRegisterTextField(dishField, true);
+            ConfigureAndRegisterTextField(reminderDateField, true);
+            ConfigureAndRegisterTextField(reminderTimeField, true);
+            ConfigureAndRegisterTextField(reminderTitleField, true);
         }
 
         private void RegisterCellClick(

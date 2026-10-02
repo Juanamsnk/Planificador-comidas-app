@@ -139,5 +139,42 @@ namespace QueComemos.UI
         }
 
         #endregion
+
+        private void ConfigureAndRegisterTextField(TextField field, bool capitalizeFirstLetter = false)
+        {
+            if (field == null)
+                return;
+
+            // CONFIGURACIÓN BASE
+            field.autoCorrection = false;
+            field.selectAllOnFocus = false;
+            field.selectAllOnMouseUp = false;
+            field.keyboardType = TouchScreenKeyboardType.NamePhonePad;
+
+            // CAPITALIZACIÓN (si aplica)
+            if (capitalizeFirstLetter)
+            {
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    string value = evt.newValue;
+
+                    if (string.IsNullOrEmpty(value))
+                        return;
+
+                    string capitalized =
+                        char.ToUpper(value[0]) + value.Substring(1);
+
+                    if (value != capitalized)
+                        field.SetValueWithoutNotify(capitalized);
+                });
+            }
+
+            // KEYBOARD SCROLLING
+            field.RegisterCallback<FocusInEvent>(evt =>
+            {
+                UpdateKeyboardSpacer();
+                ScrollToEditPanel();
+            });
+        }
     }
 }
