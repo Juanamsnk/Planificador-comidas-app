@@ -283,7 +283,7 @@ namespace QueComemos.UI
 
         public void InitBanner()
         {
-            AdsManager.Instance.ShowBanner();
+            //AdsManager.Instance.ShowBanner();
         }
     }
 }
