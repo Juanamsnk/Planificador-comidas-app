@@ -267,6 +267,11 @@ namespace QueComemos.UI
 
         private string RandomOtherWeekDish()
         {
+            if (!selected.HasValue)
+                return null;
+
+            string currentType = selected.Value.type; // "comida" o "cena"
+
             var excluded =
                 new HashSet<string>(
                     WeekDates(weekOffset)
@@ -282,7 +287,8 @@ namespace QueComemos.UI
                             ) &&
                             !excluded.Contains(
                                 kv.Key.Split('|')[0]
-                            )
+                            ) &&
+                            kv.Key.Split('|')[1] == currentType  // ← NUEVO: filtrar por tipo
                     )
                     .Select(
                         kv => kv.Value.dish
@@ -302,6 +308,11 @@ namespace QueComemos.UI
 
         private string LeastRecentDish()
         {
+            if (!selected.HasValue)
+                return null;
+
+            string currentType = selected.Value.type; // "comida" o "cena"
+
             var lastSeen =
                 new Dictionary<string, string>();
 
@@ -314,8 +325,15 @@ namespace QueComemos.UI
                     continue;
                 }
 
+                string key = kv.Key;
+                string type = key.Split('|')[1];
+
+                // Filtrar por tipo actual
+                if (type != currentType)
+                    continue;
+
                 string dateStr =
-                    kv.Key.Split('|')[0];
+                    key.Split('|')[0];
 
                 if (
                     !lastSeen.TryGetValue(
