@@ -93,39 +93,41 @@ namespace QueComemos.UI
 
         private void ScrollToEditPanel()
         {
-            if (weekScroll == null ||
-                editPanel == null)
-            {
+            if (weekScroll == null || editPanel == null)
                 return;
-            }
 
-            weekScroll.ScrollTo(
-                editPanel
-            );
+            ScrollToBottom();
+
+            // El layout (display:flex del panel, spacer del teclado) tarda
+            // uno o varios frames en actualizarse, así que repetimos.
+            editPanel.schedule
+                .Execute(ScrollToBottom)
+                .ExecuteLater(50);
 
             editPanel.schedule
-                .Execute(
-                    ScrollToEditPanelAdjusted
-                )
-                .ExecuteLater(250);
+                .Execute(ScrollToBottom)
+                .ExecuteLater(300);
         }
 
         private void ScrollToEditPanelAdjusted()
         {
-            if (weekScroll == null ||
-                editPanel == null)
-            {
-                return;
-            }
+            ScrollToBottom();
+        }
 
-            weekScroll.ScrollTo(
-                editPanel
+        private void ScrollToBottom()
+        {
+            if (weekScroll == null)
+                return;
+
+            float maxY = Mathf.Max(
+                0f,
+                weekScroll.contentContainer.layout.height -
+                weekScroll.contentViewport.layout.height
             );
 
-            Debug.Log(
-                "[MainMenuController] " +
-                $"EditPanel scrolleado. " +
-                $"ScrollOffset={weekScroll.scrollOffset}"
+            weekScroll.scrollOffset = new Vector2(
+                weekScroll.scrollOffset.x,
+                maxY
             );
         }
 
