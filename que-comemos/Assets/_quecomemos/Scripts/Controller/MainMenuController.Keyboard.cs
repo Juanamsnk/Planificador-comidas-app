@@ -20,7 +20,7 @@ namespace QueComemos.UI
                 };
 
             keyboardSpacer.style.height =
-                320;
+                280; //320
 
             keyboardSpacer.style.width =
                 Length.Percent(100);
@@ -144,30 +144,38 @@ namespace QueComemos.UI
 
         private void ConfigureAndRegisterTextField(TextField field, bool capitalizeFirstLetter = false)
         {
-            if (field == null)
-                return;
 
-            // CONFIGURACIÓN BASE
-            field.autoCorrection = false;
-            field.selectAllOnFocus = false;
-            field.selectAllOnMouseUp = false;
-            field.keyboardType = TouchScreenKeyboardType.NamePhonePad;
+            field.hideMobileInput = true;
 
-            // CAPITALIZACIÓN (si aplica)
+            field.keyboardType = TouchScreenKeyboardType.Default;
+
+            //if (field == null)
+            //    return;
+
+            //// CONFIGURACIÓN BASE
+            //field.autoCorrection = false;
+            //field.selectAllOnFocus = false;
+            //field.selectAllOnMouseUp = false;
+            //field.keyboardType = TouchScreenKeyboardType.NamePhonePad;
+
+            // Solo la PRIMERA letra del texto en mayúscula
             if (capitalizeFirstLetter)
             {
                 field.RegisterValueChangedCallback(evt =>
                 {
                     string value = evt.newValue;
 
-                    if (string.IsNullOrEmpty(value))
+                    if (string.IsNullOrEmpty(value) || !char.IsLower(value[0]))
                         return;
 
-                    string capitalized =
-                        char.ToUpper(value[0]) + value.Substring(1);
+                    int cursor = field.cursorIndex;
 
-                    if (value != capitalized)
-                        field.SetValueWithoutNotify(capitalized);
+                    field.SetValueWithoutNotify(
+                        char.ToUpper(value[0]) + value.Substring(1)
+                    );
+
+                    field.cursorIndex = cursor;
+                    field.selectIndex = cursor;
                 });
             }
 
