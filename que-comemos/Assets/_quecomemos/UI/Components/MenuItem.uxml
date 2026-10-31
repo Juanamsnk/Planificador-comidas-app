@@ -6,5 +6,5 @@
       Variantes: añade la clase "menu-itemactive" o "menu-itemdanger"
       desde C# según corresponda (calendario activo / cerrar sesión).
     -->
-    <ui:Button name="menu-item" text="Mi calendario" class="menu-item" />
+    <ui:Button name="menu-item" text="@calendar.mine" class="menu-item" />
 </ui:UXML>

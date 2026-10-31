@@ -1,5 +1,6 @@
 using System.Collections;
 using QueComemos.Data;
+using QueComemos.Localization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -16,6 +17,7 @@ namespace QueComemos.UI
 
         private Label appVersionLabel;
         private VisualElement pageRoot;
+        private LocBinder locBinder;
         private const string ThemePrefKey = "quecomemos_theme_light";
 
         private void Start()
@@ -24,6 +26,10 @@ namespace QueComemos.UI
 
             pageRoot = root.Q<VisualElement>("root");
             ApplyStoredTheme();
+
+            // Traduce los textos "@clave" del UXML.
+            locBinder = new LocBinder();
+            locBinder.Bind(root);
 
             appVersionLabel = root.Q<Label>("app-version");
             googleSignInButton = root.Q<Button>("google-login-btn");
@@ -121,6 +127,9 @@ namespace QueComemos.UI
 
         private void OnDisable()
         {
+            locBinder?.Dispose();
+            locBinder = null;
+
             if (waitForAuthManagerRoutine != null) StopCoroutine(waitForAuthManagerRoutine);
             if (googleSignInButton != null) googleSignInButton.clicked -= HandleSignInButtonClicked;
             if (guestLoginButton != null) guestLoginButton.clicked -= HandleGuestLoginClicked;

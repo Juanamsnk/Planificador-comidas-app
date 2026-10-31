@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using QueComemos.Data;
+using QueComemos.Localization;
 
 namespace QueComemos.UI
 {
@@ -26,6 +28,9 @@ namespace QueComemos.UI
         private Button settingsOwnCalendarBtn;
         private Button settingsOwnPinBtn;
         private VisualElement settingsSharedCalendarsContainer;
+
+        // Selector de idioma (Ajustes)
+        private DropdownField languageDropdown;
 
         // Estado
         private bool navPanelOpen;
@@ -63,6 +68,19 @@ namespace QueComemos.UI
 
                 settingsOwnPinBtn = navPanel.Q<Button>("settings-own-pin-btn");
                 settingsSharedCalendarsContainer = navPanel.Q<VisualElement>("settings-shared-calendars-container");
+
+                // Idioma
+                languageDropdown = navPanel.Q<DropdownField>("settings-language-dropdown");
+
+                if (languageDropdown != null)
+                {
+                    var names = new List<string>();
+
+                    foreach (var language in Loc.Supported)
+                        names.Add(Loc.NativeName(language));
+
+                    languageDropdown.choices = names;
+                }
             }
 
             CacheShoppingReferences();
@@ -120,6 +138,18 @@ namespace QueComemos.UI
 
             if (settingsLogoutBtn != null)
                 settingsLogoutBtn.clicked += OnSettingsLogoutClicked;
+
+            // Idioma
+            if (languageDropdown != null)
+            {
+                languageDropdown.RegisterValueChangedCallback(evt =>
+                {
+                    int index = languageDropdown.index;
+
+                    if (index >= 0 && index < Loc.Supported.Length)
+                        Loc.SetLanguage(Loc.Supported[index]);
+                });
+            }
 
             // Calendarios en Ajustes
             if (settingsOwnCalendarBtn != null)
@@ -207,7 +237,44 @@ namespace QueComemos.UI
             if (settingsThemeBtn == null)
                 return;
 
-            settingsThemeBtn.text = isLightTheme ? "Tema claro" : "Tema oscuro";
+            settingsThemeBtn.text =
+                Loc.T(isLightTheme ? "settings.themeLight" : "settings.themeDark");
+        }
+
+        private void UpdateLanguageDropdown()
+        {
+            languageDropdown?.SetValueWithoutNotify(
+                Loc.NativeName(Loc.Current)
+            );
+        }
+
+        /// <summary>
+        /// Se ejecuta al cambiar de idioma. Los textos "@clave" del UXML ya los
+        /// ha refrescado LocBinder; aquí se actualiza lo que pone el código.
+        /// </summary>
+        private void HandleLanguageChanged()
+        {
+            RenderWeekNav();
+            RenderWeekGrid();
+            UpdateEditPanelTitle();
+
+            UpdateThemeButtonText();
+            UpdateLanguageDropdown();
+
+            UpdateOwnerBadge();
+
+            if (ownCalendarBtn != null)
+                ownCalendarBtn.text = Loc.T("calendar.mine");
+
+            if (settingsOwnCalendarBtn != null)
+                settingsOwnCalendarBtn.text = Loc.T("calendar.mine");
+
+            // Reconstruyen las filas de calendarios compartidos con el texto nuevo.
+            if (navPanelOpen)
+                RefreshCalendarsMenuInSettings();
+
+            if (menuOpen)
+                RefreshCalendarsMenu();
         }
 
         private void OnSettingsShareClicked()
@@ -274,7 +341,7 @@ namespace QueComemos.UI
 
             if (settingsOwnCalendarBtn != null)
             {
-                settingsOwnCalendarBtn.text = "Mi calendario";
+                settingsOwnCalendarBtn.text = Loc.T("calendar.mine");
                 settingsOwnCalendarBtn.RemoveFromClassList("menu-item--active");
 
                 if (currentId == ownId)
@@ -305,7 +372,7 @@ namespace QueComemos.UI
 
                 nameBtn.text =
                     string.IsNullOrEmpty(ownerLabel)
-                        ? "Calendario compartido"
+                        ? Loc.T("calendar.shared")
                         : FirebaseManager.GetDisplayNameFromEmail(ownerLabel);
 
                 nameBtn.RemoveFromClassList("menu-item--active");

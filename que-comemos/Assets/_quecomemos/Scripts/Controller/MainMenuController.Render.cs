@@ -1,4 +1,5 @@
 using QueComemos.Data;
+using QueComemos.Localization;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UIElements;
@@ -30,16 +31,23 @@ namespace QueComemos.UI
             if (first.Month == last.Month)
             {
                 rangeLabel =
-                    $"{first.Day} – {last.Day} " +
-                    $"de {Months[first.Month - 1]}";
+                    Loc.T(
+                        "week.range.sameMonth",
+                        first.Day,
+                        last.Day,
+                        Loc.MonthName(first.Month)
+                    );
             }
             else
             {
                 rangeLabel =
-                    $"{first.Day} " +
-                    $"{Months[first.Month - 1]} – " +
-                    $"{last.Day} " +
-                    $"{Months[last.Month - 1]}";
+                    Loc.T(
+                        "week.range.diffMonth",
+                        first.Day,
+                        Loc.MonthName(first.Month),
+                        last.Day,
+                        Loc.MonthName(last.Month)
+                    );
             }
 
             weekRangeLabel.text =
@@ -90,16 +98,19 @@ namespace QueComemos.UI
                 if (refs.dayName != null)
                 {
                     refs.dayName.text =
-                        DayNames[
+                        Loc.DayName(
                             IsoWeekdayIndex(d)
-                        ];
+                        );
                 }
 
                 if (refs.dayNum != null)
                 {
                     refs.dayNum.text =
-                        $"{d.Day} " +
-                        $"{Months[d.Month - 1].Substring(0, 3)}";
+                        Loc.T(
+                            "date.dayNum",
+                            d.Day,
+                            Loc.MonthShort(d.Month)
+                        );
                 }
 
                 refs.card.RemoveFromClassList(
@@ -121,6 +132,9 @@ namespace QueComemos.UI
                     );
                 }
 
+                ApplyMealTagLabel(refs.comida, "meal.lunch");
+                ApplyMealTagLabel(refs.cena, "meal.dinner");
+
                 RenderCell(
                     refs.comida,
                     dateStr,
@@ -133,6 +147,14 @@ namespace QueComemos.UI
                     "cena"
                 );
             }
+        }
+
+        private static void ApplyMealTagLabel(
+            MealSlotRefs slot,
+            string key)
+        {
+            if (slot?.tagLabel != null)
+                slot.tagLabel.text = Loc.T(key);
         }
 
         private void RenderCell(
@@ -208,14 +230,16 @@ namespace QueComemos.UI
                             entry.reminderTime))
                     {
                         metaBits.Add(
-                            "aviso " +
-                            entry.reminderTime
+                            Loc.T(
+                                "cell.reminder",
+                                entry.reminderTime
+                            )
                         );
                     }
 
                     slot.metaLabel.text =
                         string.Join(
-                            " · ",
+                            " Â· ",
                             metaBits
                         );
                 }
@@ -266,17 +290,7 @@ namespace QueComemos.UI
                     new MealEntryData();
             }
 
-            var d =
-                System.DateTime.Parse(dateStr);
-
-            string dayLabel =
-                $"{DayNames[IsoWeekdayIndex(d)]} " +
-                $"{d.Day} de " +
-                $"{Months[d.Month - 1]}";
-
-            editPanelTitle.text =
-                $"{(type == "comida" ? "Comida" : "Cena")} · " +
-                dayLabel;
+            UpdateEditPanelTitle();
 
             string dish = entry.dish ?? "";
 
@@ -349,6 +363,37 @@ namespace QueComemos.UI
             }
         }
 
+        /// <summary>TÃ­tulo del panel: "Comida Â· Lunes 1 de septiembre" (segÃºn idioma).</summary>
+        private void UpdateEditPanelTitle()
+        {
+            if (!selected.HasValue || editPanelTitle == null)
+                return;
+
+            var selection =
+                selected.Value;
+
+            var d =
+                System.DateTime.Parse(selection.date);
+
+            string dayLabel =
+                Loc.T(
+                    "date.long",
+                    Loc.DayName(IsoWeekdayIndex(d)),
+                    d.Day,
+                    Loc.MonthName(d.Month)
+                );
+
+            string mealLabel =
+                Loc.T(
+                    selection.type == "comida"
+                        ? "meal.lunch"
+                        : "meal.dinner"
+                );
+
+            editPanelTitle.text =
+                $"{mealLabel} Â· {dayLabel}";
+        }
+
         private void UpdateReminderFieldsVisibility()
         {
             if (reminderToggle == null)
@@ -373,7 +418,7 @@ namespace QueComemos.UI
                         continue;
                     }
 
-                    // El resto (campos de fecha/hora y sus labels): ocultar/mostrar según toggle
+                    // El resto (campos de fecha/hora y sus labels): ocultar/mostrar segÃºn toggle
                     child.style.display =
                         reminderEnabled
                             ? DisplayStyle.Flex

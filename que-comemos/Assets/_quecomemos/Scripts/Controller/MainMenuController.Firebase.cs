@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using QueComemos.Data;
+using QueComemos.Localization;
 using QueComemos.Notifications;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,7 +19,7 @@ namespace QueComemos.UI
             {
                 Debug.LogWarning(
                     "[MainMenuController] No hay FirebaseManager " +
-                    "en la escena. Los datos solo vivirán en memoria."
+                    "en la escena. Los datos solo vivirÃ¡n en memoria."
                 );
 
                 return;
@@ -134,7 +135,7 @@ namespace QueComemos.UI
             if (isOwn)
             {
                 ownerBadge.text =
-                    "Tu calendario";
+                    Loc.T("badge.own");
 
                 ownerBadge.AddToClassList(
                     "badge--owner"
@@ -150,7 +151,7 @@ namespace QueComemos.UI
 
             ownerBadge.text =
                 string.IsNullOrEmpty(label)
-                    ? "Calendario compartido"
+                    ? Loc.T("calendar.shared")
                     : FirebaseManager.GetDisplayNameFromEmail(label);
 
             ownerBadge.AddToClassList(
@@ -218,7 +219,7 @@ namespace QueComemos.UI
                     ? ""
                     : calendarId;
 
-            ShowToast("Calendario fijado");
+            ShowToast(Loc.T("calendar.pinned"));
 
             RefreshCalendarsMenu();
             RefreshCalendarsMenuInSettings();
@@ -285,7 +286,7 @@ namespace QueComemos.UI
 
             string pinnedId = PinnedCalendarId;
 
-            // Vacío = "Mi calendario", que ya es el comportamiento por defecto.
+            // VacÃ­o = "Mi calendario", que ya es el comportamiento por defecto.
             if (string.IsNullOrEmpty(pinnedId))
                 return;
 
@@ -319,7 +320,7 @@ namespace QueComemos.UI
                 Debug.LogError(
                     "[MainMenuController] " +
                     "\"Calendar Menu Row Template\" " +
-                    "está vacío en el Inspector. " +
+                    "estÃ¡ vacÃ­o en el Inspector. " +
                     "Arrastra Components/CalendarMenuRow.uxml."
                 );
 
@@ -336,7 +337,7 @@ namespace QueComemos.UI
                 PinnedCalendarId;
 
             ownCalendarBtn.text =
-                "Mi calendario";
+                Loc.T("calendar.mine");
 
             ownCalendarBtn.RemoveFromClassList(
                 "menu-item--active"
@@ -401,7 +402,7 @@ namespace QueComemos.UI
 
                 nameBtn.text =
                     string.IsNullOrEmpty(ownerLabel)
-                        ? "Calendario compartido"
+                        ? Loc.T("calendar.shared")
                         : FirebaseManager.GetDisplayNameFromEmail(ownerLabel); 
 
                 nameBtn.RemoveFromClassList(
@@ -468,8 +469,7 @@ namespace QueComemos.UI
             if (string.IsNullOrEmpty(calendarId))
             {
                 ShowToast(
-                    "Todavía no se puede compartir: " +
-                    "inicia sesión primero."
+                    Loc.T("toast.shareNeedsLogin")
                 );
 
                 return;
@@ -484,7 +484,7 @@ namespace QueComemos.UI
             if (!sharedNatively)
             {
                 ShowToast(
-                    "Enlace copiado al portapapeles"
+                    Loc.T("toast.linkCopied")
                 );
             }
         }

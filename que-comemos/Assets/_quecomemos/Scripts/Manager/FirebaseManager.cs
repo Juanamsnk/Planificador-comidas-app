@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase;
 using Firebase.Database;
+using QueComemos.Localization;
 using UnityEngine;
 
 namespace QueComemos.Data
@@ -69,14 +70,14 @@ namespace QueComemos.Data
             catch (Exception e)
             {
                 Debug.LogError($"[FirebaseManager] Excepción comprobando dependencias: {e}");
-                OnError?.Invoke("No se pudo inicializar Firebase.");
+                OnError?.Invoke(Loc.T("err.firebaseInit"));
                 return;
             }
 
             if (status != DependencyStatus.Available)
             {
                 Debug.LogError($"[FirebaseManager] Dependencias de Firebase no disponibles: {status}");
-                OnError?.Invoke($"Firebase no disponible en este dispositivo ({status}).");
+                OnError?.Invoke(Loc.T("err.firebaseUnavailable", status));
                 return;
             }
 
@@ -146,7 +147,7 @@ namespace QueComemos.Data
             if (args.DatabaseError != null)
             {
                 Debug.LogError($"[FirebaseManager] Error leyendo mealplan: {args.DatabaseError.Message}");
-                OnError?.Invoke("No se pudo conectar con la base de datos.");
+                OnError?.Invoke(Loc.T("err.dbConnect"));
                 return;
             }
 
@@ -175,7 +176,7 @@ namespace QueComemos.Data
             catch (Exception e)
             {
                 Debug.LogError($"[FirebaseManager] Error guardando mealplan: {e}");
-                OnError?.Invoke("No se pudo guardar. Inténtalo de nuevo.");
+                OnError?.Invoke(Loc.T("err.saveFailed"));
             }
         }
 
@@ -234,7 +235,7 @@ namespace QueComemos.Data
             catch (Exception e)
             {
                 Debug.LogError($"[FirebaseManager] Error al quitar calendario compartido \"{calendarId}\": {e}");
-                OnError?.Invoke("No se pudo quitar ese calendario.");
+                OnError?.Invoke(Loc.T("err.leaveCalendar"));
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using QueComemos.Data;
+using QueComemos.Localization;
 using QueComemos.Notifications;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace QueComemos.UI
 
             if (string.IsNullOrEmpty(dish))
             {
-                ShowToast("Escribe el nombre del plato");
+                ShowToast(Loc.T("toast.dishRequired"));
                 return;
             }
 
@@ -54,10 +55,10 @@ namespace QueComemos.UI
             catch (Exception ex)
             {
                 Debug.LogError($"Error: {ex.Message}");
-                ShowToast("Error al programar recordatorio");
+                ShowToast(Loc.T("toast.reminderError"));
             }
 
-            ShowToast(reminderEnabled ? "Guardado y recordatorio programado" : "Guardado");
+            ShowToast(Loc.T(reminderEnabled ? "toast.savedReminder" : "toast.saved"));
 
             selected = null;
             Render();
@@ -87,7 +88,7 @@ namespace QueComemos.UI
                 );
 
                 ShowToast(
-                    "Guardado, pero no se pudo programar el aviso."
+                    Loc.T("toast.savedNoReminder")
                 );
 
                 return;
@@ -124,7 +125,7 @@ namespace QueComemos.UI
                 );
 
                 ShowToast(
-                    "La fecha/hora del recordatorio no es válida."
+                    Loc.T("toast.reminderInvalid")
                 );
 
                 return;
@@ -139,7 +140,7 @@ namespace QueComemos.UI
                 );
 
                 ShowToast(
-                    "La fecha del recordatorio ya ha pasado."
+                    Loc.T("toast.reminderPast")
                 );
 
                 return;
@@ -149,12 +150,12 @@ namespace QueComemos.UI
                 string.IsNullOrEmpty(
                     entry.reminderTitle
                 )
-                    ? "🍽️ Recordatorio de comida"
+                    ? "🍽️ " + Loc.T("notif.defaultTitle")
                     : entry.reminderTitle;
 
             string message =
                 string.IsNullOrEmpty(entry.dish)
-                    ? "Tienes una comida programada."
+                    ? Loc.T("notif.bodyScheduled")
                     : entry.dish;
 
             MealNotificationManager.Instance
@@ -181,7 +182,7 @@ namespace QueComemos.UI
             data.Remove(Key(selection.date, selection.type));
             PersistData();
 
-            ShowToast("Eliminado");
+            ShowToast(Loc.T("toast.deleted"));
 
             selected = null;
             Render();
@@ -237,7 +238,7 @@ namespace QueComemos.UI
             if (suggestion == null)
             {
                 ShowToast(
-                    "Añade platos en otras fechas para sugerir"
+                    Loc.T("toast.suggestNeedsDishes")
                 );
 
                 return;
@@ -255,7 +256,7 @@ namespace QueComemos.UI
             if (suggestion == null)
             {
                 ShowToast(
-                    "Agrega platos en varias fechas para analizar"
+                    Loc.T("toast.analyzeNeedsDishes")
                 );
 
                 return;
@@ -420,12 +421,12 @@ namespace QueComemos.UI
 
             if (filledCount == 0)
             {
-                ShowToast("Agrega platos en otras fechas para rellenar la semana");
+                ShowToast(Loc.T("toast.fillNeedsDishes"));
                 return;
             }
 
             PersistData();
-            ShowToast($"Semana rellenada: {filledCount} platos");
+            ShowToast(Loc.T(filledCount == 1 ? "toast.weekFilled.one" : "toast.weekFilled.other", filledCount));
             Render();
         }
 

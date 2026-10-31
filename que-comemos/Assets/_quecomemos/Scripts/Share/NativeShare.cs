@@ -1,3 +1,4 @@
+using QueComemos.Localization;
 using UnityEngine;
 
 namespace QueComemos.UI
@@ -18,7 +19,7 @@ namespace QueComemos.UI
                 using var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
                 using var currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
                 using var chooser = intentClass.CallStatic<AndroidJavaObject>(
-                    "createChooser", intentObject, "Compartir enlace");
+                    "createChooser", intentObject, Loc.T("action.share"));
                 currentActivity.Call("startActivity", chooser);
                 return true;
             }

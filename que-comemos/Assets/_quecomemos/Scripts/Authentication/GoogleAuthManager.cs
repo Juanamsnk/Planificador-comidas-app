@@ -2,6 +2,7 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using System;
 using System.Collections;
+using QueComemos.Localization;
 using UnityEngine;
 
 namespace QueComemos.Data
@@ -93,7 +94,7 @@ namespace QueComemos.Data
             if (!IsReady || auth == null)
             {
                 Debug.LogWarning("[GoogleAuthManager] SignIn() llamado antes de que Firebase Auth esté listo.");
-                OnSignInFailed?.Invoke("Todavía no está listo, prueba en un momento.");
+                OnSignInFailed?.Invoke(Loc.T("auth.err.notReady"));
                 return;
             }
 
@@ -111,13 +112,13 @@ namespace QueComemos.Data
                 if (task.IsCanceled)
                 {
                     Debug.LogWarning("[GoogleAuthManager] Login cancelado por el usuario.");
-                    OnSignInFailed?.Invoke("Inicio de sesión cancelado.");
+                    OnSignInFailed?.Invoke(Loc.T("auth.err.cancelled"));
                     return;
                 }
 
                 if (task.IsFaulted)
                 {
-                    string message = task.Exception?.GetBaseException()?.Message ?? "No se pudo iniciar sesión.";
+                    string message = task.Exception?.GetBaseException()?.Message ?? Loc.T("auth.err.generic");
                     Debug.LogError($"[GoogleAuthManager] Falló el login: {message}");
                     OnSignInFailed?.Invoke(message);
                     return;

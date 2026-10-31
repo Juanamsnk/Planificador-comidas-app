@@ -5,15 +5,15 @@
 <ui:VisualElement name="footer" class="footer">
     <ui:Button name="footer-calendar-btn" class="footer-btn footer-btn--active">
         <ui:Image name="footer-btn-icon-calendar" class="footer-btn-icon"/>
-        <ui:Label text="Calendario" class="footer-btn-label"/>
+        <ui:Label text="@footer.calendar" class="footer-btn-label"/>
     </ui:Button>
     <ui:Button name="footer-shopping-btn" class="footer-btn">
         <ui:Image name="footer-btn-icon-shopping" class="footer-btn-icon"/>
-        <ui:Label text="Lista" class="footer-btn-label"/>
+        <ui:Label text="@footer.list" class="footer-btn-label"/>
     </ui:Button>
     <ui:Button name="footer-settings-btn" class="footer-btn">
         <ui:Image name="footer-btn-icon-settings" class="footer-btn-icon"/>
-        <ui:Label text="Ajustes" class="footer-btn-label"/>
+        <ui:Label text="@footer.settings" class="footer-btn-label"/>
     </ui:Button>
 </ui:VisualElement>
 </ui:UXML>

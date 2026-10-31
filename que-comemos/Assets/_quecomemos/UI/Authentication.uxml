@@ -13,11 +13,11 @@
                     <ui:Image name="app-logo" class="app-logo" style="background-image: url(&quot;project://database/Assets/_quecomemos/Sprites/Icon-app/que_comemos_app_icon_v2%201.png?fileID=2800000&amp;guid=3d48498f965319444ad77c868d34e7d1&amp;type=3#que_comemos_app_icon_v2 1&quot;);"/>
                 </ui:VisualElement>
                 <ui:Label name="app-title" text="Qué comemos" class="app-title"/>
-                <ui:Label name="app-subtitle" text="Planifica tus comidas en equipo" class="app-subtitle"/>
+                <ui:Label name="app-subtitle" text="@auth.subtitle" class="app-subtitle"/>
             </ui:VisualElement>
             <ui:VisualElement name="auth-actions" class="auth-actions">
                 <ui:Instance template="ButtonSession" name="google-login-btn"/>
-            <ui:Button name="guest-login-btn" text="Entrar como invitado" class="guest-link-btn"/>
+            <ui:Button name="guest-login-btn" text="@auth.guest" class="guest-link-btn"/>
             </ui:VisualElement>
             <ui:Label name="auth-status" text="" class="auth-status"/>
         </ui:VisualElement>

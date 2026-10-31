@@ -7,7 +7,7 @@
             <ui:VisualElement name="header-actions" class="header-actions" style="display: none;"/>
         </ui:VisualElement>
         <ui:Label name="owner-badge" text="Tu calendario" class="badge badge--owner" style="display: none;"/>
-        <ui:Label name="demo-badge" text="Modo demostración: los cambios no se guardan." class="badge badge--demo" style="display: none;"/>
-        <ui:Label name="guest-note" text="Estás viendo este calendario porque alguien te ha compartido su enlace." class="guest-note" style="display: none;"/>
+        <ui:Label name="demo-badge" text="@badge.demo" class="badge badge--demo" style="display: none;"/>
+        <ui:Label name="guest-note" text="@badge.guestNote" class="guest-note" style="display: none;"/>
     </ui:VisualElement>
 </ui:UXML>

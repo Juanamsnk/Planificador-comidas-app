@@ -7,25 +7,29 @@
         <ui:ScrollView name="nav-settings-scroll" class="nav-settings-scroll">
             <ui:VisualElement name="settings-container" class="settings-container">
                 <ui:VisualElement name="settings-section">
-                    <ui:Label text="Apariencia" class="settings-section-title"/>
+                    <ui:Label text="@settings.appearance" class="settings-section-title"/>
                     <ui:Button name="settings-theme-btn" text=" Tema oscuro" class="settings-btn"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="settings-section">
-                    <ui:Label text="Calendarios" class="settings-section-title"/>
+                    <ui:Label text="@settings.language" class="settings-section-title"/>
+                    <ui:DropdownField name="settings-language-dropdown" class="language-dropdown"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="settings-section">
+                    <ui:Label text="@common.calendars" class="settings-section-title"/>
                     <ui:VisualElement name="settings-own-calendar-row" class="calendar-menu-row">
                         <ui:Instance template="MenuItem" name="settings-own-calendar-item" style="flex-grow: 1;"/>
-                        <ui:Button name="settings-own-pin-btn" text="" tooltip="Fijar calendario" class="pin-menu-btn"/>
+                        <ui:Button name="settings-own-pin-btn" text="" tooltip="@calendar.pin" class="pin-menu-btn"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="settings-shared-calendars-container"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="settings-section">
-                    <ui:Label text="Acciones" class="settings-section-title"/>
-                    <ui:Button name="settings-share-btn" text="Compartir enlace" class="settings-btn"/>
-                    <ui:Button name="settings-support-btn" text="Apoyar a Qué Comemos" class="settings-btn"/>
+                    <ui:Label text="@settings.actions" class="settings-section-title"/>
+                    <ui:Button name="settings-share-btn" text="@action.share" class="settings-btn"/>
+                    <ui:Button name="settings-support-btn" text="@settings.support" class="settings-btn"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="settings-section">
-                    <ui:Label text="Cuenta" class="settings-section-title"/>
-                    <ui:Button name="settings-logout-btn" text="Cerrar sesión" class="settings-btn settings-btn--danger"/>
+                    <ui:Label text="@settings.account" class="settings-section-title"/>
+                    <ui:Button name="settings-logout-btn" text="@action.logout" class="settings-btn settings-btn--danger"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:ScrollView>

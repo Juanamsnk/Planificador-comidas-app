@@ -382,6 +382,36 @@
     border-color: #D96B4A;
 }
 
+/* SELECTOR DE IDIOMA (dropdown) */
+.language-dropdown {
+    margin: 0 0 8px 0;
+}
+
+.language-dropdown .unity-base-popup-field__input {
+    min-height: 44px;
+    margin: 0;
+    padding: 10px;
+    background-color: var(--surface-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 8px;
+    color: var(--paper);
+    font-size: 13px;
+}
+
+.language-dropdown .unity-base-popup-field__text {
+    color: var(--paper);
+}
+
+.language-dropdown:hover .unity-base-popup-field__input {
+    background-color: var(--surface-hover);
+    border-color: var(--herb);
+}
+
+.theme-light .language-dropdown .unity-base-popup-field__input {
+    border-color: var(--line-strong);
+}
+
 .week-actions {
     position: absolute;
     right: 16px;

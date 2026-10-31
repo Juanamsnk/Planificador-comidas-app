@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Firebase.Database;
+using QueComemos.Localization;
 using UnityEngine;
 
 namespace QueComemos.Data
@@ -79,7 +80,7 @@ namespace QueComemos.Data
             if (args.DatabaseError != null)
             {
                 Debug.LogError($"[FirebaseManager] Error leyendo shoppinglist: {args.DatabaseError.Message}");
-                OnError?.Invoke("No se pudo cargar la lista de la compra.");
+                OnError?.Invoke(Loc.T("err.shopLoad"));
                 return;
             }
 
@@ -110,7 +111,7 @@ namespace QueComemos.Data
             catch (Exception e)
             {
                 Debug.LogError($"[FirebaseManager] Error añadiendo elemento: {e}");
-                OnError?.Invoke("No se pudo añadir el elemento.");
+                OnError?.Invoke(Loc.T("err.shopAdd"));
             }
         }
 
@@ -125,7 +126,7 @@ namespace QueComemos.Data
             catch (Exception e)
             {
                 Debug.LogError($"[FirebaseManager] Error actualizando elemento: {e}");
-                OnError?.Invoke("No se pudo actualizar la lista.");
+                OnError?.Invoke(Loc.T("err.shopUpdate"));
             }
         }
 
@@ -140,7 +141,7 @@ namespace QueComemos.Data
             catch (Exception e)
             {
                 Debug.LogError($"[FirebaseManager] Error borrando elemento: {e}");
-                OnError?.Invoke("No se pudo borrar el elemento.");
+                OnError?.Invoke(Loc.T("err.shopDelete"));
             }
         }
 
@@ -164,7 +165,7 @@ namespace QueComemos.Data
             catch (Exception e)
             {
                 Debug.LogError($"[FirebaseManager] Error borrando comprados: {e}");
-                OnError?.Invoke("No se pudieron borrar los elementos.");
+                OnError?.Invoke(Loc.T("err.shopClear"));
             }
         }
 

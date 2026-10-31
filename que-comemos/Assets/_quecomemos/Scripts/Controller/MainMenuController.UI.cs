@@ -1,4 +1,5 @@
 using QueComemos.Data;
+using QueComemos.Localization;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -149,8 +150,8 @@ namespace QueComemos.UI
                     if (field.panel == null)
                         return;
 
-                    // Unity ya ha calculado la posiciÛn tocada.
-                    // Quitamos cualquier selecciÛn y dejamos el caret
+                    // Unity ya ha calculado la posici√≥n tocada.
+                    // Quitamos cualquier selecci√≥n y dejamos el caret
                     // exactamente en cursorIndex.
                     field.SelectNone();
 
@@ -174,7 +175,7 @@ namespace QueComemos.UI
                 if (instance == null)
                 {
                     Debug.LogError(
-                        $"[MainMenuController] No se encontrÛ " +
+                        $"[MainMenuController] No se encontr√≥ " +
                         $"\"day-card-{i}\"."
                     );
 
@@ -188,7 +189,7 @@ namespace QueComemos.UI
                 if (card == null)
                 {
                     Debug.LogError(
-                        $"[MainMenuController] No se encontrÛ " +
+                        $"[MainMenuController] No se encontr√≥ " +
                         $"\"day-card\" dentro de day-card-{i}."
                     );
                 }
@@ -240,7 +241,7 @@ namespace QueComemos.UI
             if (slotContainer == null)
             {
                 Debug.LogError(
-                    "[MainMenuController] No se encontrÛ " +
+                    "[MainMenuController] No se encontr√≥ " +
                     "el contenedor del meal slot."
                 );
 
@@ -268,7 +269,7 @@ namespace QueComemos.UI
             if (tagLabel != null)
             {
                 tagLabel.text =
-                    isComida ? "Comida" : "Cena";
+                    Loc.T(isComida ? "meal.lunch" : "meal.dinner");
             }
 
             var cellButton =
@@ -276,6 +277,8 @@ namespace QueComemos.UI
 
             return new MealSlotRefs
             {
+                tagLabel = tagLabel,
+
                 cell = cellButton,
 
                 emptyLabel =
@@ -409,12 +412,12 @@ namespace QueComemos.UI
 
                 ok &= LogIfNull(
                     day?.comida?.cell,
-                    $"cell-button comida dÌa {i}"
+                    $"cell-button comida d√≠a {i}"
                 );
 
                 ok &= LogIfNull(
                     day?.cena?.cell,
-                    $"cell-button cena dÌa {i}"
+                    $"cell-button cena d√≠a {i}"
                 );
             }
 
@@ -429,7 +432,7 @@ namespace QueComemos.UI
                 return true;
 
             Debug.LogError(
-                $"[MainMenuController] No se encontrÛ " +
+                $"[MainMenuController] No se encontr√≥ " +
                 $"el elemento \"{label}\". " +
                 $"Revisa el nombre en el UXML."
             );
@@ -762,10 +765,10 @@ namespace QueComemos.UI
         }
 
         /// <summary>
-        /// Cambia de semana con una pequeÒa animaciÛn de fundido, para que
+        /// Cambia de semana con una peque√±a animaci√≥n de fundido, para que
         /// se note visualmente que ha ocurrido el cambio. Ignora llamadas
-        /// mientras ya hay una animaciÛn en curso, para evitar que varios
-        /// swipes/clicks r·pidos se pisen entre sÌ.
+        /// mientras ya hay una animaci√≥n en curso, para evitar que varios
+        /// swipes/clicks r√°pidos se pisen entre s√≠.
         /// </summary>
         private void ChangeWeek(int newOffset)
         {
@@ -831,15 +834,15 @@ namespace QueComemos.UI
         private bool? swipeIsHorizontal;
         private int swipePointerId = -1;
 
-        // Distancia mÌnima (px) antes de decidir si el gesto es
+        // Distancia m√≠nima (px) antes de decidir si el gesto es
         // scroll vertical o swipe horizontal.
         private const float SwipeLockThreshold = 12f;
 
-        // Distancia mÌnima total (px) para que el swipe cuente
+        // Distancia m√≠nima total (px) para que el swipe cuente
         // como cambio de semana al soltar el dedo.
         private const float SwipeMinDistance = 60f;
 
-        // Cu·nto m·s horizontal que vertical tiene que ser el
+        // Cu√°nto m√°s horizontal que vertical tiene que ser el
         // movimiento para considerarse swipe (y no scroll).
         private const float SwipeDirectionRatio = 1.2f;
 
@@ -899,7 +902,7 @@ namespace QueComemos.UI
 
             if (!swipeIsHorizontal.HasValue)
             {
-                // TodavÌa no sabemos si es scroll vertical o swipe
+                // Todav√≠a no sabemos si es scroll vertical o swipe
                 // horizontal: esperamos a que el movimiento sea
                 // significativo antes de decidir.
                 if (Mathf.Abs(deltaX) < SwipeLockThreshold &&

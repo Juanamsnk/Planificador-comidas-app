@@ -2,7 +2,7 @@
     <Style src="../Styles/Molecules.uss" />
     <ui:VisualElement name="calendar-menu-row" class="calendar-menu-row">
         <ui:Button name="calendar-name-btn" text="Calendario compartido" class="menu-item" />
-        <ui:Button name="pin-btn" text="" class="pin-menu-btn" tooltip="Fijar calendario" />
-        <ui:Button name="leave-btn" text="&#10005;" class="leave-menu-btn" tooltip="Quitar calendario" />
+        <ui:Button name="pin-btn" text="" class="pin-menu-btn" tooltip="@calendar.pin" />
+        <ui:Button name="leave-btn" text="&#10005;" class="leave-menu-btn" tooltip="@calendar.leave" />
     </ui:VisualElement>
 </ui:UXML>

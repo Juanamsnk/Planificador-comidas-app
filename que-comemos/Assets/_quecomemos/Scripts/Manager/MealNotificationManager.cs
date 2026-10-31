@@ -12,6 +12,7 @@ using UnityEngine.Android;
 #endif
 
 using QueComemos.Data;
+using QueComemos.Localization;
 
 namespace QueComemos.Notifications
 {
@@ -20,8 +21,6 @@ namespace QueComemos.Notifications
         public static MealNotificationManager Instance { get; private set; }
 
         private const string AndroidChannelId = "meal_reminders";
-        private const string AndroidChannelName = "Recordatorios de comidas";
-        private const string AndroidChannelDescription = "Recordatorios de comidas de QueComemos";
         private const string PlayerPrefsPrefix = "MealNotification_Android_";
 
         private readonly HashSet<string> scheduledReminderIds = new HashSet<string>();
@@ -42,6 +41,8 @@ namespace QueComemos.Notifications
             Instance = this;
             DontDestroyOnLoad(gameObject);
             InitializeNotifications();
+
+            Loc.LanguageChanged += OnLanguageChanged;
         }
 
         private void Start()
@@ -51,6 +52,8 @@ namespace QueComemos.Notifications
 
         private void OnDestroy()
         {
+            Loc.LanguageChanged -= OnLanguageChanged;
+
             if (FirebaseManager.Instance != null && firebaseSubscribed)
             {
                 FirebaseManager.Instance.UnsubscribeFromMealPlan(OnMealPlanChanged);
@@ -66,6 +69,14 @@ namespace QueComemos.Notifications
         // =========================================================
         // INICIALIZACIÓN
         // =========================================================
+
+        private void OnLanguageChanged()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            // Volver a registrar el canal actualiza su nombre y descripción en Android.
+            InitializeAndroid();
+#endif
+        }
 
         private void InitializeNotifications()
         {
@@ -93,9 +104,9 @@ namespace QueComemos.Notifications
             var channel = new AndroidNotificationChannel
             {
                 Id = AndroidChannelId,
-                Name = AndroidChannelName,
+                Name = Loc.T("notif.channelName"),
                 Importance = Importance.High,
-                Description = AndroidChannelDescription
+                Description = Loc.T("notif.channelDesc")
             };
 
             AndroidNotificationCenter.RegisterNotificationChannel(channel);
@@ -289,11 +300,11 @@ namespace QueComemos.Notifications
 
                     string title = !string.IsNullOrWhiteSpace(meal.reminderTitle)
                         ? meal.reminderTitle
-                        : "Recordatorio de comida";
+                        : Loc.T("notif.defaultTitle");
 
                     string message = !string.IsNullOrWhiteSpace(meal.dish)
                         ? meal.dish
-                        : "Tienes una comida pendiente.";
+                        : Loc.T("notif.bodyPending");
 
                     ScheduleMealReminder(notificationId, title, message, fireTime);
                     currentReminderIds.Add(notificationId);

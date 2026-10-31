@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:Button name="google-login-btn"
-               text="Iniciar sesión con Google"
+               text="@auth.googleLogin"
                class="btn btn--primary" />
 </ui:UXML>

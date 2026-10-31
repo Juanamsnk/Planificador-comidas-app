@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using QueComemos.Data;
+using QueComemos.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 using QueComemos.Notifications;
@@ -26,33 +27,6 @@ namespace QueComemos.UI
         [SerializeField]
         private VisualTreeAsset calendarMenuRowTemplate;
 
-        private static readonly string[] DayNames =
-        {
-            "Lunes",
-            "Martes",
-            "Miércoles",
-            "Jueves",
-            "Viernes",
-            "Sábado",
-            "Domingo"
-        };
-
-        private static readonly string[] Months =
-        {
-            "enero",
-            "febrero",
-            "marzo",
-            "abril",
-            "mayo",
-            "junio",
-            "julio",
-            "agosto",
-            "septiembre",
-            "octubre",
-            "noviembre",
-            "diciembre"
-        };
-
         #region Clases auxiliares
 
         private class DayCardRefs
@@ -70,6 +44,7 @@ namespace QueComemos.UI
 
         private class MealSlotRefs
         {
+            public Label tagLabel;
             public Button cell;
             public Label emptyLabel;
             public VisualElement filled;
@@ -84,6 +59,9 @@ namespace QueComemos.UI
         private UIDocument document;
         private VisualElement panelRoot;
         private VisualElement pageRoot;
+
+        // Traduce los textos "@clave" del UXML y los refresca al cambiar de idioma.
+        private LocBinder locBinder;
 
         #endregion
 
@@ -212,6 +190,11 @@ namespace QueComemos.UI
                 return;
             }
 
+            // Antes de cachear referencias: así los textos del UXML ya están traducidos.
+            locBinder?.Dispose();
+            locBinder = new LocBinder();
+            locBinder.Bind(panelRoot);
+
             CacheReferences();
 
             CacheNavPanelReferences();
@@ -245,6 +228,11 @@ namespace QueComemos.UI
 
             UpdateThemeButtonText();
 
+            UpdateLanguageDropdown();
+
+            // Después del binder, para que los textos del UXML se refresquen primero.
+            Loc.LanguageChanged += HandleLanguageChanged;
+
             Debug.Log(
                 "[MainMenuController] OnEnable() terminado correctamente."
             );
@@ -256,6 +244,11 @@ namespace QueComemos.UI
 
         private void OnDisable()
         {
+            Loc.LanguageChanged -= HandleLanguageChanged;
+
+            locBinder?.Dispose();
+            locBinder = null;
+
             if (panelRoot != null)
             {
                 panelRoot.UnregisterCallback<PointerDownEvent>(
