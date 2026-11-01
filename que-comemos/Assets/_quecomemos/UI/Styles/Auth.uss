@@ -97,4 +97,68 @@
     border-bottom-color: var(--ink);
 }
 
+/* MODAL (politica de privacidad) */
+.modal-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 24px;
+    background-color: rgba(0, 0, 0, 0.65);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 340px;
+    padding: 24px 20px 16px 20px;
+    background-color: var(--surface-2);
+    border-width: 1px;
+    border-color: var(--line-strong);
+    border-radius: 16px;
+}
+
+.modal-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: var(--paper);
+    margin-bottom: 12px;
+    -unity-text-align: middle-center;
+}
+
+.modal-body {
+    font-size: 14px;
+    color: var(--paper);
+    white-space: normal;
+    margin-bottom: 14px;
+    -unity-text-align: upper-center;
+}
+
+.modal-link {
+    width: auto;
+    height: auto;
+    align-self: center;
+    margin: 0 0 20px 0;
+    padding: 4px 8px 6px 8px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--herb);
+    color: var(--herb);
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    cursor: link;
+}
+
+.modal-actions {
+    flex-direction: column;
+}
+
+.modal-btn {
+    min-height: 44px;
+    margin: 0 0 8px 0;
+}
+
 .app-version { position: absolute; bottom: 20px; left: 0; right: 0; -unity-text-align: middle-center; font-size: 12px; opacity: 0.6; color : #FFFFFF;}

@@ -18,6 +18,8 @@ namespace QueComemos.UI
         private Label appVersionLabel;
         private VisualElement pageRoot;
         private LocBinder locBinder;
+        private VisualElement privacyModal;
+        private bool loadingMenu;
         private const string ThemePrefKey = "quecomemos_theme_light";
 
         private void Start()
@@ -30,6 +32,8 @@ namespace QueComemos.UI
             // Traduce los textos "@clave" del UXML.
             locBinder = new LocBinder();
             locBinder.Bind(root);
+
+            SetupPrivacyModal(root);
 
             appVersionLabel = root.Q<Label>("app-version");
             googleSignInButton = root.Q<Button>("google-login-btn");
@@ -61,6 +65,67 @@ namespace QueComemos.UI
                 appVersionLabel.text = $"v{Application.version}";
             }
         }
+        #region Politica de privacidad
+
+        private void SetupPrivacyModal(VisualElement root)
+        {
+            privacyModal = root.Q<VisualElement>("privacy-modal");
+
+            if (privacyModal == null)
+                return;
+
+            var linkButton = root.Q<Button>("privacy-link-btn");
+            var acceptButton = root.Q<Button>("privacy-accept-btn");
+            var declineButton = root.Q<Button>("privacy-decline-btn");
+
+            if (linkButton != null)
+                linkButton.clicked += PrivacyConsent.OpenPolicy;
+
+            if (acceptButton != null)
+                acceptButton.clicked += OnPrivacyAccepted;
+
+            if (declineButton != null)
+                declineButton.clicked += OnPrivacyDeclined;
+
+            privacyModal.style.display =
+                PrivacyConsent.IsAccepted
+                    ? DisplayStyle.None
+                    : DisplayStyle.Flex;
+        }
+
+        private void OnPrivacyAccepted()
+        {
+            PrivacyConsent.Accept();
+            privacyModal.style.display = DisplayStyle.None;
+        }
+
+        private void OnPrivacyDeclined()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
+        /// <summary>No se entra a la app hasta que se acepte la política (aunque ya hubiera sesión).</summary>
+        private void LoadMenuWhenConsented()
+        {
+            if (loadingMenu)
+                return;
+
+            loadingMenu = true;
+            StartCoroutine(LoadMenuWhenConsentedRoutine());
+        }
+
+        private IEnumerator LoadMenuWhenConsentedRoutine()
+        {
+            yield return new WaitUntil(() => PrivacyConsent.IsAccepted);
+            SceneHelper.LoadScene(SceneNames.Menu);
+        }
+
+        #endregion
+
         private void ApplyStoredTheme()
         {
             if (pageRoot == null)
@@ -117,7 +182,7 @@ namespace QueComemos.UI
             Debug.Log("[LoginSceneController] Editor: saltando el login real, " +
                 "usando el \"Test User Id\" de FirebaseManager.");
             yield return new WaitForSeconds(3f);
-            SceneHelper.LoadScene(SceneNames.Menu);
+            LoadMenuWhenConsented();
             yield break;
 #endif
 
@@ -179,13 +244,13 @@ namespace QueComemos.UI
             
             // Cargar la escena Menu
             Debug.Log("[LoginSceneController] Cargando Menu...");
-            SceneHelper.LoadScene(SceneNames.Menu);
+            LoadMenuWhenConsented();
         }
 
         private void HandleSignedIn(Firebase.Auth.FirebaseUser user)
         {
             Debug.Log($"[LoginSceneController] Login OK: {user.UserId}. Cargando \"{SceneNames.Menu}\"...");
-            SceneHelper.LoadScene(SceneNames.Menu);
+            LoadMenuWhenConsented();
         }
 
         private void HandleSignInFailed(string message)

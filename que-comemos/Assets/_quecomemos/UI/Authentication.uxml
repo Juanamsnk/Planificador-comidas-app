@@ -22,5 +22,16 @@
             <ui:Label name="auth-status" text="" class="auth-status"/>
         </ui:VisualElement>
         <ui:Label name="app-version" text="" class="app-version"/>
+        <ui:VisualElement name="privacy-modal" class="modal-overlay" style="display: none;">
+            <ui:VisualElement name="privacy-card" class="modal-card">
+                <ui:Label text="@privacy.title" class="modal-title"/>
+                <ui:Label text="@privacy.body" class="modal-body"/>
+                <ui:Button name="privacy-link-btn" text="@privacy.read" class="modal-link"/>
+                <ui:VisualElement class="modal-actions">
+                    <ui:Button name="privacy-accept-btn" text="@privacy.accept" class="btn btn--primary modal-btn"/>
+                    <ui:Button name="privacy-decline-btn" text="@privacy.decline" class="btn btn--ghost modal-btn"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

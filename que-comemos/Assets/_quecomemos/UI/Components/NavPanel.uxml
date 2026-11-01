@@ -26,6 +26,7 @@
                     <ui:Label text="@settings.actions" class="settings-section-title"/>
                     <ui:Button name="settings-share-btn" text="@action.share" class="settings-btn"/>
                     <ui:Button name="settings-support-btn" text="@settings.support" class="settings-btn"/>
+                    <ui:Button name="settings-privacy-btn" text="@privacy.title" class="settings-btn"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="settings-section">
                     <ui:Label text="@settings.account" class="settings-section-title"/>

@@ -23,6 +23,7 @@ namespace QueComemos.UI
         private Button settingsShareBtn;
         private Button settingsSupportBtn;
         private Button settingsLogoutBtn;
+        private Button settingsPrivacyBtn;
 
         // Settings Calendarios
         private Button settingsOwnCalendarBtn;
@@ -58,6 +59,7 @@ namespace QueComemos.UI
                 settingsShareBtn = navPanel.Q<Button>("settings-share-btn");
                 settingsSupportBtn = navPanel.Q<Button>("settings-support-btn");
                 settingsLogoutBtn = navPanel.Q<Button>("settings-logout-btn");
+                settingsPrivacyBtn = navPanel.Q<Button>("settings-privacy-btn");
 
                 // Calendarios en Ajustes
                 var settingsOwnCalendarContainer = navPanel.Q<VisualElement>("settings-own-calendar-row");
@@ -139,6 +141,9 @@ namespace QueComemos.UI
             if (settingsLogoutBtn != null)
                 settingsLogoutBtn.clicked += OnSettingsLogoutClicked;
 
+            if (settingsPrivacyBtn != null)
+                settingsPrivacyBtn.clicked += PrivacyConsent.OpenPolicy;
+
             // Idioma
             if (languageDropdown != null)
             {
@@ -149,6 +154,17 @@ namespace QueComemos.UI
                     if (index >= 0 && index < Loc.Supported.Length)
                         Loc.SetLanguage(Loc.Supported[index]);
                 });
+
+                // La lista desplegable la crea Unity fuera de nuestro arbol UXML,
+                // asi que hay que darle el estilo de la app cuando aparece.
+                languageDropdown.RegisterCallback<PointerDownEvent>(
+                    evt => StyleLanguagePopup(),
+                    TrickleDown.TrickleDown
+                );
+
+                languageDropdown.RegisterCallback<ClickEvent>(
+                    evt => StyleLanguagePopup()
+                );
             }
 
             // Calendarios en Ajustes
@@ -239,6 +255,54 @@ namespace QueComemos.UI
 
             settingsThemeBtn.text =
                 Loc.T(isLightTheme ? "settings.themeLight" : "settings.themeDark");
+        }
+
+        /// <summary>
+        /// Aplica el estilo de la app (colores del tema) a la lista del dropdown.
+        /// Busca el popup durante ~0,5 s porque Unity lo crea justo despues del clic.
+        /// </summary>
+        private void StyleLanguagePopup()
+        {
+            if (panelRoot == null)
+                return;
+
+            int attempts = 0;
+            bool styled = false;
+
+            panelRoot.schedule
+                .Execute(() =>
+                {
+                    attempts++;
+
+                    var popup =
+                        panelRoot.panel?.visualTree
+                            .Q(className: "unity-base-dropdown");
+
+                    if (popup == null)
+                        return;
+
+                    styled = true;
+
+                    if (popup.ClassListContains("language-popup"))
+                        return;
+
+                    // Solo las hojas necesarias: variables de tema y estilos del popup.
+                    for (int i = 0; i < panelRoot.styleSheets.count; i++)
+                    {
+                        var sheet = panelRoot.styleSheets[i];
+
+                        if ((sheet.name == "Theme" || sheet.name == "Molecules") &&
+                            !popup.styleSheets.Contains(sheet))
+                        {
+                            popup.styleSheets.Add(sheet);
+                        }
+                    }
+
+                    popup.AddToClassList("language-popup");
+                    popup.AddToClassList(isLightTheme ? "theme-light" : "theme-dark");
+                })
+                .Every(16)
+                .Until(() => styled || attempts > 30);
         }
 
         private void UpdateLanguageDropdown()

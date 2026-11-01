@@ -412,6 +412,45 @@
     border-color: var(--line-strong);
 }
 
+/* Lista desplegable del idioma. Unity la crea fuera del arbol de la pagina:
+   el script le anade la clase language-popup y la clase del tema. */
+.language-popup .unity-base-dropdown__container-outer {
+    background-color: var(--surface-2);
+    border-width: 1px;
+    border-color: var(--line-strong);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.language-popup .unity-base-dropdown__container-inner {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.language-popup .unity-base-dropdown__item {
+    min-height: 44px;
+    border-radius: 6px;
+    padding: 0 10px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.language-popup .unity-base-dropdown__item:hover,
+.language-popup .unity-base-dropdown__item:focus {
+    background-color: var(--surface-hover);
+}
+
+.language-popup .unity-base-dropdown__label {
+    color: var(--paper);
+    font-size: 13px;
+}
+
+.language-popup .unity-base-dropdown__item:hover .unity-base-dropdown__label {
+    color: var(--herb);
+}
+
+.language-popup .unity-base-dropdown__checkmark {
+    -unity-background-image-tint-color: var(--herb);
+}
+
 .week-actions {
     position: absolute;
     right: 16px;

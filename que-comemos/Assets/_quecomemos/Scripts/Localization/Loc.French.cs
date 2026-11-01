@@ -117,6 +117,13 @@ namespace QueComemos.Localization
                 ["settings.actions"] = "Actions",
                 ["settings.account"] = "Compte",
                 ["settings.language"] = "Langue",
+
+                // ── Politique de confidentialité ────────────────────
+                ["privacy.title"] = "Politique de confidentialité",
+                ["privacy.body"] = "Avant de continuer, lisez et acceptez notre Politique de confidentialité. Elle explique quelles données sont enregistrées et comment elles sont utilisées. En acceptant, vous confirmez l'avoir lue.",
+                ["privacy.read"] = "Lire la politique de confidentialité",
+                ["privacy.accept"] = "Accepter et continuer",
+                ["privacy.decline"] = "Refuser",
                 ["footer.calendar"] = "Calendrier",
                 ["footer.list"] = "Liste",
                 ["footer.settings"] = "Réglages",
