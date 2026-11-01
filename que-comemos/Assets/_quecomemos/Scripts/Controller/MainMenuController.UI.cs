@@ -784,6 +784,7 @@ namespace QueComemos.UI
             if (weekScroll == null)
             {
                 weekOffset = newOffset;
+                lastVisibleDate = null;
                 Render();
                 return;
             }
@@ -804,7 +805,12 @@ namespace QueComemos.UI
                     () =>
                     {
                         weekOffset = newOffset;
+
+                        // Al cambiar de semana se empieza siempre desde arriba (lunes).
+                        lastVisibleDate = null;
+
                         Render();
+                        ScrollWeekToTop();
 
                         weekScroll.experimental.animation
                             .Start(
@@ -824,6 +830,20 @@ namespace QueComemos.UI
                             );
                     }
                 );
+        }
+
+        /// <summary>Lleva el scroll al principio (cabecera de semana + lunes).</summary>
+        private void ScrollWeekToTop()
+        {
+            if (weekScroll == null)
+                return;
+
+            weekScroll.scrollOffset = Vector2.zero;
+
+            // Otra vez tras el layout, por si el contenido cambió de alto al renderizar.
+            weekScroll.schedule
+                .Execute(() => weekScroll.scrollOffset = Vector2.zero)
+                .ExecuteLater(1);
         }
 
         #endregion
