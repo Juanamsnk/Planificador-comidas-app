@@ -86,6 +86,7 @@ namespace QueComemos.UI
             }
 
             CacheShoppingReferences();
+            CacheRecipesReferences();
         }
 
         private void LoadFooterIcons()
@@ -175,6 +176,7 @@ namespace QueComemos.UI
                 settingsOwnPinBtn.clicked += () => PinCalendar(FirebaseManager.Instance?.OwnCalendarId);
 
             RegisterShoppingEvents();
+            RegisterRecipesEvents();
         }
 
         #endregion
@@ -184,6 +186,7 @@ namespace QueComemos.UI
         private void OpenNavPanel()
         {
             HideShoppingPanel();
+            HideRecipesPanel();
 
             if (navPanel == null)
                 return;
@@ -219,6 +222,9 @@ namespace QueComemos.UI
             if (footerSettingsBtn != null)
                 footerSettingsBtn.RemoveFromClassList("footer-btn--active");
 
+            if (footerRecipesBtn != null)
+                footerRecipesBtn.RemoveFromClassList("footer-btn--active");
+
             // Agregar clase activa al seleccionado
             switch (tab)
             {
@@ -234,6 +240,10 @@ namespace QueComemos.UI
                 case "lista":
                     if (footerShoppingBtn != null)
                         footerShoppingBtn.AddToClassList("footer-btn--active");
+                    break;
+                case "recetas":
+                    if (footerRecipesBtn != null)
+                        footerRecipesBtn.AddToClassList("footer-btn--active");
                     break;
             }
         }

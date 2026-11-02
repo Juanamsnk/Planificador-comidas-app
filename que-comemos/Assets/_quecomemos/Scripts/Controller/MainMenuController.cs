@@ -270,6 +270,7 @@ namespace QueComemos.UI
             }
 
             UnsubscribeShoppingList();
+            UnsubscribeRecipes();
         }
 
         #endregion

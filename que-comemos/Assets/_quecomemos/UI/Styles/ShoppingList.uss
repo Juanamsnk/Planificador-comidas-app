@@ -140,6 +140,61 @@
     background-color: rgba(226, 115, 90, 0.15);
 }
 
+/* ==========================================================================
+   RECETAS (reutiliza las clases shopping-*)
+   ========================================================================== */
+
+.recipes-input {
+    flex-grow: 0;
+    margin: 0 0 8px 0;
+}
+
+.recipes-save-btn {
+    width: 100%;
+    min-height: 44px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.recipe-row {
+    padding: 0 4px 0 12px;
+}
+
+.recipe-open-area {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.recipe-text-col {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: column;
+}
+
+.recipe-name {
+    font-size: 15px;
+    color: var(--paper);
+    white-space: normal;
+    -unity-text-align: middle-left;
+}
+
+.recipe-host {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    -unity-text-align: middle-left;
+}
+
+.recipe-chevron {
+    font-size: 22px;
+    color: var(--herb);
+    margin: 0 4px 0 8px;
+    -unity-text-align: middle-center;
+}
+
 .shopping-empty {
     font-size: 13px;
     color: var(--muted);

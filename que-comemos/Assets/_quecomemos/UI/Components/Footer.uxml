@@ -11,6 +11,10 @@
         <ui:Image name="footer-btn-icon-shopping" class="footer-btn-icon"/>
         <ui:Label text="@footer.list" class="footer-btn-label"/>
     </ui:Button>
+    <ui:Button name="footer-recipes-btn" class="footer-btn">
+        <ui:Image name="footer-btn-icon-recipes" class="footer-btn-icon"/>
+        <ui:Label text="@footer.recipes" class="footer-btn-label"/>
+    </ui:Button>
     <ui:Button name="footer-settings-btn" class="footer-btn">
         <ui:Image name="footer-btn-icon-settings" class="footer-btn-icon"/>
         <ui:Label text="@footer.settings" class="footer-btn-label"/>

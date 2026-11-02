@@ -78,6 +78,8 @@ namespace QueComemos.UI
             if (shoppingPanel == null)
                 return;
 
+            HideRecipesPanel();
+
             // Cierra Ajustes si estaba abierto
             if (navPanel != null)
             {
@@ -109,6 +111,7 @@ namespace QueComemos.UI
         {
             CloseNavPanel();
             HideShoppingPanel();
+            HideRecipesPanel();
         }
 
         #endregion

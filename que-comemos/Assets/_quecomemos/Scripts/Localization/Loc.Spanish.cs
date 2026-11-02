@@ -132,6 +132,20 @@ namespace QueComemos.Localization
                 ["footer.calendar"] = "Calendario",
                 ["footer.list"] = "Lista",
                 ["footer.settings"] = "Ajustes",
+                ["footer.recipes"] = "Recetas",
+
+                // ── Recetas ─────────────────────────────────────────
+                ["recipes.title"] = "Recetas",
+                ["recipes.namePlaceholder"] = "Nombre de la receta",
+                ["recipes.linkPlaceholder"] = "Enlace (YouTube, web...)",
+                ["recipes.save"] = "Guardar receta",
+                ["recipes.empty"] = "Aún no tienes recetas. Escribe un nombre y el enlace de un vídeo o una web, y pulsa Guardar receta.",
+                ["toast.recipeNameRequired"] = "Escribe el nombre de la receta",
+                ["toast.recipeLinkInvalid"] = "Escribe un enlace válido (http o https)",
+                ["toast.recipeSaved"] = "Receta guardada",
+                ["err.recipeLoad"] = "No se pudieron cargar las recetas.",
+                ["err.recipeAdd"] = "No se pudo guardar la receta.",
+                ["err.recipeDelete"] = "No se pudo borrar la receta.",
 
                 // ── Lista de la compra ──────────────────────────────
                 ["shopping.title"] = "Lista de la compra",

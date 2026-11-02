@@ -10,6 +10,7 @@ public class SafeArea : MonoBehaviour
     private VisualElement safeArea;
     private VisualElement navPanel;
     private VisualElement shoppingPanel;
+    private VisualElement recipesPanel;
     private VisualElement footer;
     private Vector2 lastScreenSize;
     private Rect lastSafeArea;
@@ -34,6 +35,7 @@ public class SafeArea : MonoBehaviour
         safeArea = root.Q<VisualElement>("SafeArea");
         navPanel = root.Q<VisualElement>("nav-panel");
         shoppingPanel = root.Q<VisualElement>("shopping-panel");
+        recipesPanel = root.Q<VisualElement>("recipes-panel");
         footer = root.Q<VisualElement>(className: "footer");
 
         if (safeArea == null)
@@ -110,6 +112,7 @@ public class SafeArea : MonoBehaviour
         {
             ApplyOverlayInsets(navPanel, left, right, topTotal, bottom);
             ApplyOverlayInsets(shoppingPanel, left, right, topTotal, bottom);
+            ApplyOverlayInsets(recipesPanel, left, right, topTotal, bottom);
         }
 
         lastScreenSize = new Vector2(Screen.width, Screen.height);

@@ -118,6 +118,7 @@ namespace QueComemos.Data
             mealsRef.ValueChanged += HandleValueChanged;
 
             AttachShoppingRef(calendarId);
+            AttachRecipesRef(calendarId);
 
             Debug.Log($"[FirebaseManager] Calendario activo: \"{calendarId}\".");
         }
@@ -286,6 +287,7 @@ namespace QueComemos.Data
         private void OnDestroy()
         {
             DetachShoppingRef();
+            DetachRecipesRef();
 
             if (mealsRef != null)
             {

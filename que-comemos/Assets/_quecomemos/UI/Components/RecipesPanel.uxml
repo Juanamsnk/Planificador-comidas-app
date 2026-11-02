@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="recipes-panel" class="shopping-panel" style="display: none;">
+        <ui:VisualElement name="recipes-content" class="shopping-content">
+            <ui:Label text="@recipes.title" class="shopping-title"/>
+            <ui:TextField name="recipe-name-input" placeholder-text="@recipes.namePlaceholder" max-length="80" class="shopping-input recipes-input"/>
+            <ui:TextField name="recipe-link-input" placeholder-text="@recipes.linkPlaceholder" max-length="500" class="shopping-input recipes-input"/>
+            <ui:Button name="recipe-save-btn" text="@recipes.save" class="btn btn--primary recipes-save-btn"/>
+            <ui:ScrollView name="recipes-scroll" class="shopping-scroll" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden">
+                <ui:VisualElement name="recipes-items" class="shopping-items"/>
+                <ui:Label name="recipes-empty" text="@recipes.empty" class="shopping-empty"/>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
