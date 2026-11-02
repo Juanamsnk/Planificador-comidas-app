@@ -523,17 +523,70 @@ namespace QueComemos.UI
             ConfigureAndRegisterTextField(reminderTitleField, true);
         }
 
+        // Movimiento máximo (px) entre tocar y soltar para que cuente como toque.
+        // Si el dedo se mueve más, es un arrastre (scroll o swipe) y no se selecciona.
+        private const float CellTapMaxMovement = 10f;
+
         private void RegisterCellClick(
             MealSlotRefs slot)
         {
             if (slot?.cell == null)
                 return;
 
-            slot.cell.clicked +=
-                () =>
+            var cell = slot.cell;
+
+            // Un Button captura el puntero al tocarlo, y así el ScrollView no recibe el
+            // arrastre y la celda se selecciona al soltar. Quitamos ese comportamiento
+            // y detectamos el toque nosotros: solo es toque si el dedo apenas se mueve.
+            cell.clickable = null;
+
+            Vector2 downPos = Vector2.zero;
+            int downPointerId = -1;
+            bool tracking = false;
+            bool dragged = false;
+
+            cell.RegisterCallback<PointerDownEvent>(
+                evt =>
                 {
-                    if (slot.cell.userData
-                        is ValueTuple<string, string> value)
+                    tracking = true;
+                    dragged = false;
+                    downPos = evt.position;
+                    downPointerId = evt.pointerId;
+                },
+                TrickleDown.TrickleDown
+            );
+
+            cell.RegisterCallback<PointerMoveEvent>(
+                evt =>
+                {
+                    if (!tracking || evt.pointerId != downPointerId)
+                        return;
+
+                    if (((Vector2)evt.position - downPos).magnitude > CellTapMaxMovement)
+                        dragged = true;
+                },
+                TrickleDown.TrickleDown
+            );
+
+            cell.RegisterCallback<PointerCancelEvent>(
+                evt => tracking = false
+            );
+
+            cell.RegisterCallback<PointerUpEvent>(
+                evt =>
+                {
+                    bool wasTap =
+                        tracking &&
+                        !dragged &&
+                        evt.pointerId == downPointerId &&
+                        cell.worldBound.Contains(evt.position);
+
+                    tracking = false;
+
+                    if (!wasTap)
+                        return;
+
+                    if (cell.userData is ValueTuple<string, string> value)
                     {
                         selected =
                             (value.Item1, value.Item2);
@@ -544,7 +597,8 @@ namespace QueComemos.UI
                         RenderWeekGrid();
                         RenderEditPanel();
                     }
-                };
+                }
+            );
         }
 
         #endregion
