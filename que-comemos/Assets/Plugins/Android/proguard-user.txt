@@ -1,0 +1,20 @@
+# ===== Firebase para Unity (puentes JNI llamados desde código nativo C++) =====
+-keep class com.google.firebase.MessagingUnityPlayerActivity { *; }
+-keep class com.google.firebase.messaging.MessageForwardingService { *; }
+-keep class com.google.firebase.messaging.cpp.** { *; }
+-keep class com.google.firebase.app.internal.cpp.** { *; }
+-keep class com.google.firebase.auth.internal.cpp.** { *; }
+-keep class com.google.firebase.database.internal.cpp.** { *; }
+
+# ===== AdMob para Unity =====
+-keep class com.google.unity.** { *; }
+-keep public class com.google.android.gms.ads.** { public *; }
+-keep public class com.google.ads.** { public *; }
+
+# ===== Unity Mobile Notifications =====
+-keep class com.unity.androidnotifications.** { *; }
+
+# ===== Evitar avisos por clases opcionales =====
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+-dontwarn com.google.android.ump.**
